@@ -2,6 +2,7 @@ package quantity
 
 import units.MeasureUnit
 import java.math.BigDecimal
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -22,10 +23,19 @@ abstract class AbstractQuantity<Q>(
         return value.toString() + " " + baseUnit.createInstance().unitSymbol()
     }
 
-    fun toString(fullUnitName: Boolean): String {
+    fun toString(locale: Locale? = null, unitFullName: Boolean = false): String {
         val unitInstance = baseUnit.createInstance()
         val valueString = value.toString()
-        val unitString = if (fullUnitName) unitInstance.fullUnitName() else unitInstance.unitSymbol()
+
+        val unitString = if (unitFullName) {
+            if (value == BigDecimal.ONE) {
+                unitInstance.fullUnitName(locale)
+            } else {
+                unitInstance.pluralForm(locale)
+            }
+        } else {
+            unitInstance.unitSymbol(locale)
+        }
 
         return "$valueString $unitString"
     }

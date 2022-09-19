@@ -1,13 +1,6 @@
 package units
 
-class Meter: MeasureUnit {
+import java.util.*
 
-    override fun unitSymbol(): String {
-        return "m"
-    }
-
-    override fun fullUnitName(): String {
-        return "meter"
-    }
-}
+class Meter: MeasureUnit
 

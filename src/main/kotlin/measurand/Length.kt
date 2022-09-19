@@ -5,7 +5,6 @@ import units.Meter
 import java.math.BigDecimal
 
 class Length(number: Number) : Quantity<Length>(number = number, baseUnit = Meter::class) {
-
     override fun copyWith(value: BigDecimal): Quantity<Length> {
         return Length(value)
     }

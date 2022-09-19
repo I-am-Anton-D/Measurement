@@ -1,12 +1,5 @@
 package units
 
-class Gram: MeasureUnit {
+import java.util.*
 
-    override fun unitSymbol(): String {
-        return "g"
-    }
-
-    override fun fullUnitName(): String {
-        return "gram"
-    }
-}
+class Gram: MeasureUnit
