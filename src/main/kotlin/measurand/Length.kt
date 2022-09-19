@@ -15,10 +15,5 @@ fun Number.meter(prefix: Prefix = Prefix.NOMINAL) : Length {
     val normalizedValue = prefix.normalize(this)
     return Length(normalizedValue)
 }
-fun Number.kilometer(): Length {
-    return meter(Prefix.KILO)
-}
-
-fun Number.centimeter(): Length {
-    return meter(Prefix.CENTI)
-}
+fun Number.kilometer() = meter(Prefix.KILO)
+fun Number.centimeter() = meter(Prefix.CENTI)
