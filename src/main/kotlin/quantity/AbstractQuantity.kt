@@ -1,6 +1,7 @@
 package quantity
 
 import units.MeasureUnit
+import units.Prefix
 import java.math.BigDecimal
 import java.util.*
 import kotlin.reflect.KClass
@@ -19,13 +20,22 @@ abstract class AbstractQuantity<Q>(
 
     abstract fun copyWith(value: BigDecimal): Quantity<Q>
 
+    open infix fun valueIn(prefix: Prefix): BigDecimal {
+        return value.divide(prefix.getPrefixMultiplier())
+    }
+
+    open infix fun valueIn(units: MeasureUnit): BigDecimal {
+        //return this.value.multiply(prefix.getPrefixMultiplier())
+        return BigDecimal.ONE
+    }
+
     override fun toString(): String {
         return value.toString() + " " + baseUnit.createInstance().unitSymbol()
     }
 
-    fun toString(locale: Locale? = null, unitFullName: Boolean = false): String {
+    fun toString(locale: Locale? = null, unitFullName: Boolean = false, prefix: Prefix = Prefix.NOMINAL): String {
         val unitInstance = baseUnit.createInstance()
-        val valueString = value.toString()
+        val valueString = (this valueIn prefix).toString()
 
         val unitString = if (unitFullName) {
             if (value == BigDecimal.ONE) {
@@ -43,5 +53,9 @@ abstract class AbstractQuantity<Q>(
     operator fun plus(other: Quantity<Q>): Quantity<Q> {
         if (this.baseUnit != other.baseUnit) throw Exception()
         return copyWith(this.value + other.value)
+    }
+
+    operator fun plus(number: Number) : Quantity<Q> {
+        return copyWith(this.value + BigDecimal(number.toString()))
     }
 }

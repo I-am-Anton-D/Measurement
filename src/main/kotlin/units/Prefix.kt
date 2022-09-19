@@ -1,29 +1,54 @@
 package units
 
-enum class Prefix(internationalSymbol:String, exponent:Int) {
-    YOTTA("Y", 24),
-    ZETTA("Z", 21),
-    EXA("E", 18),
-    PETA("P", 15),
-    TERA("T", 12),
-    GIGA("G", 9),
-    MEGA("M", 6),
-    KILO("k", 3),
-    HECTO("h", 2),
-    DEKA("da", 1),
-    NOMINAL("", 0),
-    DECI("d", -1),
-    CENTI("c", -2),
-    MILLI("m", -3),
-    MICRO("μ", -6),
-    NANO("n", -9),
-    PICO("p", -12),
-    FEMTO("f", -15),
-    ATTO("a", -18),
-    ZEPTO("z", -21),
-    YOCTO("y", -24);
+import java.math.BigDecimal
+import java.util.*
+import kotlin.math.absoluteValue
 
-    fun toFullPrefixName() : String {
-        return ""
+
+enum class Prefix(val exponent: Int) {
+    YOTTA(24),
+    ZETTA(21),
+    EXA(18),
+    PETA(15),
+    TERA(12),
+    GIGA(9),
+    MEGA(6),
+    KILO(3),
+    HECTO(2),
+    DEKA(1),
+    NOMINAL(0),
+    DECI(-1),
+    CENTI(-2),
+    MILLI(-3),
+    MICRO(-6),
+    NANO(-9),
+    PICO(-12),
+    FEMTO(-15),
+    ATTO(-18),
+    ZEPTO(-21),
+    YOCTO(-24);
+
+    fun prefixSymbol(locale: Locale): String {
+        return getBundle(locale).getString(this.toString() + "_SYMBOL")
     }
+
+    fun prefixName(locale: Locale): String {
+        return getBundle(locale).getString(this.toString())
+    }
+
+    fun getPrefixMultiplier(): BigDecimal {
+        if (this == NOMINAL) return BigDecimal.ONE
+        return if (exponent > 0) BigDecimal.TEN.pow(exponent)
+        else BigDecimal.ONE.divide(BigDecimal.TEN.pow(exponent.absoluteValue))
+    }
+
+    private fun getBundle(locale: Locale? = null): ResourceBundle {
+        val targetLocale = locale ?: Locale.getDefault()
+        return ResourceBundle.getBundle(this::class.simpleName!!, targetLocale) ?: throw Exception()
+    }
+
+    fun normalize(number: Number): BigDecimal {
+        return BigDecimal(number.toString()).multiply(this.getPrefixMultiplier())
+    }
+
 }
