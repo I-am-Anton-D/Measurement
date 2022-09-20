@@ -18,11 +18,8 @@ abstract class AbstractQuantity<Q>(
 
     constructor(number: Number, baseUnit: KClass<out MeasureUnit>) : this(BigDecimal(number.toString()), baseUnit)
 
-    abstract fun copyWith(value: BigDecimal): Quantity<Q>
+    abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
-    open infix fun valueIn(prefix: Prefix): BigDecimal {
-        return value.divide(prefix.getPrefixMultiplier())
-    }
 
     open infix fun valueIn(units: MeasureUnit): BigDecimal {
         //return this.value.multiply(prefix.getPrefixMultiplier())
@@ -33,9 +30,9 @@ abstract class AbstractQuantity<Q>(
         return value.toString() + " " + baseUnit.createInstance().unitSymbol()
     }
 
-    fun toString(locale: Locale? = null, unitFullName: Boolean = false, prefix: Prefix = Prefix.NOMINAL): String {
+    fun toString(locale: Locale? = null, unitFullName: Boolean = false): String {
         val unitInstance = baseUnit.createInstance()
-        val valueString = (this valueIn prefix).toString()
+        val valueString = value.toString()
 
         val unitString = if (unitFullName) {
             if (value == BigDecimal.ONE) {
@@ -50,12 +47,8 @@ abstract class AbstractQuantity<Q>(
         return "$valueString $unitString"
     }
 
-    operator fun plus(other: Quantity<Q>): Quantity<Q> {
+    operator fun plus(other: AbstractQuantity<Q>): AbstractQuantity<Q> {
         if (this.baseUnit != other.baseUnit) throw Exception()
         return copyWith(this.value + other.value)
-    }
-
-    operator fun plus(number: Number) : Quantity<Q> {
-        return copyWith(this.value + BigDecimal(number.toString()))
     }
 }

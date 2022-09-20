@@ -4,8 +4,7 @@ import java.math.BigDecimal
 import java.util.*
 import kotlin.math.absoluteValue
 
-
-enum class Prefix(val exponent: Int) {
+enum class Prefix(private val exponent: Int) {
     YOTTA(24),
     ZETTA(21),
     EXA(18),
@@ -44,7 +43,7 @@ enum class Prefix(val exponent: Int) {
 
     private fun getBundle(locale: Locale? = null): ResourceBundle {
         val targetLocale = locale ?: Locale.getDefault()
-        return ResourceBundle.getBundle(this::class.simpleName!!, targetLocale) ?: throw Exception()
+        return ResourceBundle.getBundle(this::class.simpleName!!, targetLocale)
     }
 
     fun normalize(number: Number): BigDecimal {
