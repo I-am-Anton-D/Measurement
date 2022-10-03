@@ -1,3 +1,3 @@
 package units
 
-class Gram: MeasureUnit
+class Gram: AbstractUnit()

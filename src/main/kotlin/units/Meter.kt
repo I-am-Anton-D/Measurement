@@ -3,7 +3,7 @@ package units
 import java.math.BigDecimal
 import java.util.*
 
-class Meter: MeasureUnit {
+class Meter: AbstractUnit() {
 
     override fun fullUnitName(locale: Locale?, value: BigDecimal): String {
         val targetLocale = locale ?: Locale.getDefault()

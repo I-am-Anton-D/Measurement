@@ -1,12 +1,12 @@
 package quantity
 
-import units.MeasureUnit
+import units.AbstractUnit
 import units.Prefix
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
-abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out MeasureUnit>) :
+abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUnit>) :
     AbstractQuantity<Q>(number, baseUnit) {
 
     open infix fun valueIn(prefix: Prefix): BigDecimal {
