@@ -1,10 +1,9 @@
 import measurand.*
-import java.util.*
+import units.Prefix
 
 fun main() {
     //Locale.setDefault(Locale("fr","FR"))
 
-    var l = 0.01.kilometer() + 5.cm() + 1.km()
-
-    print(l.toStringWithFullUnitName())
+    val l = 1.meter() + 3.meter() + 1.km() + 1000.mm()
+    print(l.toStringWithFullUnitName(prefix = Prefix.KILO))
 }

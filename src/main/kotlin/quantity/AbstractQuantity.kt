@@ -8,7 +8,7 @@ import kotlin.reflect.full.createInstance
 
 abstract class AbstractQuantity<Q>(
     value: BigDecimal,
-    private val unit: KClass<out MeasureUnit>
+    val unit: KClass<out MeasureUnit>
 ) {
     val value: BigDecimal = value
         get() = BigDecimal(field.toString())
@@ -19,7 +19,7 @@ abstract class AbstractQuantity<Q>(
 
     override fun toString() = "${valueToString()} ${unitToString()}"
 
-    fun toString(locale: Locale? = null) = "${valueToString()} ${unitToString(locale)}"
+    open fun toString(locale: Locale? = null) = "${valueToString()} ${unitToString(locale)}"
 
     open fun toStringWithFullUnitName(locale: Locale? = null) = "${valueToString()} ${unitToFullNameString(locale)}"
 
@@ -28,9 +28,4 @@ abstract class AbstractQuantity<Q>(
     open fun unitToString(locale: Locale? = null) = unit.createInstance().unitSymbol(locale)
 
     open fun valueToString() = value.toString()
-
-    operator fun plus(other: AbstractQuantity<Q>): AbstractQuantity<Q> {
-        if (this.unit != other.unit) throw Exception()
-        return copyWith(this.value + other.value)
-    }
 }

@@ -27,12 +27,12 @@ enum class Prefix(private val exponent: Int) {
     ZEPTO(-21),
     YOCTO(-24);
 
-    fun prefixSymbol(locale: Locale): String {
-        return getBundle(locale).getString(this.toString() + "_SYMBOL")
+    fun prefixSymbol(locale: Locale?): String {
+        return if (this == NOMINAL) "" else  getBundle(locale).getString(this.toString() + "_SYMBOL")
     }
 
-    fun prefixName(locale: Locale): String {
-        return getBundle(locale).getString(this.toString())
+    fun prefixName(locale: Locale?): String {
+        return if (this == NOMINAL) "" else getBundle(locale).getString(this.toString())
     }
 
     fun getPrefixMultiplier(): BigDecimal {
