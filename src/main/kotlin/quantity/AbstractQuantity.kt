@@ -20,11 +20,8 @@ abstract class AbstractQuantity<Q>(
     override fun toString() = "${valueToString()} ${unitToString()}"
 
     open fun toString(outputParameters: OutputParameters): String {
-        if (outputParameters.fullNameUnit) {
-            return valueToString() + " " + unit.createInstance().fullUnitName(outputParameters.locale, value)
-        }
-
-        return "${valueToString()} ${unitToString(outputParameters.locale)}"
+        return valueToString() + " " + if (outputParameters.fullUnitName) unit.createInstance()
+            .fullUnitName(outputParameters.locale, value) else unit.createInstance().unitSymbol(outputParameters.locale)
     }
 
     open fun unitToString(locale: Locale? = null) = unit.createInstance().unitSymbol(locale)
