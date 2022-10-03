@@ -18,5 +18,5 @@ abstract class AbstractQuantity<Q>(
 
     override fun toString() = "$value ${unit.createInstance()}"
 
-    open fun toString(outputParameters: OutputParameters) = "$value  ${unit.createInstance().toString(outputParameters)}"
+    open fun toString(outputParameters: OutputParameters) = "$value ${unit.createInstance().toString(outputParameters, value)}"
 }

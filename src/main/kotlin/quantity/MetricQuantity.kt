@@ -23,10 +23,10 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUn
         val valueInPrefix = valueIn(prefix)
 
         val valueString = valueInPrefix.toString()
-        val unitString = if (outputParameters.fullUnitName) prefix.prefixName(locale) + unit.createInstance().fullUnitName(locale, valueInPrefix)
-            else prefix.prefixSymbol(locale) + unit.createInstance().unitSymbol(locale)
+        val prefixString = if (outputParameters.fullUnitName) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
+        val unitString = unit.createInstance().toString(outputParameters, valueInPrefix)
 
-        return "$valueString $unitString"
+        return "$valueString $prefixString$unitString"
     }
 
     open operator fun plus(other: AbstractQuantity<Q>): MetricQuantity<Q> {

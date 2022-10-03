@@ -28,8 +28,8 @@ abstract class AbstractUnit {
         return ResourceBundle.getBundle(unitSimpleClassName, targetLocale) ?: throw Exception()
     }
 
-    open fun toString(outputParameters: OutputParameters): String {
-        return if (outputParameters.fullUnitName) pluralForm(outputParameters.locale)
+    open fun toString(outputParameters: OutputParameters, value: BigDecimal): String {
+        return if (outputParameters.fullUnitName) fullUnitName(outputParameters.locale, value)
         else unitSymbol(outputParameters.locale)
     }
 
