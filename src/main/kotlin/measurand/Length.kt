@@ -1,7 +1,6 @@
 package measurand
 
 import quantity.MetricQuantity
-import quantity.Quantity
 import units.Meter
 import units.Prefix
 import java.math.BigDecimal
@@ -21,3 +20,5 @@ fun Number.kilometer() = meter(Prefix.KILO)
 fun Number.km() = kilometer()
 fun Number.centimeter() = meter(Prefix.CENTI)
 fun Number.cm() = centimeter()
+fun Number.millimeter() = meter(Prefix.MILLI)
+fun Number.mm() = millimeter()

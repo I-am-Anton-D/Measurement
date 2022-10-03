@@ -1,7 +1,6 @@
 package quantity
 
 import units.MeasureUnit
-import units.Prefix
 import java.math.BigDecimal
 import java.util.*
 import kotlin.reflect.KClass
@@ -9,46 +8,29 @@ import kotlin.reflect.full.createInstance
 
 abstract class AbstractQuantity<Q>(
     value: BigDecimal,
-    val baseUnit: KClass<out MeasureUnit>
+    private val unit: KClass<out MeasureUnit>
 ) {
     val value: BigDecimal = value
-        get() {
-            return BigDecimal(field.toString())
-        }
+        get() = BigDecimal(field.toString())
 
     constructor(number: Number, baseUnit: KClass<out MeasureUnit>) : this(BigDecimal(number.toString()), baseUnit)
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
+    override fun toString() = "${valueToString()} ${unitToString()}"
 
-    open infix fun valueIn(units: MeasureUnit): BigDecimal {
-        //return this.value.multiply(prefix.getPrefixMultiplier())
-        return BigDecimal.ONE
-    }
+    fun toString(locale: Locale? = null) = "${valueToString()} ${unitToString(locale)}"
 
-    override fun toString(): String {
-        return value.toString() + " " + baseUnit.createInstance().unitSymbol()
-    }
+    open fun toStringWithFullUnitName(locale: Locale? = null) = "${valueToString()} ${unitToFullNameString(locale)}"
 
-    fun toString(locale: Locale? = null, unitFullName: Boolean = false): String {
-        val unitInstance = baseUnit.createInstance()
-        val valueString = value.toString()
+    open fun unitToFullNameString(locale: Locale? = null) = unit.createInstance().fullUnitName(locale)
 
-        val unitString = if (unitFullName) {
-            if (value == BigDecimal.ONE) {
-                unitInstance.fullUnitName(locale)
-            } else {
-                unitInstance.pluralForm(locale)
-            }
-        } else {
-            unitInstance.unitSymbol(locale)
-        }
+    open fun unitToString(locale: Locale? = null) = unit.createInstance().unitSymbol(locale)
 
-        return "$valueString $unitString"
-    }
+    open fun valueToString() = value.toString()
 
     operator fun plus(other: AbstractQuantity<Q>): AbstractQuantity<Q> {
-        if (this.baseUnit != other.baseUnit) throw Exception()
+        if (this.unit != other.unit) throw Exception()
         return copyWith(this.value + other.value)
     }
 }
