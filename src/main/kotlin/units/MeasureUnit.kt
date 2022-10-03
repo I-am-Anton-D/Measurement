@@ -1,5 +1,6 @@
 package units
 
+import java.math.BigDecimal
 import java.util.*
 
 
@@ -8,7 +9,11 @@ interface MeasureUnit {
         return getBundle(locale).getString("symbol")
     }
 
-    fun fullUnitName(locale: Locale?): String {
+    fun fullUnitName(locale: Locale?, value:BigDecimal): String {
+        return singularForm(locale)
+    }
+
+    fun singularForm(locale: Locale?) : String {
         return getBundle(locale).getString("fullName")
     }
 

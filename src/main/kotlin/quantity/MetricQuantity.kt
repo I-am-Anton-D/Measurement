@@ -3,7 +3,6 @@ package quantity
 import units.MeasureUnit
 import units.Prefix
 import java.math.BigDecimal
-import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -14,13 +13,20 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out MeasureUni
         return value.divide(prefix.getPrefixMultiplier())
     }
 
-    fun toString(locale: Locale? = null, prefix: Prefix = Prefix.NOMINAL): String {
-        if (prefix == Prefix.NOMINAL) return toString(locale)
-        return valueIn(prefix).toString() + " " + prefix.prefixSymbol(locale) + unit.createInstance().unitSymbol(locale)
-    }
+    override fun toString(outputParameters: OutputParameters): String {
+        val prefix = outputParameters.prefix
+        val locale = outputParameters.locale
 
-    fun toStringWithFullUnitName(locale: Locale? = null, prefix: Prefix  = Prefix.NOMINAL) : String {
-        return valueIn(prefix).toString() + " " + prefix.prefixName(locale) + unit.createInstance().pluralForm(locale)
+        if (prefix == Prefix.NOMINAL)
+            return super.toString(outputParameters)
+
+        val valueInPrefix = valueIn(prefix)
+
+        if (outputParameters.fullNameUnit) {
+            return valueInPrefix.toString() + " " + prefix.prefixName(locale) + unit.createInstance().fullUnitName(locale, valueInPrefix)
+        }
+
+        return valueInPrefix.toString() + " " + prefix.prefixSymbol(locale) + unit.createInstance().unitSymbol(locale)
     }
 
     open operator fun plus(other: AbstractQuantity<Q>): MetricQuantity<Q> {
