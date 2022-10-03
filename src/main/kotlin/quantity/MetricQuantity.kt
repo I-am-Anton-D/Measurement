@@ -4,7 +4,6 @@ import units.AbstractUnit
 import units.Prefix
 import java.math.BigDecimal
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
 abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUnit>) :
     AbstractQuantity<Q>(number, baseUnit) {
@@ -24,7 +23,7 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUn
 
         val valueString = valueInPrefix.toString()
         val prefixString = if (outputParameters.fullUnitName) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
-        val unitString = unit.createInstance().toString(outputParameters, valueInPrefix)
+        val unitString = unit.toString(outputParameters, valueInPrefix)
 
         return "$valueString $prefixString$unitString"
     }
