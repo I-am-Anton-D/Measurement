@@ -20,7 +20,11 @@ abstract class AbstractUnit {
         return ResourceBundle.getBundle(unitSimpleClassName, locale) ?: throw Exception()
     }
 
-    open fun convertTo(number: Number, kClass: KClass<out AbstractUnit>): BigDecimal {
+    open fun convertTo(kClass: KClass<out AbstractUnit>, number: Number): BigDecimal {
+        throw NotImplementedError()
+    }
+
+    open fun convertFrom(kClass: KClass<out AbstractUnit>, number: Number): BigDecimal {
         throw NotImplementedError()
     }
 
