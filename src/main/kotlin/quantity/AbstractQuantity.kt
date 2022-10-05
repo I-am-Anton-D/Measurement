@@ -22,4 +22,29 @@ abstract class AbstractQuantity<Q>(
         "${outputParameters.df.format(value)} ${unit.toString(outputParameters, value)}"
 
     override fun toString() = "$value $unit"
+
+    operator fun compareTo(other: AbstractQuantity<Q>): Int {
+        return if (unit::class == other.unit::class) {
+            this.value.compareTo(other.value)
+        } else {
+            throw Exception()
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AbstractQuantity<*>) return false
+
+        return if (unit::class == other.unit::class) {
+            this.value == other.value
+        } else {
+            false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
+    }
 }
