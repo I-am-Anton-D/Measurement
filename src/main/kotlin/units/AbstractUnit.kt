@@ -6,21 +6,13 @@ import java.util.*
 
 
 abstract class AbstractUnit {
-    open fun unitSymbol(locale: Locale? = null): String {
-        return getBundle(locale).getString("symbol")
-    }
+    open fun unitSymbol(locale: Locale? = null): String = getBundle(locale).getString("symbol")
 
-    open fun fullUnitName(locale: Locale?, value: BigDecimal): String {
-        return singularForm(locale)
-    }
+    open fun fullUnitName(locale: Locale?, value: BigDecimal) =  if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
 
-    open fun singularForm(locale: Locale?): String {
-        return getBundle(locale).getString("fullName")
-    }
+    open fun singularForm(locale: Locale?): String = getBundle(locale).getString("fullName")
 
-    open fun pluralForm(locale: Locale?): String {
-        return getBundle(locale).getString("pluralForm")
-    }
+    open fun pluralForm(locale: Locale?): String = getBundle(locale).getString("pluralForm")
 
     open fun getBundle(locale: Locale? = null): ResourceBundle {
         val targetLocale = locale ?: Locale.getDefault()
@@ -33,7 +25,6 @@ abstract class AbstractUnit {
         else unitSymbol(outputParameters.locale)
     }
 
-    override fun toString(): String {
-        return unitSymbol()
-    }
+    override fun toString() = unitSymbol()
+
 }

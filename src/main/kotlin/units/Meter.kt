@@ -7,15 +7,16 @@ class Meter: AbstractUnit() {
 
     override fun fullUnitName(locale: Locale?, value: BigDecimal): String {
         val targetLocale = locale ?: Locale.getDefault()
-        val five = BigDecimal(5)
 
         if (targetLocale.language == "ru") {
             if (value == BigDecimal.ONE) return singularForm(locale)
+
+            val five = BigDecimal(5)
             if (value < five) return getBundle(locale).getString("lessFive")
             if (value >= five) return pluralForm(locale)
         }
 
-        return if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
+        return super.fullUnitName(locale, value)
     }
 }
 
