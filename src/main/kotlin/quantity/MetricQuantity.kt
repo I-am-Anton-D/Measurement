@@ -21,7 +21,7 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUn
 
         val valueInPrefix = valueIn(prefix)
 
-        val valueString = valueInPrefix.toString()
+        val valueString = outputParameters.df.format(valueInPrefix)
         val prefixString = if (outputParameters.fullUnitName) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
         val unitString = unit.toString(outputParameters, valueInPrefix)
 
@@ -29,7 +29,7 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUn
     }
 
     open operator fun plus(other: AbstractQuantity<Q>): MetricQuantity<Q> {
-        if (this.unit != other.unit) throw Exception()
+        if (this.unit::class != other.unit::class) throw Exception()
         return copyWith(this.value + other.value) as MetricQuantity<Q>
     }
 }

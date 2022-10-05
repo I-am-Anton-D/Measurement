@@ -4,11 +4,8 @@ import java.math.BigDecimal
 import java.util.*
 
 class Meter: AbstractUnit() {
-
-    override fun fullUnitName(locale: Locale?, value: BigDecimal): String {
-        val targetLocale = locale ?: Locale.getDefault()
-
-        if (targetLocale.language == "ru") {
+    override fun fullUnitName(locale: Locale, value: BigDecimal): String {
+        if (locale.language == "ru") {
             if (value == BigDecimal.ONE) return singularForm(locale)
 
             val five = BigDecimal(5)

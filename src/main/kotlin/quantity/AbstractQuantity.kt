@@ -18,7 +18,8 @@ abstract class AbstractQuantity<Q>(
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
-    open fun toString(outputParameters: OutputParameters) = "$value ${unit.toString(outputParameters, value)}"
+    open fun toString(outputParameters: OutputParameters) =
+        "${outputParameters.df.format(value)} ${unit.toString(outputParameters, value)}"
 
     override fun toString() = "$value $unit"
 }
