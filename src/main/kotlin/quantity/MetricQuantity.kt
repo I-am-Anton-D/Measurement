@@ -22,7 +22,7 @@ abstract class MetricQuantity<Q>(number: Number, baseUnit: KClass<out AbstractUn
         val valueInPrefix = valueIn(prefix)
 
         val valueString = outputParameters.df.format(valueInPrefix)
-        val prefixString = if (outputParameters.fullUnitName) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
+        val prefixString = if (outputParameters.expand) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
         val unitString = unit.toString(outputParameters, valueInPrefix)
 
         return "$valueString $prefixString$unitString"

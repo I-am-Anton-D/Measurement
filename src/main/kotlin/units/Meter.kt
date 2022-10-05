@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class Meter: AbstractUnit() {
-    override fun fullUnitName(locale: Locale, value: BigDecimal): String {
+    override fun expandedForm(locale: Locale, value: BigDecimal): String {
         if (locale.language == "ru") {
             if (value == BigDecimal.ONE) return singularForm(locale)
 
@@ -13,7 +13,7 @@ class Meter: AbstractUnit() {
             if (value >= five) return pluralForm(locale)
         }
 
-        return super.fullUnitName(locale, value)
+        return super.expandedForm(locale, value)
     }
 }
 

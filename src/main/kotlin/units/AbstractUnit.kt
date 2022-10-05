@@ -6,11 +6,11 @@ import java.util.*
 
 
 abstract class AbstractUnit {
-    open fun unitSymbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
+    open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
-    open fun fullUnitName(locale: Locale = Locale.getDefault(), value: BigDecimal) =  if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
+    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal) =  if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
 
-    open fun singularForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("fullName")
+    open fun singularForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
 
     open fun pluralForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("pluralForm")
 
@@ -20,10 +20,10 @@ abstract class AbstractUnit {
     }
 
     open fun toString(outputParameters: OutputParameters, value: BigDecimal): String {
-        return if (outputParameters.fullUnitName) fullUnitName(outputParameters.locale, value)
-        else unitSymbol(outputParameters.locale)
+        return if (outputParameters.expand) expandedForm(outputParameters.locale, value)
+        else symbol(outputParameters.locale)
     }
 
-    override fun toString() = unitSymbol()
+    override fun toString() = symbol()
 
 }

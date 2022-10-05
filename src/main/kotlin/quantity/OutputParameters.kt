@@ -8,5 +8,5 @@ class OutputParameters(
     var df: DecimalFormat = DecimalFormat(),
     var locale: Locale = Locale.getDefault(),
     var prefix: Prefix = Prefix.NOMINAL,
-    var fullUnitName: Boolean = false
+    var expand: Boolean = false
 )
