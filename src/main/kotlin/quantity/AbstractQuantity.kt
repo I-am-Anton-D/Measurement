@@ -6,15 +6,10 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 abstract class AbstractQuantity<Q>(
-    value: BigDecimal,
-    unit: KClass<out AbstractUnit<Q>>
+    val value: BigDecimal,
+    val unit: AbstractUnit<Q>
 ) {
-    val value: BigDecimal = value
-        get() = BigDecimal(field.toString())
-
-    val unit: AbstractUnit<Q> = unit.createInstance()
-
-    constructor(number: Number, baseUnit: KClass<out AbstractUnit<Q>>) : this(BigDecimal(number.toString()), baseUnit)
+    constructor(number: Number, baseUnit: KClass<out AbstractUnit<Q>>) : this(BigDecimal(number.toString()), baseUnit.createInstance())
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
