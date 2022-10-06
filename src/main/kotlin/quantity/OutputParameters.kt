@@ -11,5 +11,5 @@ class OutputParameters(
     var locale: Locale = Locale.getDefault(),
     var prefix: Prefix = Prefix.NOMINAL,
     var expand: Boolean = false,
-    var unit: KClass<out AbstractUnit>? = null
+    var unit: KClass<out AbstractUnit<*>>? = null
 )

@@ -1,9 +1,10 @@
 package units
 
+import measurand.Mass
 import java.math.BigDecimal
 import java.util.*
 
-class Gram : AbstractUnit() {
+class Gram : AbstractUnit<Mass>() {
     override fun expandedForm(locale: Locale, value: BigDecimal): String {
         if (locale.language == "ru") {
             return if (value == BigDecimal.ONE) singularForm(locale) else

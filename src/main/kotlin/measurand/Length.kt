@@ -13,8 +13,8 @@ class Length(number: Number) : MetricQuantity<Length>(number, Meter::class) {
     override fun copyWith(value: BigDecimal) = Length(value)
 }
 
-fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: KClass<out AbstractUnit> = Meter::class): Length {
-    val toMeterValue = if (unit == Meter::class) this else unit.createInstance().convertTo(Meter::class, this)
+fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: KClass<out AbstractUnit<Length>> = Meter::class): Length {
+    val toMeterValue = if (unit == Meter::class) this else Meter().convertFrom(unit, number = this)
     val toPrefixValue = if (prefix == Prefix.NOMINAL) toMeterValue else prefix.normalize(toMeterValue)
     return Length(toPrefixValue)
 }
