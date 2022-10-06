@@ -33,7 +33,7 @@ abstract class AbstractUnit<Q> {
 
     open fun convertFrom(kClass: KClass<out AbstractUnit<Q>>, number: Number): BigDecimal {
         val ratio = kClass.createInstance().ratio.toString()
-        return BigDecimal(number.toString()).multiply(BigDecimal(ratio.toString()))
+        return BigDecimal(number.toString()).multiply(BigDecimal(ratio))
     }
 
     open fun toString(outputParameters: OutputParameters, value: BigDecimal): String {

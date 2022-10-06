@@ -22,7 +22,6 @@ abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q
     override fun toString(outputParameters: OutputParameters): String {
         val prefix = outputParameters.prefix
         val locale = outputParameters.locale
-
         val targetUnit = outputParameters.unit ?: unit::class
 
         val valueIn = valueIn(prefix, targetUnit as KClass<AbstractUnit<Q>>)

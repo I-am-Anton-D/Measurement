@@ -1,13 +1,12 @@
 
 import measurand.*
 import quantity.OutputParameters
-import units.Gram
-import units.Mile
+import units.Prefix
 
 
 fun main() {
     //Locale.setDefault(Locale("fr","FR"))
 
     val l = 5.mile()
-    print(l.toString(OutputParameters(unit = Gram::class)))
+    print(l.toString(OutputParameters(prefix = Prefix.KILO, expand = true)))
 }
