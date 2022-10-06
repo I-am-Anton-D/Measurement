@@ -23,6 +23,7 @@ abstract class AbstractQuantity<Q>(
 
     override fun toString() = "$value $unit"
 
+    @Suppress("UNCHECKED_CAST")
     open operator fun plus(other: AbstractQuantity<Q>): Q {
         if (this.unit::class != other.unit::class) throw Exception()
         return copyWith(this.value + other.value) as Q

@@ -19,6 +19,7 @@ abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun toString(outputParameters: OutputParameters): String {
         val prefix = outputParameters.prefix
         val locale = outputParameters.locale
