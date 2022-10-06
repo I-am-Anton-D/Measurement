@@ -9,11 +9,12 @@ import kotlin.reflect.KClass
 abstract class AbstractUnit {
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
-    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal) = if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
-
     open fun singularForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
 
     open fun pluralForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("pluralForm")
+
+    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal) =
+        if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
 
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw Exception()
@@ -34,6 +35,4 @@ abstract class AbstractUnit {
     }
 
     override fun toString() = symbol()
-
-
 }

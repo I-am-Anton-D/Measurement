@@ -1,16 +1,15 @@
-import measurand.gram
+
+import measurand.Length
 import measurand.km
-import measurand.meter
 import measurand.mile
+import measurand.toMiles
 import quantity.OutputParameters
-import java.math.BigDecimal
-import java.text.DecimalFormat
+import units.Mile
 
 
 fun main() {
     //Locale.setDefault(Locale("fr","FR"))
 
-    val l = 2.mile()
-
-    print(l)
+    val l = 120.km() + 5.mile()
+    print(l.toMiles())
 }

@@ -1,6 +1,7 @@
 package units
 
 import java.math.BigDecimal
+import java.math.MathContext
 import kotlin.reflect.KClass
 
 class Mile : AbstractUnit() {
@@ -15,7 +16,7 @@ class Mile : AbstractUnit() {
 
     override fun convertFrom(kClass: KClass<out AbstractUnit>, number: Number): BigDecimal {
         if (kClass == Meter::class) {
-            return BigDecimal(number.toString()).divide(BigDecimal(RATIO.toString()))
+            return BigDecimal(number.toString()).divide(BigDecimal(RATIO.toString()), MathContext.DECIMAL128)
         }
         throw Exception()
     }

@@ -23,6 +23,11 @@ abstract class AbstractQuantity<Q>(
 
     override fun toString() = "$value $unit"
 
+    open operator fun plus(other: AbstractQuantity<Q>): Q {
+        if (this.unit::class != other.unit::class) throw Exception()
+        return copyWith(this.value + other.value) as Q
+    }
+
     operator fun compareTo(other: AbstractQuantity<Q>): Int {
         return if (unit::class == other.unit::class) {
             this.value.compareTo(other.value)
