@@ -1,7 +1,7 @@
 
 import measurand.mile
 import quantity.OutputParameters
-import units.Gram
+import units.Mile
 
 
 fun main() {
@@ -9,5 +9,5 @@ fun main() {
 
     val l = 5.mile()
 
-    print(l.toString(OutputParameters(unit = Gram::class)))
+    print(l.toString(OutputParameters(unit = Mile::class)))
 }
