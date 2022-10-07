@@ -4,7 +4,6 @@ import quantity.OutputParameters
 import java.math.BigDecimal
 import java.util.*
 
-
 abstract class AbstractUnit<Q> {
 
     open val ratio = 1.0

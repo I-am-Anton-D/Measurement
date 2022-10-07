@@ -2,10 +2,7 @@ package units
 
 import measurand.Length
 import java.math.BigDecimal
-import java.math.MathContext
 import java.util.*
-import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
 class Meter : AbstractUnit<Length>() {
 
