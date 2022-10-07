@@ -9,14 +9,11 @@ import kotlin.reflect.full.createInstance
 abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q>>) :
     AbstractQuantity<Q>(number, unit) {
 
-    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, target: KClass<out AbstractUnit<Q>>? = unit::class): BigDecimal {
-        val valueIn = if (target == unit::class || target == null) value else unit.convertTo(target, value)
-
-        return if (prefix == Prefix.NOMINAL) {
-            valueIn
-        } else {
-            valueIn.divide((prefix.getPrefixMultiplier()))
-        }
+    open fun valueIn(
+        prefix: Prefix = Prefix.NOMINAL,
+        unit: KClass<out AbstractUnit<Q>> = this.unit::class
+    ): BigDecimal {
+        return super.valueIn(unit).divide((prefix.getPrefixMultiplier()))
     }
 
     @Suppress("UNCHECKED_CAST")

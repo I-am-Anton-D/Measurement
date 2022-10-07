@@ -2,6 +2,7 @@ package quantity
 
 import units.AbstractUnit
 import java.math.BigDecimal
+import java.math.MathContext
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -9,7 +10,10 @@ abstract class AbstractQuantity<Q>(
     val value: BigDecimal,
     val unit: AbstractUnit<Q>
 ) {
-    constructor(number: Number, baseUnit: KClass<out AbstractUnit<Q>>) : this(BigDecimal(number.toString()), baseUnit.createInstance())
+    constructor(number: Number, baseUnit: KClass<out AbstractUnit<Q>>) : this(
+        BigDecimal(number.toString()),
+        baseUnit.createInstance()
+    )
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
@@ -17,6 +21,11 @@ abstract class AbstractQuantity<Q>(
         "${outputParameters.df.format(value)} ${unit.toString(outputParameters, value)}"
 
     override fun toString() = "$value $unit"
+
+    open infix fun valueIn(unit: KClass<out AbstractUnit<Q>>): BigDecimal {
+        val ratio = unit.createInstance().ratio
+        return BigDecimal(value.toString()).divide(BigDecimal(ratio), MathContext.DECIMAL128)
+    }
 
     @Suppress("UNCHECKED_CAST")
     open operator fun plus(other: AbstractQuantity<Q>): Q {

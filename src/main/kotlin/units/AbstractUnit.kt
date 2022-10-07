@@ -2,10 +2,7 @@ package units
 
 import quantity.OutputParameters
 import java.math.BigDecimal
-import java.math.MathContext
 import java.util.*
-import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
 
 abstract class AbstractUnit<Q> {
@@ -24,16 +21,6 @@ abstract class AbstractUnit<Q> {
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw Exception()
         return ResourceBundle.getBundle(unitSimpleClassName, locale) ?: throw Exception()
-    }
-
-    open fun convertTo(kClass: KClass<out AbstractUnit<Q>>, number: Number): BigDecimal {
-        val ratio = kClass.createInstance().ratio.toString()
-        return BigDecimal(number.toString()).divide(BigDecimal(ratio), MathContext.DECIMAL128)
-    }
-
-    open fun convertFrom(kClass: KClass<out AbstractUnit<Q>>, number: Number): BigDecimal {
-        val ratio = kClass.createInstance().ratio.toString()
-        return BigDecimal(number.toString()).multiply(BigDecimal(ratio))
     }
 
     open fun toString(outputParameters: OutputParameters, value: BigDecimal): String {

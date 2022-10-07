@@ -14,7 +14,8 @@ class Length(number: Number) : MetricQuantity<Length>(number, Meter::class) {
 }
 
 fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: KClass<out AbstractUnit<Length>> = Meter::class): Length {
-    val toMeterValue = if (unit == Meter::class) this else Meter().convertFrom(unit, number = this)
+    val toMeterValue =
+        if (unit == Meter::class) this else BigDecimal(this.toString()).multiply(BigDecimal(unit.createInstance().ratio))
     val toPrefixValue = if (prefix == Prefix.NOMINAL) toMeterValue else prefix.normalize(toMeterValue)
     return Length(toPrefixValue)
 }
@@ -27,4 +28,4 @@ fun Number.millimeter() = meter(Prefix.MILLI)
 fun Number.mm() = millimeter()
 fun Number.mile() = meter(unit = Mile::class)
 
-fun Length.toMiles() = valueIn(target = Mile::class)
+fun Length.toMiles() = valueIn(unit = Mile::class)
