@@ -3,6 +3,8 @@ package quantity
 import units.AbstractUnit
 import units.Prefix
 import java.math.BigDecimal
+import java.text.DecimalFormat
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
@@ -29,4 +31,12 @@ abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q
 
         return "$valueString $prefixString$unitString"
     }
+
+    fun toString(
+        df: DecimalFormat = DecimalFormat(),
+        locale: Locale = Locale.getDefault(),
+        prefix: Prefix = Prefix.NOMINAL,
+        expand: Boolean = false,
+        unit: KClass<out AbstractUnit<Q>>? = null
+    ) = toString(OutputParameters(df, locale, prefix, expand, unit))
 }

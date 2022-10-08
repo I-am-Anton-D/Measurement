@@ -1,7 +1,7 @@
 
 import measurand.km
 import measurand.mile
-import quantity.OutputParameters
+import units.Mile
 
 
 fun main() {
@@ -9,5 +9,5 @@ fun main() {
 
     val l = 5001.mile() + 500.km()
 
-    print(l.toString(OutputParameters()))
+    print(l.toString(unit = Mile::class))
 }
