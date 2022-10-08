@@ -1,8 +1,8 @@
 package units
 
 import java.math.BigDecimal
+import java.math.MathContext
 import java.util.*
-import kotlin.math.absoluteValue
 
 enum class Prefix(private val exponent: Int) {
     YOTTA(24),
@@ -33,11 +33,7 @@ enum class Prefix(private val exponent: Int) {
     fun prefixName(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString())
 
-    fun getPrefixMultiplier(): BigDecimal {
-        if (this == NOMINAL) return BigDecimal.ONE
-        return if (exponent > 0) BigDecimal.TEN.pow(exponent)
-        else BigDecimal.ONE.divide(BigDecimal.TEN.pow(exponent.absoluteValue))
-    }
+    fun getPrefixMultiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
 
     fun normalize(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(getPrefixMultiplier())
 

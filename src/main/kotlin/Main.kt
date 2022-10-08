@@ -1,5 +1,4 @@
 
-import measurand.km
 import measurand.mile
 import units.Mile
 
@@ -7,7 +6,7 @@ import units.Mile
 fun main() {
     //Locale.setDefault(Locale("fr","FR"))
 
-    val l = 5001.mile() + 500.km()
+    val l = 50.mile()
 
-    print(l.toString(unit = Mile))
+    print(l.toString(expand = true, unit = Mile))
 }
