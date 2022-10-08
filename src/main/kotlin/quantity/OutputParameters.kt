@@ -6,10 +6,10 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.reflect.KClass
 
-class OutputParameters(
+class OutputParameters<Q>(
     var df: DecimalFormat = DecimalFormat(),
     var locale: Locale = Locale.getDefault(),
     var prefix: Prefix = Prefix.NOMINAL,
     var expand: Boolean = false,
-    var unit: KClass<out AbstractUnit<*>>? = null
+    var unit: KClass<out AbstractUnit<Q>>? = null
 )

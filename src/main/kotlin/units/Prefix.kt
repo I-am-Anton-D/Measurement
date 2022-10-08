@@ -49,5 +49,4 @@ enum class Prefix(private val exponent: Int) {
     fun normalize(number: Number): BigDecimal {
         return BigDecimal(number.toString()).multiply(this.getPrefixMultiplier())
     }
-
 }

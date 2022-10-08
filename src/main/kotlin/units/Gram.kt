@@ -5,7 +5,6 @@ import java.math.BigDecimal
 import java.util.*
 
 class Gram : AbstractUnit<Mass>() {
-    override val measurand = Mass::class
 
     override fun expandedForm(locale: Locale, value: BigDecimal): String {
         if (locale.language == "ru") {

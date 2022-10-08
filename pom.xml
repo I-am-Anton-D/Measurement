@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>measurement</artifactId>
-    <groupId>it.dmitrohenko</groupId>
+    <groupId>it.dmitrochenko</groupId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>consoleApp</name>
+    <name>Measurement</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

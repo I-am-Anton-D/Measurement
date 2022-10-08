@@ -3,12 +3,10 @@ package units
 import quantity.OutputParameters
 import java.math.BigDecimal
 import java.util.*
-import kotlin.reflect.KClass
 
 abstract class AbstractUnit<Q> {
 
     open val ratio = 1.0
-    abstract val measurand: KClass<*>
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
@@ -19,13 +17,12 @@ abstract class AbstractUnit<Q> {
     open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal) =
         if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
 
-
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw Exception()
         return ResourceBundle.getBundle(unitSimpleClassName, locale) ?: throw Exception()
     }
 
-    open fun toString(outputParameters: OutputParameters, value: BigDecimal): String {
+    open fun toString(outputParameters: OutputParameters<Q>, value: BigDecimal): String {
         return if (outputParameters.expand) expandedForm(outputParameters.locale, value)
         else symbol(outputParameters.locale)
     }
