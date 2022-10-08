@@ -9,5 +9,5 @@ fun main() {
 
     val l = 5001.mile() + 500.km()
 
-    print(l.toString(unit = Mile::class))
+    print(l.toString(unit = Mile))
 }

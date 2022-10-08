@@ -4,7 +4,7 @@ import measurand.Length
 import java.math.BigDecimal
 import java.util.*
 
-class Meter : AbstractUnit<Length>() {
+object Meter : AbstractUnit<Length>() {
 
     override fun expandedForm(locale: Locale, value: BigDecimal): String {
         if (locale.language == "ru") {
@@ -16,6 +16,6 @@ class Meter : AbstractUnit<Length>() {
     }
 }
 
-class Mile : AbstractUnit<Length>() {
+object Mile : AbstractUnit<Length>() {
     override val ratio = 1609.344
 }

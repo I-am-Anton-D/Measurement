@@ -5,15 +5,13 @@ import units.Prefix
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
 
-abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q>>) :
+abstract class MetricQuantity<Q>(number: Number, unit: AbstractUnit<Q>) :
     AbstractQuantity<Q>(number, unit) {
 
     open fun valueIn(
         prefix: Prefix = Prefix.NOMINAL,
-        unit: KClass<out AbstractUnit<Q>> = this.unit::class
+        unit: AbstractUnit<Q> = this.unit
     ): BigDecimal {
         return super.valueIn(unit).divide((prefix.getPrefixMultiplier()))
     }
@@ -21,13 +19,13 @@ abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q
     override fun toString(outputParameters: OutputParameters<Q>): String {
         val prefix = outputParameters.prefix
         val locale = outputParameters.locale
-        val targetUnit = outputParameters.unit ?: unit::class
+        val targetUnit = outputParameters.unit ?: unit
 
         val valueIn = valueIn(prefix, targetUnit)
 
         val valueString = outputParameters.df.format(valueIn)
         val prefixString = if (outputParameters.expand) prefix.prefixName(locale) else prefix.prefixSymbol(locale)
-        val unitString = targetUnit.createInstance().toString(outputParameters, valueIn)
+        val unitString = targetUnit.toString(outputParameters, valueIn)
 
         return "$valueString $prefixString$unitString"
     }
@@ -37,6 +35,6 @@ abstract class MetricQuantity<Q>(number: Number, unit: KClass<out AbstractUnit<Q
         locale: Locale = Locale.getDefault(),
         prefix: Prefix = Prefix.NOMINAL,
         expand: Boolean = false,
-        unit: KClass<out AbstractUnit<Q>>? = null
+        unit: AbstractUnit<Q>? = null
     ) = toString(OutputParameters(df, locale, prefix, expand, unit))
 }

@@ -4,7 +4,7 @@ import measurand.Mass
 import java.math.BigDecimal
 import java.util.*
 
-class Gram : AbstractUnit<Mass>() {
+object Gram : AbstractUnit<Mass>() {
 
     override fun expandedForm(locale: Locale, value: BigDecimal): String {
         if (locale.language == "ru") {
