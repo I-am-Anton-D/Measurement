@@ -27,13 +27,11 @@ enum class Prefix(private val exponent: Int) {
     ZEPTO(-21),
     YOCTO(-24);
 
-    fun prefixSymbol(locale: Locale?): String {
-        return if (this == NOMINAL) "" else  getBundle(locale).getString(this.toString() + "_SYMBOL")
-    }
+    fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
+        getBundle(locale).getString(this.toString() + "_SYMBOL")
 
-    fun prefixName(locale: Locale?): String {
-        return if (this == NOMINAL) "" else getBundle(locale).getString(this.toString())
-    }
+    fun prefixName(locale: Locale = Locale.getDefault()): String =
+        getBundle(locale).getString(this.toString())
 
     fun getPrefixMultiplier(): BigDecimal {
         if (this == NOMINAL) return BigDecimal.ONE
@@ -41,12 +39,7 @@ enum class Prefix(private val exponent: Int) {
         else BigDecimal.ONE.divide(BigDecimal.TEN.pow(exponent.absoluteValue))
     }
 
-    private fun getBundle(locale: Locale? = null): ResourceBundle {
-        val targetLocale = locale ?: Locale.getDefault()
-        return ResourceBundle.getBundle(this::class.simpleName!!, targetLocale)
-    }
+    fun normalize(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(getPrefixMultiplier())
 
-    fun normalize(number: Number): BigDecimal {
-        return BigDecimal(number.toString()).multiply(this.getPrefixMultiplier())
-    }
+    private fun getBundle(locale: Locale) = ResourceBundle.getBundle(this::class.simpleName!!, locale)
 }
