@@ -1,10 +1,10 @@
 package measurand
 
-import quantity.MetricQuantity
+import quantity.AbstractQuantity
 import units.Gram
 import java.math.BigDecimal
 
-class Mass(number: Number) : MetricQuantity<Mass>(number, Gram) {
+class Mass(number: Number) : AbstractQuantity<Mass>(number, Gram) {
     override fun copyWith(value: BigDecimal): Mass {
         return Mass(value)
     }

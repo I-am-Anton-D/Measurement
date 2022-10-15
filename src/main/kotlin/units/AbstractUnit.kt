@@ -1,6 +1,5 @@
 package units
 
-import utils.ToStringParameters
 import java.math.BigDecimal
 import java.util.*
 
@@ -22,10 +21,9 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
         return ResourceBundle.getBundle(unitSimpleClassName, locale) ?: throw Exception()
     }
 
-    open fun toString(outputParameters: ToStringParameters<Q>, value: BigDecimal): String {
-        return if (outputParameters.expand) expandedForm(outputParameters.locale, value)
-        else symbol(outputParameters.locale)
-    }
+    open fun toString(expand:Boolean = false, locale: Locale = Locale.getDefault(), value: BigDecimal) =
+        if (expand) expandedForm(locale, value)
+        else symbol(locale)
 
     fun valueInBaseUnit(number: Number): BigDecimal =
         if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
