@@ -11,11 +11,11 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val unit: AbstractUnit
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
     open infix fun valueIn(unit: AbstractUnit<Q>): BigDecimal {
-        return BigDecimal(value.toString()).divide(BigDecimal(unit.ratio), MathContext.DECIMAL128)
+        return BigDecimal(value.toString()).divide(unit.ratio, MathContext.DECIMAL128)
     }
 
-    open fun toString(outputParameters: OutputParameters<Q>) =
-        "${outputParameters.df.format(value)} ${unit.toString(outputParameters, value)}"
+    open fun toString(op: ToStringParameters<Q>) =
+        "${op.df.format(value)} ${unit.toString(op, value)}"
 
     override fun toString() = "$value $unit"
 

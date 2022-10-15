@@ -27,15 +27,19 @@ enum class Prefix(private val exponent: Int) {
     ZEPTO(-21),
     YOCTO(-24);
 
-    fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
-        getBundle(locale).getString(this.toString() + "_SYMBOL")
-
-    fun prefixName(locale: Locale = Locale.getDefault()): String =
-        getBundle(locale).getString(this.toString())
-
     fun getPrefixMultiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
 
-    fun normalize(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(getPrefixMultiplier())
+    fun getPrefixString(expand: Boolean, locale: Locale) = if (expand) prefixName(locale) else prefixSymbol(locale)
+
+    private fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
+        getBundle(locale).getString(this.toString() + "_SYMBOL")
+
+    private fun prefixName(locale: Locale = Locale.getDefault()): String =
+        getBundle(locale).getString(this.toString())
+
+    fun getNominalValue(number: Number): BigDecimal =
+        if (this == NOMINAL) BigDecimal(number.toString())
+        else BigDecimal(number.toString()).multiply(getPrefixMultiplier())
 
     private fun getBundle(locale: Locale) = ResourceBundle.getBundle(this::class.simpleName!!, locale)
 }

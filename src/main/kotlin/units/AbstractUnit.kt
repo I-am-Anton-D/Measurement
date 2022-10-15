@@ -1,12 +1,12 @@
 package units
 
-import quantity.OutputParameters
+import quantity.ToStringParameters
 import java.math.BigDecimal
 import java.util.*
 
-abstract class AbstractUnit<Q> {
+abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
-    open val ratio = 1.0
+    constructor(number: Number) : this(BigDecimal(number.toString()))
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
@@ -22,10 +22,16 @@ abstract class AbstractUnit<Q> {
         return ResourceBundle.getBundle(unitSimpleClassName, locale) ?: throw Exception()
     }
 
-    open fun toString(outputParameters: OutputParameters<Q>, value: BigDecimal): String {
+    open fun toString(outputParameters: ToStringParameters<Q>, value: BigDecimal): String {
         return if (outputParameters.expand) expandedForm(outputParameters.locale, value)
         else symbol(outputParameters.locale)
     }
 
+    fun valueInBaseUnit(number: Number): BigDecimal =
+        if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
+        else BigDecimal(number.toString()).multiply(ratio)
+
     override fun toString() = symbol()
 }
+
+abstract class MetricUnit<Q> : AbstractUnit<Q>()
