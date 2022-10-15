@@ -1,8 +1,7 @@
-package quantity
+package utils
 
 import units.AbstractUnit
 import units.MetricUnit
-import units.Prefix
 import java.text.DecimalFormat
 import java.util.*
 

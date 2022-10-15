@@ -1,6 +1,7 @@
 package quantity
 
 import units.AbstractUnit
+import utils.ToStringParameters
 import java.math.BigDecimal
 import java.math.MathContext
 

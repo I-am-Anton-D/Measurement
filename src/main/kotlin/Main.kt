@@ -1,9 +1,9 @@
 
 import measurand.km
 import measurand.mile
-import quantity.ToStringParameters
+import utils.ToStringParameters
 import units.Meter
-import units.Prefix
+import utils.Prefix
 
 
 fun main() {

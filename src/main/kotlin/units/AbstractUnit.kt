@@ -1,6 +1,6 @@
 package units
 
-import quantity.ToStringParameters
+import utils.ToStringParameters
 import java.math.BigDecimal
 import java.util.*
 

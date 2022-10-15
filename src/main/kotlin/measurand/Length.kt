@@ -2,8 +2,9 @@ package measurand
 
 import quantity.MetricQuantity
 import units.*
+import utils.Prefix
 import java.math.BigDecimal
-import units.Prefix.*
+import utils.Prefix.*
 
 class Length(number: Number) : MetricQuantity<Length>(number, Meter) {
     override fun copyWith(value: BigDecimal) = Length(value)
