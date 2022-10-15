@@ -13,8 +13,12 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     open fun pluralForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("pluralForm")
 
-    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal) =
-        if (BigDecimal.ONE == value) singularForm(locale) else pluralForm(locale)
+    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal): String =
+        try {
+            getBundle(locale).getString(value.toString())
+        } catch (ex: MissingResourceException) {
+            pluralForm(locale)
+        }
 
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw Exception()
