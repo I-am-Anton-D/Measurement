@@ -1,7 +1,7 @@
 package measurand
 
 import quantity.AbstractQuantity
-import units.Gram
+import unit.Gram
 import java.math.BigDecimal
 
 class Mass(number: Number) : AbstractQuantity<Mass>(number, Gram) {

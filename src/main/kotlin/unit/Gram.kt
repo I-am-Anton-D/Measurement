@@ -1,4 +1,4 @@
-package units
+package unit
 
 import measurand.Mass
 import java.math.BigDecimal

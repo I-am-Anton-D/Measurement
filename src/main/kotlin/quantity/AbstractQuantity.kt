@@ -1,9 +1,9 @@
 package quantity
 
-import units.AbstractUnit
-import units.MetricUnit
-import utils.Prefix
-import utils.ToStringParameters
+import unit.AbstractUnit
+import unit.MetricUnit
+import util.Prefix
+import util.ToStringParameters
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
