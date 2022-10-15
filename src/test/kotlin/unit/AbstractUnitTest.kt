@@ -141,6 +141,70 @@ internal class AbstractUnitTest {
     }
 
     @Test
+    fun checkValueInBaseUnit() {
+        assertThat(Meter.valueInBaseUnit(1)).isEqualTo(BigDecimal.ONE)
+        assertThat(Mile.valueInBaseUnit(1)).isEqualTo(Mile.ratio)
+        assertThat(Mile.valueInBaseUnit(10)).isEqualTo(Mile.ratio.multiply(BigDecimal.TEN))
+        assertThat(Mile.valueInBaseUnit(1)).isEqualTo(BigDecimal(1609.344.toString()))
+    }
+
+    @Test
+    fun overrideValueInBaseUnit() {
+        val descendant = object : AbstractUnit<Length>() {
+            override fun valueInBaseUnit(number: Number): BigDecimal {
+                return BigDecimal.ZERO
+            }
+        }
+        assertThat(descendant.valueInBaseUnit(10)).isEqualTo(BigDecimal.ZERO)
+    }
+
+    @Test
+    fun valueOfDescendant() {
+        val descendant = object : AbstractUnit<Length>() {}
+
+        assertThat(descendant.valueInBaseUnit(1)).isEqualTo(BigDecimal.ONE)
+        assertThat(descendant.valueInBaseUnit(10)).isEqualTo(BigDecimal.TEN)
+    }
+
+    @Test
+    fun toStringTest() {
+        Locale.setDefault(Locale("en","GB"))
+        assertThat(Meter.toString()).isEqualTo("m")
+    }
+
+    @Test
+    fun toStringTestWithParameters() {
+        Locale.setDefault(Locale("en","GB"))
+
+        assertThat(Meter.toString(expand = true, value = BigDecimal.ZERO)).isEqualTo("meters")
+        assertThat(Meter.toString(expand = true, value = BigDecimal.ONE)).isEqualTo("meter")
+        assertThat(Meter.toString(expand = true, value = BigDecimal.TEN)).isEqualTo("meters")
+        assertThat(Meter.toString(expand = false, value = BigDecimal.TEN)).isEqualTo("m")
+        assertThat(Meter.toString(expand = false, value = BigDecimal.ONE)).isEqualTo("m")
+        assertThat(Meter.toString(value = BigDecimal.ONE)).isEqualTo("m")
+
+        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("метр")
+        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.TEN)).isEqualTo("метров")
+        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("метров")
+        assertThat(Meter.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("м")
+        assertThat(Meter.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("м")
+        assertThat(Meter.toString(locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("м")
+    }
+
+    @Test
+    fun overrideToStringTestWithParameters() {
+        val descendant = object : AbstractUnit<Length>() {
+            override fun toString(expand: Boolean, locale: Locale, value: BigDecimal): String {
+                return "X"
+            }
+        }
+        assertThat(descendant.toString(expand = true, value = BigDecimal.ZERO)).isEqualTo("X")
+        assertThat(descendant.toString(expand = true, value = BigDecimal.ONE)).isEqualTo("X")
+        assertThat(descendant.toString(expand = true, value = BigDecimal.TEN)).isEqualTo("X")
+        assertThat(descendant.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("X")
+    }
+
+    @Test
     fun noBundleForAnonymousClass() {
         val descendant = object : AbstractUnit<Length>() {}
         assertThrows<NoBundleForAnonymousClass> {
@@ -158,6 +222,29 @@ internal class AbstractUnitTest {
     fun foundedBundle() {
         val bundle = Mile.getBundle(Locale("en","GB"))
         assertThat(bundle.locale).isEqualTo(Locale("en","GB"))
+    }
+
+    object SomeUnit: AbstractUnit<Length>(1.234)
+
+    @Test
+    fun testNewUnit() {
+        assertThrows<MissingResourceException>{
+            SomeUnit.getBundle(Locale.getDefault())
+        }
+
+        assertThrows<MissingResourceException>{
+            SomeUnit.symbol()
+        }
+
+        assertThrows<MissingResourceException>{
+            SomeUnit.pluralForm()
+        }
+
+        assertThrows<MissingResourceException>{
+            SomeUnit.pluralForm()
+        }
+
+        assertThat(SomeUnit.ratio).isEqualTo(BigDecimal(1.234.toString()))
     }
 
 }

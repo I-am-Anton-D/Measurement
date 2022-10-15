@@ -21,6 +21,10 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
             pluralForm(locale)
         }
 
+    open fun valueInBaseUnit(number: Number): BigDecimal =
+        if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
+        else BigDecimal(number.toString()).multiply(ratio)
+
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClass()
         return ResourceBundle.getBundle(unitSimpleClassName, locale)
@@ -29,10 +33,6 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
     open fun toString(expand: Boolean = false, locale: Locale = Locale.getDefault(), value: BigDecimal) =
         if (expand) expandedForm(locale, value)
         else symbol(locale)
-
-    fun valueInBaseUnit(number: Number): BigDecimal =
-        if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
-        else BigDecimal(number.toString()).multiply(ratio)
 
     override fun toString() = symbol()
 }
