@@ -49,10 +49,20 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val unit: AbstractUnit
         unit: AbstractUnit<Q> = this.unit
     ) = toString(ToStringParameters(df, locale, expand, unit))
 
+    override fun toString(): String {
+        return toString(expand = false)
+    }
+
     @Suppress("UNCHECKED_CAST")
     open operator fun plus(other: AbstractQuantity<Q>): Q {
         if (this.unit != other.unit) throw Exception()
         return copyWith(this.value + other.value) as Q
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    open operator fun minus(other: AbstractQuantity<Q>): Q {
+        if (this.unit != other.unit) throw Exception()
+        return copyWith(this.value - other.value) as Q
     }
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
