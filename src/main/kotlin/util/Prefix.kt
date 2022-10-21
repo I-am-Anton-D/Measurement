@@ -1,10 +1,11 @@
 package util
 
+import jdk.jshell.execution.LocalExecutionControl
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
 
-enum class Prefix(private val exponent: Int) {
+enum class Prefix(val exponent: Int) {
     YOTTA(24),
     ZETTA(21),
     EXA(18),
@@ -29,12 +30,12 @@ enum class Prefix(private val exponent: Int) {
 
     fun getPrefixMultiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
 
-    fun getPrefixString(expand: Boolean, locale: Locale) = if (expand) prefixName(locale) else prefixSymbol(locale)
+    fun getPrefixString(expand: Boolean = false, locale: Locale = Locale.getDefault()) = if (expand) prefixName(locale) else prefixSymbol(locale)
 
-    private fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
+    fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString() + "_SYMBOL")
 
-    private fun prefixName(locale: Locale = Locale.getDefault()): String =
+    fun prefixName(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString())
 
     fun getNominalValue(number: Number): BigDecimal =
