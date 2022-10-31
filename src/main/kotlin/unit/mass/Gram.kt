@@ -1,4 +1,4 @@
-package unit
+package unit.mass
 
 import measurand.Mass
 import unit.prototype.MetricUnit

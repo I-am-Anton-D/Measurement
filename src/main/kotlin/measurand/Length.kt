@@ -1,9 +1,9 @@
 package measurand
 
 import quantity.AbstractQuantity
-import unit.Inch
-import unit.Meter
-import unit.Mile
+import unit.length.Inch
+import unit.length.Meter
+import unit.length.Mile
 import java.math.BigDecimal
 
 class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {

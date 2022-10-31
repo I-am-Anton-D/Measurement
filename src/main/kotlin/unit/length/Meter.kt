@@ -1,4 +1,4 @@
-package unit
+package unit.length
 
 import measurand.Length
 import unit.prototype.AbstractUnit

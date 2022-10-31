@@ -1,6 +1,7 @@
-package unit
+package unit.length
 
 import measurand.Length
+
 import unit.prototype.Fraction
 import unit.prototype.FractionUnit
 import unit.prototype.StreakUnit

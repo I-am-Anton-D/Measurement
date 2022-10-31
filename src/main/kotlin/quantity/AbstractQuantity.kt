@@ -1,9 +1,6 @@
 package quantity
 
-import unit.prototype.AbstractUnit
-import unit.prototype.FractionUnit
-import unit.prototype.MetricUnit
-import unit.prototype.StreakUnit
+import unit.prototype.*
 import util.Prefix
 import util.ToStringParameters
 import java.math.BigDecimal
@@ -30,21 +27,35 @@ abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal, val baseUnit
         val targetUnit = op.unit ?: baseUnit
         val df = op.df
 
-        val valueIn = if (targetUnit is MetricUnit) valueIn(op.prefix, targetUnit) else valueIn(targetUnit)
-        var valueString = ""
+        when (targetUnit) {
+            is MetricUnit -> {
+                val valueIn = valueIn(op.prefix, targetUnit)
+                val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
+                val prefixString = op.prefix.getPrefixString(op.expand, op.locale)
+                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+                return "$valueString $prefixString$unitString"
+            }
+            is FractionUnit -> {
+                val valueIn = valueIn(targetUnit)
+                val fraction = targetUnit.getFractionString(valueIn)
+                val valueString = if (fraction.isNotEmpty()) fraction else if (df == null) valueIn.stripTrailingZeros()
+                    .toString() else df.format(valueIn)
+                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+                val space = if (targetUnit is StreakUnit && !op.expand) "" else " "
+                return "$valueString$space$unitString"
+            }
+            is CompositeUnit -> {
+                val valueIn = valueIn(targetUnit)
+                return targetUnit.getCompositeUnitString(valueIn)
+            }
 
-        if (targetUnit is FractionUnit) {
-            valueString = targetUnit.getFractionString(valueIn)
+            else -> {
+                val valueIn = valueIn(targetUnit)
+                val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
+                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+                return "$valueString $unitString"
+            }
         }
-        if (valueString.isEmpty()) {
-            valueString = if (df == null) valueIn.stripTrailingZeros().toString() else df.format(valueIn)
-        }
-
-        val prefixString = op.prefix.getPrefixString(op.expand, op.locale)
-        val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
-        val space = if (targetUnit is StreakUnit && !op.expand) "" else " "
-
-        return "$valueString$space$prefixString$unitString"
     }
 
     open fun toString(
