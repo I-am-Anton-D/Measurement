@@ -1,13 +1,13 @@
-
-import measurand.km
-import util.ToStringParameters
-import unit.Meter
-import util.Prefix
+import unit.Inch
+import unit.Inch.inch
 
 
 fun main() {
-//    //Locale.setDefault(Locale("fr","FR"))
-//
-//    val l = 2.km()
-//    print(l.toString(ToStringParameters(unit = Meter, expand = true, prefix = Prefix.KILO)))
+    //Locale.setDefault(Locale("fr","FR"))
+
+    val l = 2.inch()
+    println(l.toString(unit = Inch))
+
+    val l2 = 9.inch() + Inch.ThreeQuarter + Inch.OneQuarter + Inch.SevenEighth
+    print(l2.toString(unit = Inch))
 }

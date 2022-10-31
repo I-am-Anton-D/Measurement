@@ -1,13 +1,13 @@
 package util
 
 import exception.IllegalMetricPrefix
-import unit.AbstractUnit
-import unit.MetricUnit
+import unit.prototype.AbstractUnit
+import unit.prototype.MetricUnit
 import java.text.DecimalFormat
 import java.util.*
 
 class ToStringParameters<Q>(
-    var df: DecimalFormat = DecimalFormat(),
+    var df: DecimalFormat? = null,
     var locale: Locale = Locale.getDefault(),
     var expand: Boolean = false,
     unit: AbstractUnit<Q>? = null
@@ -28,7 +28,7 @@ class ToStringParameters<Q>(
         }
 
     constructor(
-        df: DecimalFormat = DecimalFormat(),
+        df: DecimalFormat? = null,
         locale: Locale = Locale.getDefault(),
         prefix: Prefix = Prefix.NOMINAL,
         expand: Boolean = false,
