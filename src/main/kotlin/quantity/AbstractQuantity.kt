@@ -54,12 +54,16 @@ abstract class AbstractQuantity<Q>(
             is CompositeUnit -> {
                 return if (op.normailze) {
                     val divAndRemainder = valueInBaseUnit.divideAndRemainder(targetUnit.ratio)
-                    val integer = divAndRemainder[0].stripTrailingZeros().toString()
+                    val integer = divAndRemainder[0].stripTrailingZeros()
                     val remainder = divAndRemainder[1].stripTrailingZeros()
+                    val unitStringForInteger = targetUnit.toString(op.expand, op.locale, integer)
                     if (remainder == BigDecimal.ZERO) {
-                        "$integer$space$unitString"
+                        "$integer$space$unitStringForInteger"
                     } else {
-                        "$integer$space$unitString$space" + copyWith(remainder, targetUnit.parentUnit).toString(op)
+                        "$integer$space$unitStringForInteger$space" + copyWith(
+                            remainder,
+                            targetUnit.parentUnit
+                        ).toString(op)
                     }
                 } else {
                     "$valueString$space$unitString"

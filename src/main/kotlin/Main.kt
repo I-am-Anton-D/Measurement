@@ -1,10 +1,8 @@
-import measurand.day
-import measurand.hour
-import measurand.second
-
+import measurand.foot
+import measurand.inch
 
 fun main() {
 
-    val l = 2.day() + 12.hour() + 12.255.second()
-    println(l.toString(expand = true))
+    val l = 2.foot() + 3.inch()
+    println(l.toString(expand = true, normalize = false))
 }
