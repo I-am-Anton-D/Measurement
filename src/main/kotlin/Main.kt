@@ -1,9 +1,10 @@
-import unit.length.km
+import measurand.day
+import measurand.hour
+import measurand.second
 
 
 fun main() {
-    //Locale.setDefault(Locale("fr","FR"))
 
-    val l = 5.km()
-    println(l)
+    val l = 2.day() + 12.hour() + 12.255.second()
+    println(l.toString(expand = true))
 }

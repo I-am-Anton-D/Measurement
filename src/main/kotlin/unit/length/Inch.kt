@@ -1,6 +1,7 @@
 package unit.length
 
 import measurand.Length
+import measurand.inch
 
 import unit.prototype.Fraction
 import unit.prototype.FractionUnit
@@ -10,8 +11,6 @@ import java.math.BigInteger
 import java.math.MathContext
 
 object Inch : FractionUnit<Length>(0.0254), StreakUnit {
-
-    fun Number.inch() = meter(Inch)
 
     fun fraction(numerator: Int, denominator: Int): Length {
         val fractionValue = calculateFraction(numerator, denominator)

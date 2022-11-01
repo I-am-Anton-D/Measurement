@@ -3,5 +3,4 @@ package unit.time
 import measurand.Time
 import unit.prototype.MetricUnit
 
-object Second : MetricUnit<Time>() {
-}
+object Second : MetricUnit<Time>()

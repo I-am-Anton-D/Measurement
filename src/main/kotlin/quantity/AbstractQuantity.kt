@@ -19,7 +19,11 @@ abstract class AbstractQuantity<Q>(
     constructor(number: Number, baseUnit: AbstractUnit<Q>, useUnit: AbstractUnit<Q>?, usePrefix: Prefix?)
             : this(valueInBaseUnit = BigDecimal(number.toString()), baseUnit, useUnit, usePrefix)
 
-    abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
+    abstract fun copyWith(
+        value: BigDecimal,
+        useUnit: AbstractUnit<Q>? = null,
+        usePrefix: Prefix? = null
+    ): AbstractQuantity<Q>
 
     open fun valueIn(unit: AbstractUnit<Q>): BigDecimal =
         valueInBaseUnit.divide(unit.ratio, MathContext.DECIMAL128)
@@ -36,6 +40,7 @@ abstract class AbstractQuantity<Q>(
         val valueIn = if (targetUnit is MetricUnit) valueIn(prefix, targetUnit) else valueIn(targetUnit)
         val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
         val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
+        val space = if (targetUnit is StreakUnit && !op.expand) "" else " "
 
         when (targetUnit) {
             is MetricUnit -> {
@@ -44,16 +49,24 @@ abstract class AbstractQuantity<Q>(
             }
             is FractionUnit -> {
                 val fractionString = targetUnit.getFractionString(valueIn) ?: valueString
-                val space = if (targetUnit is StreakUnit && !op.expand) "" else " "
                 return "$fractionString$space$unitString"
             }
             is CompositeUnit -> {
-                return targetUnit.getCompositeUnitString(valueIn)
+                return if (op.normailze) {
+                    val divAndRemainder = valueInBaseUnit.divideAndRemainder(targetUnit.ratio)
+                    val integer = divAndRemainder[0].stripTrailingZeros().toString()
+                    val remainder = divAndRemainder[1].stripTrailingZeros()
+                    if (remainder == BigDecimal.ZERO) {
+                        "$integer$space$unitString"
+                    } else {
+                        "$integer$space$unitString$space" + copyWith(remainder, targetUnit.parentUnit).toString(op)
+                    }
+                } else {
+                    "$valueString$space$unitString"
+                }
             }
 
-            else -> {
-                return "$valueString $unitString"
-            }
+            else -> return "$valueString $unitString"
         }
     }
 
@@ -74,13 +87,13 @@ abstract class AbstractQuantity<Q>(
     @Suppress("UNCHECKED_CAST")
     open operator fun plus(other: AbstractQuantity<Q>): Q {
         if (this.baseUnit != other.baseUnit) throw Exception()
-        return copyWith(this.valueInBaseUnit + other.valueInBaseUnit) as Q
+        return copyWith(valueInBaseUnit + other.valueInBaseUnit, useUnit, usePrefix) as Q
     }
 
     @Suppress("UNCHECKED_CAST")
     open operator fun minus(other: AbstractQuantity<Q>): Q {
         if (this.baseUnit != other.baseUnit) throw Exception()
-        return copyWith(this.valueInBaseUnit - other.valueInBaseUnit) as Q
+        return copyWith(valueInBaseUnit - other.valueInBaseUnit, useUnit, usePrefix) as Q
     }
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
