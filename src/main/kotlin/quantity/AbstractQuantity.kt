@@ -1,17 +1,23 @@
 package quantity
 
 import unit.prototype.*
-import util.Prefix
-import util.ToStringParameters
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
 import java.util.*
 
-abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal, val baseUnit: AbstractUnit<Q>) :
+abstract class AbstractQuantity<Q>(
+    val valueInBaseUnit: BigDecimal,
+    val baseUnit: AbstractUnit<Q>,
+    val useUnit: AbstractUnit<Q>? = null,
+    val usePrefix: Prefix? = null
+) :
     Comparable<AbstractQuantity<Q>> {
 
-    constructor(number: Number, unit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), unit)
+    constructor(number: Number, baseUnit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), baseUnit)
+
+    constructor(number: Number, baseUnit: AbstractUnit<Q>, useUnit: AbstractUnit<Q>?, usePrefix: Prefix?)
+            : this(valueInBaseUnit = BigDecimal(number.toString()), baseUnit, useUnit, usePrefix)
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
@@ -24,35 +30,28 @@ abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal, val baseUnit
     open infix fun to(unit: AbstractUnit<Q>) = valueIn(unit)
 
     open fun toString(op: ToStringParameters<Q>): String {
-        val targetUnit = op.unit ?: baseUnit
+        val targetUnit = op.unit ?: useUnit ?: baseUnit
         val df = op.df
+        val prefix = if (op.normailze) op.prefix ?: usePrefix ?: Prefix.NOMINAL else Prefix.NOMINAL
+        val valueIn = if (targetUnit is MetricUnit) valueIn(prefix, targetUnit) else valueIn(targetUnit)
+        val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+        val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
 
         when (targetUnit) {
             is MetricUnit -> {
-                val valueIn = valueIn(op.prefix, targetUnit)
-                val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
-                val prefixString = op.prefix.getPrefixString(op.expand, op.locale)
-                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+                val prefixString = if (prefix != Prefix.NOMINAL) prefix.getPrefixString(op.expand, op.locale) else ""
                 return "$valueString $prefixString$unitString"
             }
             is FractionUnit -> {
-                val valueIn = valueIn(targetUnit)
-                val fraction = targetUnit.getFractionString(valueIn)
-                val valueString = if (fraction.isNotEmpty()) fraction else if (df == null) valueIn.stripTrailingZeros()
-                    .toString() else df.format(valueIn)
-                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
+                val fractionString = targetUnit.getFractionString(valueIn) ?: valueString
                 val space = if (targetUnit is StreakUnit && !op.expand) "" else " "
-                return "$valueString$space$unitString"
+                return "$fractionString$space$unitString"
             }
             is CompositeUnit -> {
-                val valueIn = valueIn(targetUnit)
                 return targetUnit.getCompositeUnitString(valueIn)
             }
 
             else -> {
-                val valueIn = valueIn(targetUnit)
-                val valueString = if (df == null) valueIn.stripTrailingZeros().toPlainString() else df.format(valueIn)
-                val unitString = targetUnit.toString(op.expand, op.locale, valueIn)
                 return "$valueString $unitString"
             }
         }
@@ -61,17 +60,12 @@ abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal, val baseUnit
     open fun toString(
         df: DecimalFormat? = null,
         locale: Locale = Locale.getDefault(),
-        prefix: Prefix = Prefix.NOMINAL,
+        prefix: Prefix? = null,
         expand: Boolean = false,
-        unit: MetricUnit<Q>
-    ) = toString(ToStringParameters(df, locale, prefix, expand, unit))
+        normalize: Boolean = true,
+        unit: AbstractUnit<Q>? = null
+    ) = toString(ToStringParameters(df, locale, expand, normalize, prefix, unit))
 
-    open fun toString(
-        df: DecimalFormat? = null,
-        locale: Locale = Locale.getDefault(),
-        expand: Boolean = false,
-        unit: AbstractUnit<Q> = this.baseUnit
-    ) = toString(ToStringParameters(df, locale, expand, unit))
 
     override fun toString(): String {
         return toString(expand = false)

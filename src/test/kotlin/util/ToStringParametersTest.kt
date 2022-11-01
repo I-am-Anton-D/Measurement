@@ -6,8 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import unit.Meter
-import unit.Mile
+import quantity.ToStringParameters
+import unit.length.Meter
+import unit.length.Mile
+
+import unit.prototype.Prefix
 import java.text.DecimalFormat
 import java.util.*
 

@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import unit.AbstractUnit
 import unit.MetricUnit
-import util.Prefix
-import util.ToStringParameters
+import unit.prototype.Prefix
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*

@@ -1,4 +1,4 @@
-package util
+package unit.prototype
 
 import java.math.BigDecimal
 import java.math.MathContext

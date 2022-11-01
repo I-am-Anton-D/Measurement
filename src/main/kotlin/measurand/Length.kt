@@ -4,10 +4,14 @@ import quantity.AbstractQuantity
 import unit.length.Inch
 import unit.length.Meter
 import unit.length.Mile
+import unit.prototype.AbstractUnit
+import unit.prototype.Prefix
 import java.math.BigDecimal
 
-class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
-    override fun copyWith(value: BigDecimal) = Length(value)
+class Length(number: Number, useUnits: AbstractUnit<Length>? = null, usePrefix: Prefix? = null) :
+    AbstractQuantity<Length>(number, Meter, useUnits, usePrefix) {
+
+    override fun copyWith(value: BigDecimal) = Length(value, useUnit, usePrefix)
 }
 
 fun Length.toMile() = valueIn(Mile)

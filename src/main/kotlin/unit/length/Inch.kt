@@ -10,6 +10,20 @@ import java.math.BigInteger
 import java.math.MathContext
 
 object Inch : FractionUnit<Length>(0.0254), StreakUnit {
+
+    fun Number.inch() = meter(Inch)
+
+    fun fraction(numerator: Int, denominator: Int): Length {
+        val fractionValue = calculateFraction(numerator, denominator)
+        return fractionValue.inch()
+    }
+
+    override fun getFractionString(value: BigDecimal): String? {
+        val fraction = super.getFractionString(value.stripTrailingZeros().remainder(BigDecimal.ONE)) ?: return null
+        val integer = value.toBigInteger()
+        return if (integer != BigInteger.ZERO) integer.toString() + fraction else fraction
+    }
+
     //Const fraction
     val OneHalf = fraction(1, 2)
     val OneQuarter = fraction(1, 4)
@@ -19,23 +33,6 @@ object Inch : FractionUnit<Length>(0.0254), StreakUnit {
     val FiveEighth = fraction(5, 8)
     val SevenEighth = fraction(7, 8)
     val OneSixteenth = fraction(1, 16)
-
-    fun Number.inch() = meter(Inch)
-
-    fun fraction(numerator: Int, denominator: Int): Length {
-        val fractionValue = calculateFraction(numerator, denominator)
-        return fractionValue.inch()
-    }
-
-    override fun getFractionString(value: BigDecimal): String {
-        val fraction = super.getFractionString(value.remainder(BigDecimal.ONE))
-        val integer = value.toBigInteger()
-        return if (fraction.isNotEmpty()) {
-            if (integer != BigInteger.ZERO) integer.toString() + fraction else fraction
-        } else {
-            ""
-        }
-    }
 
     init {
         // 64 fraction
