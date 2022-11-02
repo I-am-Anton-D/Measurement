@@ -65,14 +65,13 @@ abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal) : Comparable
     }
 
     open fun toString(
-        df: DecimalFormat? = null,
-        locale: Locale = Locale.getDefault(),
+        unit: AbstractUnit<Q>? = null,
         prefix: Prefix? = null,
         expand: Boolean = false,
         normalize: Boolean = true,
-        unit: AbstractUnit<Q>? = null
-    ) = toString(ToStringParameters(df, locale, expand, normalize, prefix, unit))
-
+        df: DecimalFormat? = null,
+        locale: Locale = Locale.getDefault()
+    ) = toString(ToStringParameters(unit, prefix, expand, normalize, df, locale))
 
     override fun toString(): String {
         return toString(expand = false)

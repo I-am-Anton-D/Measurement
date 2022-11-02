@@ -27,12 +27,12 @@ fun Length.toFoot() = valueIn(Foot)
 
 fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
     val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
-    return Length(number, ToStringParameters(unit = unit, prefix = prefix))
+    return Length(number, ToStringParameters(unit, prefix))
 }
 
 fun Number.meter(unit: AbstractUnit<Length>): Length {
     val number = unit.valueInBaseUnit(this)
-    return Length(number, ToStringParameters(unit = unit))
+    return Length(number, ToStringParameters(unit))
 }
 
 fun Number.km() = meter(Prefix.KILO)

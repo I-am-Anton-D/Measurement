@@ -6,11 +6,11 @@ import java.text.DecimalFormat
 import java.util.*
 
 class ToStringParameters<Q>(
-    var df: DecimalFormat? = null,
-    var locale: Locale = Locale.getDefault(),
+    var unit: AbstractUnit<Q>? = null,
+    var prefix: Prefix? = null,
     var expand: Boolean = false,
     var normailze: Boolean = true,
-    var prefix: Prefix? = null,
-    var unit: AbstractUnit<Q>? = null
+    var df: DecimalFormat? = null,
+    var locale: Locale = Locale.getDefault()
 )
 

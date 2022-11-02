@@ -23,12 +23,12 @@ class Time(number: Number) : AbstractQuantity<Time>(number) {
 
 fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Time> = Second): Time {
     val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
-    return Time(number, ToStringParameters(unit = unit, prefix = prefix))
+    return Time(number, ToStringParameters(unit, prefix))
 }
 
 fun Number.second(unit: AbstractUnit<Time>): Time {
     val number = unit.valueInBaseUnit(this)
-    return Time(number, ToStringParameters(unit = unit))
+    return Time(number, ToStringParameters(unit))
 }
 
 fun Number.minute() = second(Minute)
