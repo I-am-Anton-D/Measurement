@@ -1,6 +1,7 @@
 package measurand
 
 import quantity.AbstractQuantity
+import quantity.ToStringParameters
 import unit.length.Foot
 import unit.length.Inch
 import unit.length.Meter
@@ -10,24 +11,28 @@ import unit.prototype.MetricUnit
 import unit.prototype.Prefix
 import java.math.BigDecimal
 
-class Length(number: Number, useUnits: AbstractUnit<Length>? = null, usePrefix: Prefix? = null) :
-    AbstractQuantity<Length>(number, Meter, useUnits, usePrefix) {
+class Length(number: Number) : AbstractQuantity<Length>(number) {
+    override val baseUnit = Meter
 
-    override fun copyWith(value: BigDecimal, useUnit: AbstractUnit<Length>?, usePrefix: Prefix?) =
-        Length(value, useUnit, usePrefix)
+    constructor(number: Number, toStringParameters: ToStringParameters<Length>) : this(number) {
+        this.defaultToStringParameters = toStringParameters
+    }
+
+    override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)
 }
 
 fun Length.toMile() = valueIn(Mile)
 fun Length.toInch() = valueIn(Inch)
+fun Length.toFoot() = valueIn(Foot)
 
 fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
     val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
-    return Length(number = number, usePrefix = prefix, useUnits = unit)
+    return Length(number, ToStringParameters(unit = unit, prefix = prefix))
 }
 
 fun Number.meter(unit: AbstractUnit<Length>): Length {
     val number = unit.valueInBaseUnit(this)
-    return Length(number = number, useUnits = unit)
+    return Length(number, ToStringParameters(unit = unit))
 }
 
 fun Number.km() = meter(Prefix.KILO)
