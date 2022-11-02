@@ -1,6 +1,7 @@
 package measurand
 
 import quantity.AbstractQuantity
+import quantity.QuantityFactory
 import quantity.ToStringParameters
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
@@ -12,7 +13,7 @@ import unit.time.Second
 import java.math.BigDecimal
 
 class Time(number: Number) : AbstractQuantity<Time>(number) {
-    override val baseUnit = Second
+    override val dimension = QuantityFactory.dimensionFor(this::class)
 
     constructor(number: Number, toStringParameters: ToStringParameters<Time>) : this(number) {
         this.defaultToStringParameters = toStringParameters

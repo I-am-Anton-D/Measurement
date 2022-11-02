@@ -1,6 +1,7 @@
 package measurand
 
 import quantity.AbstractQuantity
+import quantity.QuantityFactory
 import quantity.ToStringParameters
 import unit.length.Foot
 import unit.length.Inch
@@ -12,10 +13,10 @@ import unit.prototype.Prefix
 import java.math.BigDecimal
 
 class Length(number: Number) : AbstractQuantity<Length>(number) {
-    override val baseUnit = Meter
+    override val dimension = QuantityFactory.dimensionFor(this::class)
 
     constructor(number: Number, toStringParameters: ToStringParameters<Length>) : this(number) {
-        this.defaultToStringParameters = toStringParameters
+        this.defaultToStringParameters = toStringParameters.copy()
     }
 
     override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)

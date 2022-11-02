@@ -1,8 +1,8 @@
-import measurand.hour
-import measurand.minute
+import measurand.km
+import measurand.meter
 
 fun main() {
+    val l = 1.km() * 1.km() * 100.meter() * 5.km()
 
-    val l = 12.hour() + 33.5.minute()
-    println()
+    print(l)
 }

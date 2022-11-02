@@ -4,11 +4,10 @@ import quantity.AbstractQuantity
 import quantity.QuantityFactory
 import java.math.BigDecimal
 
-class Mass(number: Number) : AbstractQuantity<Mass>(number) {
+class Volume(number: Number) : AbstractQuantity<Volume>(number) {
     override val dimension = QuantityFactory.dimensionFor(this::class)
-    override fun copyWith(value: BigDecimal) = Mass(value)
-}
 
-fun Number.gram() : Mass {
-    return Mass(this)
+    override fun copyWith(value: BigDecimal): AbstractQuantity<Volume> {
+        return Volume(value)
+    }
 }

@@ -12,5 +12,8 @@ class ToStringParameters<Q>(
     var normailze: Boolean = true,
     var df: DecimalFormat? = null,
     var locale: Locale = Locale.getDefault()
-)
+) {
+    fun copy() = ToStringParameters(unit, prefix, expand, normailze, df, locale)
+}
+
 
