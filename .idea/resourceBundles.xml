@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ResourceBundleManager">
+    <file url="file://$PROJECT_DIR$/src/main/resources/Gram.properties" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/Gram_fr_FR.properties" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/Gram_ru_RU.properties" />
+    <custom-resource-bundle>
+      <file value="file://$PROJECT_DIR$/src/main/resources/Gram.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/Gram_en_GB.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/Gram_fr_FR.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/Gram_ru_RU.properties" />
+      <base-name>Gram</base-name>
+    </custom-resource-bundle>
+  </component>
+</project>
