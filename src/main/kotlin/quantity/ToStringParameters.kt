@@ -1,7 +1,7 @@
 package quantity
 
+import dimension.Prefix
 import unit.prototype.AbstractUnit
-import unit.prototype.Prefix
 import java.text.DecimalFormat
 import java.util.*
 

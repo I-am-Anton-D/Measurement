@@ -1,5 +1,6 @@
 package util
 
+import dimension.Prefix
 import exception.IllegalMetricPrefix
 import measurand.Length
 import org.assertj.core.api.Assertions.assertThat
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.assertThrows
 import quantity.ToStringParameters
 import unit.length.Meter
 import unit.length.Mile
-
-import unit.prototype.Prefix
 import java.text.DecimalFormat
 import java.util.*
 

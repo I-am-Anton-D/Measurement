@@ -1,5 +1,6 @@
 package unit.prototype
 
+import dimension.UnitHolder
 import exception.NoBundleForAnonymousClass
 import java.math.BigDecimal
 import java.util.*
@@ -33,6 +34,8 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
     open fun toString(expand: Boolean = false, locale: Locale = Locale.getDefault(), value: BigDecimal) =
         if (expand) expandedForm(locale, value)
         else symbol(locale)
+
+    fun pow(pow: Int) = UnitHolder(this, pow)
 
     override fun toString() = symbol()
 }

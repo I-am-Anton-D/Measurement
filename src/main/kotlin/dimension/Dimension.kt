@@ -1,6 +1,7 @@
 package dimension
 
 import unit.prototype.AbstractUnit
+import unit.prototype.DimensionUnit
 
 open class Dimension() {
     private val unitsSet: LinkedHashMap<AbstractUnit<*>, Int> = LinkedHashMap()
@@ -15,6 +16,31 @@ open class Dimension() {
         }
     }
 
+    constructor(unit: AbstractUnit<*>, other: AbstractUnit<*>, divide: Boolean = false) : this() {
+        if (unit is DimensionUnit && other is DimensionUnit) {
+            this.addSetOfUnits(unit.dimension.unitsSet)
+            this.addSetOfUnits(other.dimension.unitsSet, divide)
+            return
+        }
+
+        if (unit is DimensionUnit && other !is DimensionUnit) {
+            this.addSetOfUnits(unit.dimension.unitsSet)
+            this.addUnit(other, 1, divide)
+            return
+        }
+
+        if (unit !is DimensionUnit && other is DimensionUnit) {
+            this.addUnit(unit)
+            this.addSetOfUnits(other.dimension.unitsSet, divide)
+            return
+        }
+
+        if (unit !is DimensionUnit && other !is DimensionUnit) {
+            this.addUnit(unit)
+            this.addUnit(other, 1, divide)
+        }
+    }
+
     open operator fun times(other: Dimension): Dimension {
         val dim = Dimension()
         dim.addSetOfUnits(this.unitsSet)
@@ -22,12 +48,15 @@ open class Dimension() {
         return dim
     }
 
-    private fun addUnit(unit: AbstractUnit<*>, pow: Int = 1) {
-        unitsSet.computeIfPresent(unit) { _, v -> v + pow } ?: unitsSet.put(unit, pow)
+    private fun addUnit(unit: AbstractUnit<*>, pow: Int = 1, inverse: Boolean = false) {
+        unitsSet.computeIfPresent(unit) { _, v -> v + if (inverse) -pow else pow } ?: unitsSet.put(
+            unit,
+            if (inverse) -pow else pow
+        )
     }
 
-    private fun addSetOfUnits(unitSet: Map<AbstractUnit<*>, Int>) {
-        unitSet.forEach { (k, v) -> addUnit(k, v) }
+    private fun addSetOfUnits(unitSet: Map<AbstractUnit<*>, Int>, inverse: Boolean = false) {
+        unitSet.forEach { (k, v) -> addUnit(k, if (inverse) -v else v) }
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,8 +1,8 @@
 package util
 
+import dimension.Prefix.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import unit.prototype.Prefix.*
 import java.math.BigDecimal
 import java.util.*
 

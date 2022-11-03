@@ -1,10 +1,10 @@
 package measurand
 
+import dimension.Prefix
 import quantity.AbstractQuantity
 import quantity.ToStringParameters
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
-import unit.prototype.Prefix
 import unit.time.Day
 import unit.time.Hour
 import unit.time.Minute
