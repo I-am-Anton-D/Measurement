@@ -25,8 +25,9 @@ fun Length.toMile() = valueIn(Mile)
 fun Length.toInch() = valueIn(Inch)
 fun Length.toFoot() = valueIn(Foot)
 
-fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
-    val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
+fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Length> = Meter): Length {
+    val number = if (unit is MetricUnit) unit.valueInBaseUnit(prefix.getNominalValue(this))
+    else unit.valueInBaseUnit(this)
     return Length(number, ToStringParameters(unit, prefix))
 }
 

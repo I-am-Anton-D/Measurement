@@ -21,8 +21,9 @@ class Time(number: Number) : AbstractQuantity<Time>(number) {
     override fun copyWith(value: BigDecimal) = Time(value, defaultToStringParameters)
 }
 
-fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Time> = Second): Time {
-    val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
+fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Time> = Second): Time {
+    val number = if (unit is MetricUnit) unit.valueInBaseUnit(prefix.getNominalValue(this))
+    else unit.valueInBaseUnit(this)
     return Time(number, ToStringParameters(unit, prefix))
 }
 

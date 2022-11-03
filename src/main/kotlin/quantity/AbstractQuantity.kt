@@ -18,8 +18,13 @@ abstract class AbstractQuantity<Q>(val valueInBaseUnit: BigDecimal) : Comparable
     open fun valueIn(unit: AbstractUnit<Q>): BigDecimal =
         valueInBaseUnit.divide(unit.ratio, MathContext.DECIMAL128)
 
-    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>): BigDecimal =
-        valueIn(unit).divide((prefix.getPrefixMultiplier()))
+    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Q>): BigDecimal {
+        return if (unit is MetricUnit) {
+            valueIn(unit).divide((prefix.getPrefixMultiplier()))
+        } else {
+            valueIn(unit)
+        }
+    }
 
     open infix fun to(unit: AbstractUnit<Q>) = valueIn(unit)
 

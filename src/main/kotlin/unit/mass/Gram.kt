@@ -1,7 +1,8 @@
 package unit.mass
 
 import measurand.Mass
+import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
 
-object Gram : MetricUnit<Mass>()
+object Gram : AbstractUnit<Mass>(), MetricUnit
 
