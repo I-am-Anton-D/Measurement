@@ -96,10 +96,8 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQ
         val newValue = value * other.value
         val clazz = QuantityFactory.getMeasurandByDimension(newDimension)
 
-        return if (clazz == null) Quantity(newValue, newDimension) else QuantityFactory.createInstanceOf(
-            clazz,
-            newValue
-        )
+        return if (clazz == null) Quantity(newValue, newDimension)
+        else QuantityFactory.createInstanceOf(clazz, newValue)
     }
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
