@@ -59,6 +59,12 @@ open class Dimension() {
         unitSet.forEach { (k, v) -> addUnit(k, if (inverse) -v else v) }
     }
 
+    override fun toString(): String {
+        var result = ""
+        unitsSet.forEach { (k, v) -> result += "$k^$v⋅" }
+        return result
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -67,8 +73,8 @@ open class Dimension() {
 
         if (this.unitsSet.size != other.unitsSet.size) return false
 
-        val sortedList = unitsSet.toList().sortedBy { it::class.simpleName }
-        val otherSortedList = other.unitsSet.toList().sortedBy { it::class.simpleName }
+        val sortedList = unitsSet.toList().sortedBy { it.first::class.simpleName }
+        val otherSortedList = other.unitsSet.toList().sortedBy { it.first::class.simpleName }
 
         for (i in sortedList.indices) {
             val thisElement = sortedList[i]
