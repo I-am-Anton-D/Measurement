@@ -8,6 +8,8 @@ import java.text.DecimalFormat
 import java.util.*
 
 abstract class BaseQuantity<Q>(number: Number) : AbstractQuantity<Q>(number) {
+    var defaultToStringParameters = ToStringParameters<Q>()
+
     abstract override val baseUnit: BaseUnit<Q>
 
     abstract override fun copyWith(value: BigDecimal): BaseQuantity<Q>
@@ -15,13 +17,8 @@ abstract class BaseQuantity<Q>(number: Number) : AbstractQuantity<Q>(number) {
     open fun valueIn(unit: AbstractUnit<Q>): BigDecimal =
         value.divide(unit.ratio, MathContext.DECIMAL128)
 
-    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Q>): BigDecimal {
-        return if (unit is MetricUnit) {
-            valueIn(unit).divide((prefix.getPrefixMultiplier()))
-        } else {
-            valueIn(unit)
-        }
-    }
+    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>): BigDecimal =
+        valueIn(unit).divide((prefix.getPrefixMultiplier()))
 
     open infix fun to(unit: AbstractUnit<Q>) = valueIn(unit)
 

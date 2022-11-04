@@ -1,3 +1,3 @@
 package unit.prototype
 
-abstract class BaseUnit<Q> : AbstractUnit<Q>()
+abstract class BaseUnit<Q> : MetricUnit<Q>()

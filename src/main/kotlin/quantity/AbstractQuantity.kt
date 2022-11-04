@@ -8,8 +8,6 @@ import java.util.*
 abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQuantity<Q>> {
     abstract val baseUnit: AbstractUnit<Q>
 
-    var defaultToStringParameters = ToStringParameters<Q>()
-
     constructor(number: Number) : this(BigDecimal(number.toString()))
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
@@ -37,6 +35,8 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQ
         val result = this.value / other.value
         return Quantity(result, QuantityUnit(dimension))
     }
+
+    override fun toString() = "${value.toPlainString()} $baseUnit"
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
         return if (baseUnit == other.baseUnit) {

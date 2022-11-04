@@ -24,13 +24,8 @@ class Length(number: Number) : BaseQuantity<Length>(number) {
     override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)
 }
 
-fun Length.toMile() = valueIn(Mile)
-fun Length.toInch() = valueIn(Inch)
-fun Length.toFoot() = valueIn(Foot)
-
-fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Length> = Meter): Length {
-    val number = if (unit is MetricUnit) unit.valueInBaseUnit(prefix.getNominalValue(this))
-    else unit.valueInBaseUnit(this)
+fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
+    val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
     return Length(number, ToStringParameters(unit, prefix))
 }
 
@@ -46,3 +41,7 @@ fun Number.mm() = meter(Prefix.MILLI)
 fun Number.inch() = meter(Inch)
 fun Number.foot() = meter(Foot)
 fun Number.mile() = meter(Mile)
+
+fun Length.toMile() = valueIn(Mile)
+fun Length.toInch() = valueIn(Inch)
+fun Length.toFoot() = valueIn(Foot)

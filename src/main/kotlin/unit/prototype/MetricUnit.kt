@@ -1,3 +1,3 @@
 package unit.prototype
 
-interface MetricUnit
+abstract class MetricUnit<Q> : AbstractUnit<Q>()

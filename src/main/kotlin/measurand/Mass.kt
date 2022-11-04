@@ -1,10 +1,10 @@
 package measurand
 
-import quantity.AbstractQuantity
+import quantity.BaseQuantity
 import unit.mass.Gram
 import java.math.BigDecimal
 
-class Mass(number: Number) : AbstractQuantity<Mass>(number) {
+class Mass(number: Number) : BaseQuantity<Mass>(number) {
     override val baseUnit = Gram
     override fun copyWith(value: BigDecimal) = Mass(value)
 }
