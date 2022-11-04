@@ -24,13 +24,13 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQ
         return copyWith(value - other.value) as Q
     }
 
-    open operator fun times(other: AbstractQuantity<*>): AbstractQuantity<*> {
+    open operator fun times(other: AbstractQuantity<*>): Quantity {
         val dimension = Dimension(baseUnit, other.baseUnit, false)
         val result = this.value * other.value
         return Quantity(result, QuantityUnit(dimension))
     }
 
-    open operator fun div(other: AbstractQuantity<*>): AbstractQuantity<*> {
+    open operator fun div(other: AbstractQuantity<*>): Quantity {
         val dimension = Dimension(baseUnit, other.baseUnit, true)
         val result = this.value / other.value
         return Quantity(result, QuantityUnit(dimension))
