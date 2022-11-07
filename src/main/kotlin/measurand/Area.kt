@@ -4,6 +4,7 @@ import quantity.AbstractQuantity
 import quantity.DimensionQuantity
 import unit.area.AreaUnit
 import java.math.BigDecimal
+import java.math.MathContext
 
 class Area(number: Number) : DimensionQuantity<Area>(number) {
     override val baseUnit = AreaUnit
@@ -12,7 +13,7 @@ class Area(number: Number) : DimensionQuantity<Area>(number) {
         return Area(value)
     }
 
-    operator fun div(other: Length) = Length(value / other.value)
+    operator fun div(other: Length) = Length(value.divide(other.value, MathContext.DECIMAL128))
     operator fun times(other: Length) = Volume(value * other.value)
 }
 

@@ -3,7 +3,7 @@ package quantity
 import dimension.Dimension
 import unit.prototype.*
 import java.math.BigDecimal
-import java.util.*
+import java.math.MathContext
 
 abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQuantity<Q>> {
     abstract val baseUnit: AbstractUnit<Q>
@@ -32,7 +32,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQ
 
     open operator fun div(other: AbstractQuantity<*>): Quantity {
         val dimension = Dimension(baseUnit, other.baseUnit, true)
-        val result = this.value / other.value
+        val result = value.divide(other.value, MathContext.DECIMAL128)
         return Quantity(result, QuantityUnit(dimension))
     }
 

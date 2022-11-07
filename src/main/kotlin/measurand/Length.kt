@@ -10,6 +10,7 @@ import unit.length.Mile
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
 import java.math.BigDecimal
+import java.math.MathContext
 
 class Length(number: Number) : BaseQuantity<Length>(number) {
     override val baseUnit = Meter
@@ -19,7 +20,7 @@ class Length(number: Number) : BaseQuantity<Length>(number) {
     }
 
     operator fun times(other: Length) = Area(value * other.value)
-    operator fun div(other: Time) = Velocity(value / other.value)
+    operator fun div(other: Time) = Velocity(value.divide(other.value, MathContext.DECIMAL128))
 
     override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)
 }
