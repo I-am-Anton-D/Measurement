@@ -26,12 +26,12 @@ class Length(number: Number) : BaseQuantity<Length>(number) {
 }
 
 fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
-    val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
+    val number = prefix.inNominal(this).multiply(unit.ratio)
     return Length(number, ToStringParameters(unit, prefix))
 }
 
 fun Number.meter(unit: AbstractUnit<Length>): Length {
-    val number = unit.valueInBaseUnit(this)
+    val number = BigDecimal(this.toString()).multiply(unit.ratio)
     return Length(number, ToStringParameters(unit))
 }
 

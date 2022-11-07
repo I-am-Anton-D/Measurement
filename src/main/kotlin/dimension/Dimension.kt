@@ -1,72 +1,63 @@
 package dimension
 
 import unit.prototype.AbstractUnit
-import unit.prototype.DimensionUnit
+import kotlin.collections.LinkedHashMap
 import kotlin.math.absoluteValue
 
-open class Dimension() {
+open class Dimension private constructor() {
     private val unitsSet: LinkedHashMap<AbstractUnit<*>, Int> = LinkedHashMap()
 
     constructor(vararg holders: UnitHolder) : this() {
-        for (holder in holders) addUnit(holder.unit, holder.pow)
+        holders.forEach { holder -> addUnit(holder.unit, holder.pow) }
     }
 
     constructor(vararg units: AbstractUnit<*>) : this() {
-        for (unit in units) {
-            addUnit(unit)
-        }
+        units.forEach { unit -> addUnit(unit) }
     }
 
     constructor(unit: AbstractUnit<*>, other: AbstractUnit<*>, divide: Boolean = false) : this() {
-        if (unit is DimensionUnit && other is DimensionUnit) {
-            this.addSetOfUnits(unit.dimension.unitsSet)
-            this.addSetOfUnits(other.dimension.unitsSet, divide)
-            return
-        }
+        val first = unit.toDimensionUnit()
+        val second = other.toDimensionUnit()
 
-        if (unit is DimensionUnit && other !is DimensionUnit) {
-            this.addSetOfUnits(unit.dimension.unitsSet)
-            this.addUnit(other, 1, divide)
-            return
-        }
-
-        if (unit !is DimensionUnit && other is DimensionUnit) {
-            this.addUnit(unit)
-            this.addSetOfUnits(other.dimension.unitsSet, divide)
-            return
-        }
-
-        if (unit !is DimensionUnit && other !is DimensionUnit) {
-            this.addUnit(unit)
-            this.addUnit(other, 1, divide)
-        }
-    }
-
-    private fun addUnit(unit: AbstractUnit<*>, pow: Int = 1, inverse: Boolean = false) {
-        unitsSet.computeIfPresent(unit) { _, v -> v + if (inverse) -pow else pow } ?:
-        unitsSet.put(unit, if (inverse) -pow else pow)
+        this.addSetOfUnits(first.dimension.unitsSet)
+        this.addSetOfUnits(second.dimension.unitsSet, divide)
     }
 
     private fun addSetOfUnits(unitSet: Map<AbstractUnit<*>, Int>, inverse: Boolean = false) {
-        unitSet.forEach { (k, v) -> addUnit(k, if (inverse) -v else v) }
+        unitSet.forEach { (k, v) -> addUnit(k, v, inverse) }
+    }
+
+    private fun addUnit(unit: AbstractUnit<*>, pow: Int = 1, inverse: Boolean = false) {
+        val exist = unitsSet[unit]
+        val p = if (inverse) -pow else pow
+        if (exist == null) {
+            unitsSet[unit] = p
+        } else {
+            val r = exist + p
+            if (r == 0) {
+                unitsSet.remove(unit)
+            } else {
+                unitsSet[unit] = r
+            }
+        }
     }
 
     override fun toString(): String {
         var numerator = ""
         var denominator = ""
 
-       unitsSet.forEach { (unit, pow) ->
-           if (pow > 0) {
-              numerator += (if (numerator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
-           }
-           if (pow < 0) {
-              denominator += (if (denominator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
-           }
-       }
+        unitsSet.forEach { (unit, pow) ->
+            if (pow > 0) {
+                numerator += (if (numerator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
+            }
+            if (pow < 0) {
+                denominator += (if (denominator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
+            }
+        }
 
-       if (numerator.isEmpty()) numerator = "1"
+        if (numerator.isEmpty()) numerator = "1"
 
-       return "$numerator/$denominator"
+        return "$numerator/$denominator"
     }
 
     private fun convertPowToSuperscript(pow: Int): String {
@@ -89,9 +80,7 @@ open class Dimension() {
 
         other as Dimension
 
-        if (this.unitsSet != other.unitsSet) return false
-
-        return true
+        return unitsSet == other.unitsSet
     }
 
     override fun hashCode() = unitsSet.hashCode()

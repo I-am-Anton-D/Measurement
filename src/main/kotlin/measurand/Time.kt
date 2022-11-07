@@ -4,7 +4,6 @@ import unit.Prefix
 import quantity.BaseQuantity
 import quantity.ToStringParameters
 import unit.prototype.AbstractUnit
-import unit.prototype.MetricUnit
 import unit.time.Day
 import unit.time.Hour
 import unit.time.Minute
@@ -22,13 +21,12 @@ class Time(number: Number) : BaseQuantity<Time>(number) {
 }
 
 fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Time> = Second): Time {
-    val number = if (unit is MetricUnit) unit.valueInBaseUnit(prefix.getNominalValue(this))
-    else unit.valueInBaseUnit(this)
+    val number = prefix.inNominal(this).multiply(unit.ratio)
     return Time(number, ToStringParameters(unit, prefix))
 }
 
 fun Number.second(unit: AbstractUnit<Time>): Time {
-    val number = unit.valueInBaseUnit(this)
+    val number = BigDecimal(this.toString()).multiply(unit.ratio)
     return Time(number, ToStringParameters(unit))
 }
 

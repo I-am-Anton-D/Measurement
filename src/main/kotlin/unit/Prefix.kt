@@ -37,7 +37,7 @@ enum class Prefix(val exponent: Int) {
     fun prefixName(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString())
 
-    fun getNominalValue(number: Number): BigDecimal =
+    fun inNominal(number: Number): BigDecimal =
         if (this == NOMINAL) BigDecimal(number.toString())
         else BigDecimal(number.toString()).multiply(getPrefixMultiplier())
 

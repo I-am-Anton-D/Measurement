@@ -1,5 +1,6 @@
 package unit.prototype
 
+import dimension.Dimension
 import dimension.UnitHolder
 import exception.NoBundleForAnonymousClass
 import java.math.BigDecimal
@@ -22,10 +23,6 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
             pluralForm(locale)
         }
 
-    open fun valueInBaseUnit(number: Number): BigDecimal =
-        if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
-        else BigDecimal(number.toString()).multiply(ratio)
-
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClass()
         return ResourceBundle.getBundle(unitSimpleClassName, locale)
@@ -35,7 +32,18 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
         if (expand) expandedForm(locale, value)
         else symbol(locale)
 
+    open fun toExpandedString(locale: Locale = Locale.getDefault(), value: BigDecimal) : String {
+        return expandedForm(locale, value)
+    }
+
     fun pow(pow: Int) = UnitHolder(this, pow)
+
+    fun toDimensionUnit(): DimensionUnit<Q> {
+        if (this is DimensionUnit) return this
+        return object : DimensionUnit<Q>() {
+            override val dimension = Dimension(this@AbstractUnit)
+        }
+    }
 
     override fun toString() = symbol()
 }

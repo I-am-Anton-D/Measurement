@@ -103,7 +103,7 @@ internal class PrefixTest {
 
     @Test
     fun getNominalValueTest() {
-        assertThat(KILO.getNominalValue(1)).isEqualTo(BigDecimal(1000))
-        assertThat(NOMINAL.getNominalValue(1)).isEqualTo(BigDecimal.ONE)
+        assertThat(KILO.inNominal(1)).isEqualTo(BigDecimal(1000))
+        assertThat(NOMINAL.inNominal(1)).isEqualTo(BigDecimal.ONE)
     }
 }
