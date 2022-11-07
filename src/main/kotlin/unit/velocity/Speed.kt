@@ -1,4 +1,4 @@
-package unit
+package unit.velocity
 
 import dimension.Dimension
 import measurand.Velocity

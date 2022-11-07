@@ -1,6 +1,6 @@
 package quantity
 
-import dimension.Prefix
+import unit.Prefix
 import unit.prototype.AbstractUnit
 import java.text.DecimalFormat
 import java.util.*

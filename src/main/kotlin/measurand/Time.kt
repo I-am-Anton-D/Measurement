@@ -1,6 +1,6 @@
 package measurand
 
-import dimension.Prefix
+import unit.Prefix
 import quantity.BaseQuantity
 import quantity.ToStringParameters
 import unit.prototype.AbstractUnit

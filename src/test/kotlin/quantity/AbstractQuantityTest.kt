@@ -1,6 +1,6 @@
 package quantity
 
-import dimension.Prefix
+import unit.Prefix
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

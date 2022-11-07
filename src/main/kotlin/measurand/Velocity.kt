@@ -2,7 +2,7 @@ package measurand
 
 import quantity.AbstractQuantity
 import quantity.DimensionQuantity
-import unit.Speed
+import unit.velocity.Speed
 import java.math.BigDecimal
 
 class Velocity(number: Number) : DimensionQuantity<Velocity>(number) {

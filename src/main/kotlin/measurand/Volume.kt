@@ -2,7 +2,7 @@ package measurand
 
 import quantity.AbstractQuantity
 import quantity.DimensionQuantity
-import unit.VolumeUnit
+import unit.volume.VolumeUnit
 import java.math.BigDecimal
 
 class Volume(number: Number) : DimensionQuantity<Volume>(number) {

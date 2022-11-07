@@ -1,6 +1,6 @@
 package util
 
-import dimension.Prefix
+import unit.Prefix
 import exception.IllegalMetricPrefix
 import measurand.Length
 import org.assertj.core.api.Assertions.assertThat

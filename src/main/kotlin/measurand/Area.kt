@@ -2,11 +2,11 @@ package measurand
 
 import quantity.AbstractQuantity
 import quantity.DimensionQuantity
-import unit.area.Square
+import unit.area.AreaUnit
 import java.math.BigDecimal
 
 class Area(number: Number) : DimensionQuantity<Area>(number) {
-    override val baseUnit = Square
+    override val baseUnit = AreaUnit
 
     override fun copyWith(value: BigDecimal): AbstractQuantity<Area> {
         return Area(value)
