@@ -1,6 +1,9 @@
 package dimension
 
 import unit.prototype.AbstractUnit
+import java.lang.reflect.ParameterizedType
+import java.math.BigDecimal
+import java.math.MathContext
 import java.util.*
 import kotlin.collections.LinkedHashMap
 import kotlin.math.absoluteValue
@@ -85,4 +88,47 @@ open class Dimension private constructor() {
     }
 
     override fun hashCode() = unitsSet.hashCode()
+
+    companion object {
+        fun convertValue(from: Dimension, to: Dimension, value:Number): BigDecimal {
+            if (canConvert(from, to)) {
+                val toIterator = to.unitsSet.iterator()
+                var numerator = BigDecimal.ONE
+                var denominator = BigDecimal.ONE
+                while (toIterator.hasNext()) {
+                    val toUnit = toIterator.next()
+                    if (toUnit.value > 0) {
+                        numerator = numerator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                    } else {
+                        denominator = denominator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                    }
+                }
+                val rate = denominator.divide(numerator, MathContext.DECIMAL128)
+                return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
+            } else {
+                throw Exception()
+            }
+        }
+
+        private fun canConvert(from: Dimension, to: Dimension): Boolean {
+            if (from.unitsSet.size != to.unitsSet.size) return false
+
+            val fromIterator = from.unitsSet.iterator()
+            val toIterator = to.unitsSet.iterator()
+
+            while (fromIterator.hasNext()) {
+                val fromUnit = fromIterator.next()
+                val toUnit = toIterator.next()
+
+                if (fromUnit.value != toUnit.value) return false
+
+                val fromType = (fromUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+                val toType =  (toUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+
+                if (fromType != toType) return false
+            }
+
+            return true
+        }
+    }
 }

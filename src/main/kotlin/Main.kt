@@ -1,9 +1,16 @@
+import dimension.Dimension
 import measurand.*
+import unit.length.Meter
+import unit.length.Mile
+import unit.time.Hour
+import unit.time.Minute
+import unit.time.Second
 import java.util.*
 
 fun main() {
 
     val l = 5.km()
-    val z = 100.meter() / 2.gram() / 5.second() / 5.gram() * 2.meter()
-    println(z.toString(Locale("en", "GB")))
+    val z = 5000.meter() /  1.second()
+    val v = z.valueIn(Dimension(Meter.pow(1), Hour.pow(-1)))
+    println(v)
 }

@@ -32,9 +32,7 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
         if (expand) expandedForm(locale, value)
         else symbol(locale)
 
-    open fun toExpandedString(locale: Locale = Locale.getDefault(), value: BigDecimal) : String {
-        return expandedForm(locale, value)
-    }
+    override fun toString() = symbol()
 
     fun pow(pow: Int) = UnitHolder(this, pow)
 
@@ -44,6 +42,4 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
             override val dimension = Dimension(this@AbstractUnit)
         }
     }
-
-    override fun toString() = symbol()
 }
