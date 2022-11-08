@@ -36,7 +36,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal) : Comparable<AbstractQ
         return Quantity(result, QuantityUnit(dimension))
     }
 
-    override fun toString() = "${value.toPlainString()} $baseUnit"
+    override fun toString() = "${value.stripTrailingZeros().toPlainString()} $baseUnit"
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
         return if (baseUnit == other.baseUnit) {

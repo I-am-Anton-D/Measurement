@@ -1,13 +1,15 @@
 package unit.prototype
 
 import dimension.Dimension
+import java.util.*
 
 abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
     abstract val dimension: Dimension
 
-    override fun toString(): String {
-        return dimension.toString()
-    }
+    override fun toString() =  toString(Locale.getDefault())
+
+    open fun toString(locale: Locale) = dimension.toString(locale)
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,9 +17,7 @@ abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
 
         other as QuantityUnit
 
-        if (dimension != other.dimension) return false
-
-        return true
+        return dimension == other.dimension
     }
 
     override fun hashCode(): Int {

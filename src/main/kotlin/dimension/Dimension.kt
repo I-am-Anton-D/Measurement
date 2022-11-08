@@ -1,6 +1,7 @@
 package dimension
 
 import unit.prototype.AbstractUnit
+import java.util.*
 import kotlin.collections.LinkedHashMap
 import kotlin.math.absoluteValue
 
@@ -42,23 +43,23 @@ open class Dimension private constructor() {
         }
     }
 
-    override fun toString(): String {
+    open fun toString(locale: Locale): String {
         var numerator = ""
         var denominator = ""
 
         unitsSet.forEach { (unit, pow) ->
-            if (pow > 0) {
-                numerator += (if (numerator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
-            }
-            if (pow < 0) {
-                denominator += (if (denominator.isNotEmpty()) "·" else "") + unit + convertPowToSuperscript(pow)
-            }
+            if (pow > 0) numerator +=
+                (if (numerator.isNotEmpty()) "·" else "") + unit.symbol(locale) + convertPowToSuperscript(pow)
+            if (pow < 0) denominator +=
+                (if (denominator.isNotEmpty()) "·" else "") + unit.symbol(locale) + convertPowToSuperscript(pow)
         }
 
         if (numerator.isEmpty()) numerator = "1"
 
         return "$numerator/$denominator"
     }
+
+    override fun toString() = toString(Locale.getDefault())
 
     private fun convertPowToSuperscript(pow: Int): String {
         when (pow.absoluteValue) {
