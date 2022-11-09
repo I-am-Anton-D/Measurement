@@ -10,7 +10,7 @@ import java.util.*
 fun main() {
 
     val l = 5.km()
-    val z = 5000.meter() /  1.second()
-    val v = z.valueIn(Dimension(Meter.pow(1), Hour.pow(-1)))
-    println(v)
+    val z = 10.meter() / 10.second()
+    val v = z.valueIn(Dimension(Mile.pow(1), Minute.pow(-1)))
+    println(z.toString(dimension = Dimension(Meter.pow(1), Hour.pow(-1))))
 }

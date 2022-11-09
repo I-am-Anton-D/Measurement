@@ -58,8 +58,9 @@ open class Dimension private constructor() {
         }
 
         if (numerator.isEmpty()) numerator = "1"
+        if (denominator.isNotEmpty()) denominator = "/$denominator"
 
-        return "$numerator/$denominator"
+        return "$numerator$denominator"
     }
 
     override fun toString() = toString(Locale.getDefault())
@@ -89,46 +90,45 @@ open class Dimension private constructor() {
 
     override fun hashCode() = unitsSet.hashCode()
 
-    companion object {
-        fun convertValue(from: Dimension, to: Dimension, value:Number): BigDecimal {
-            if (canConvert(from, to)) {
-                val toIterator = to.unitsSet.iterator()
-                var numerator = BigDecimal.ONE
-                var denominator = BigDecimal.ONE
-                while (toIterator.hasNext()) {
-                    val toUnit = toIterator.next()
-                    if (toUnit.value > 0) {
-                        numerator = numerator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
-                    } else {
-                        denominator = denominator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
-                    }
-                }
-                val rate = denominator.divide(numerator, MathContext.DECIMAL128)
-                return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
-            } else {
-                throw Exception()
-            }
-        }
-
-        private fun canConvert(from: Dimension, to: Dimension): Boolean {
-            if (from.unitsSet.size != to.unitsSet.size) return false
-
-            val fromIterator = from.unitsSet.iterator()
-            val toIterator = to.unitsSet.iterator()
-
-            while (fromIterator.hasNext()) {
-                val fromUnit = fromIterator.next()
+    fun convertValue(target: Dimension, value: Number): BigDecimal {
+        if (canConvert(target)) {
+            val toIterator = target.unitsSet.iterator()
+            var numerator = BigDecimal.ONE
+            var denominator = BigDecimal.ONE
+            while (toIterator.hasNext()) {
                 val toUnit = toIterator.next()
-
-                if (fromUnit.value != toUnit.value) return false
-
-                val fromType = (fromUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
-                val toType =  (toUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
-
-                if (fromType != toType) return false
+                if (toUnit.value > 0) {
+                    numerator = numerator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                } else {
+                    denominator = denominator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                }
             }
-
-            return true
+            val rate = denominator.divide(numerator, MathContext.DECIMAL128)
+            return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
+        } else {
+            throw Exception()
         }
+    }
+
+    private fun canConvert(target: Dimension): Boolean {
+        if (unitsSet.size != target.unitsSet.size) return false
+
+        val fromIterator = unitsSet.iterator()
+        val toIterator = target.unitsSet.iterator()
+
+        while (fromIterator.hasNext()) {
+            val fromUnit = fromIterator.next()
+            val toUnit = toIterator.next()
+
+            if (fromUnit.value != toUnit.value) return false
+
+            //Kotlin hack
+            val fromType = (fromUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+            val toType = (toUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+
+            if (fromType != toType) return false
+        }
+
+        return true
     }
 }

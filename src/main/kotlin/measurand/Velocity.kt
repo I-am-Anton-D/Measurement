@@ -21,6 +21,6 @@ fun Number.msec() : Velocity {
 }
 
 fun Number.kmh() : Velocity {
-    val value = Dimension.convertValue(Dimension(Meter.pow(1), Hour.pow(-1)), Speed.dimension, this)
+    val value = Speed.convertValueToDimension(Dimension(Meter.pow(1), Hour.pow(-1)), this)
     return Velocity(value)
 }

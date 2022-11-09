@@ -1,6 +1,7 @@
 package unit.prototype
 
 import dimension.Dimension
+import java.math.BigDecimal
 import java.util.*
 
 abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
@@ -21,5 +22,9 @@ abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
 
     override fun hashCode(): Int {
         return dimension.hashCode()
+    }
+
+    fun convertValueToDimension(dimension: Dimension, value: Number): BigDecimal {
+        return dimension.convertValue(dimension, value)
     }
 }
