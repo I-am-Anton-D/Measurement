@@ -5,18 +5,18 @@ import java.lang.reflect.ParameterizedType
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
-import kotlin.collections.LinkedHashMap
+import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
 open class Dimension private constructor() {
-    private val unitsSet: LinkedHashMap<AbstractUnit<*>, Int> = LinkedHashMap()
+    private val unitsSet: ArrayList<UnitHolder> = ArrayList()
 
     constructor(vararg holders: UnitHolder) : this() {
-        holders.forEach { holder -> addUnit(holder.unit, holder.pow) }
+        holders.forEach { holder -> addUnit(holder) }
     }
 
     constructor(vararg units: AbstractUnit<*>) : this() {
-        units.forEach { unit -> addUnit(unit) }
+        units.forEach { unit -> addUnit(UnitHolder(unit)) }
     }
 
     constructor(unit: AbstractUnit<*>, other: AbstractUnit<*>, divide: Boolean = false) : this() {
@@ -27,21 +27,22 @@ open class Dimension private constructor() {
         this.addSetOfUnits(second.dimension.unitsSet, divide)
     }
 
-    private fun addSetOfUnits(unitSet: Map<AbstractUnit<*>, Int>, inverse: Boolean = false) {
-        unitSet.forEach { (k, v) -> addUnit(k, v, inverse) }
+    private fun addSetOfUnits(unitSet: List<UnitHolder>, inverse: Boolean = false) {
+        unitSet.forEach { uh -> addUnit(uh, inverse) }
     }
 
-    private fun addUnit(unit: AbstractUnit<*>, pow: Int = 1, inverse: Boolean = false) {
-        val exist = unitsSet[unit]
-        val p = if (inverse) -pow else pow
+    private fun addUnit(unit: UnitHolder, inverse: Boolean = false) {
+        val exist = unitsSet.find { it.unit == unit.unit }
+
         if (exist == null) {
-            unitsSet[unit] = p
+            unitsSet.add(unit)
         } else {
-            val r = exist + p
+            val p = if (inverse) -unit.pow else unit.pow
+            val r = exist.pow + p
             if (r == 0) {
-                unitsSet.remove(unit)
+                unitsSet.remove(exist)
             } else {
-                unitsSet[unit] = r
+                exist.pow = r
             }
         }
     }
@@ -50,11 +51,14 @@ open class Dimension private constructor() {
         var numerator = ""
         var denominator = ""
 
-        unitsSet.forEach { (unit, pow) ->
-            if (pow > 0) numerator +=
-                (if (numerator.isNotEmpty()) "·" else "") + unit.symbol(locale) + convertPowToSuperscript(pow)
-            if (pow < 0) denominator +=
-                (if (denominator.isNotEmpty()) "·" else "") + unit.symbol(locale) + convertPowToSuperscript(pow)
+        unitsSet.forEach { uh ->
+            val prefix = uh.prefix.prefixSymbol(locale)
+            val symbol = uh.unit.symbol(locale)
+
+            if (uh.pow > 0) numerator +=
+                (if (numerator.isNotEmpty()) "·" else "") + prefix + symbol + convertPowToSuperscript(uh.pow)
+            if (uh.pow < 0) denominator +=
+                (if (denominator.isNotEmpty()) "·" else "") + prefix + symbol + convertPowToSuperscript(uh.pow)
         }
 
         if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
@@ -97,10 +101,14 @@ open class Dimension private constructor() {
             var denominator = BigDecimal.ONE
             while (toIterator.hasNext()) {
                 val toUnit = toIterator.next()
-                if (toUnit.value > 0) {
-                    numerator = numerator.multiply(toUnit.key.ratio.pow(toUnit.value), MathContext.DECIMAL128)
+                val pow = toUnit.pow
+                val prefix = toUnit.prefix
+                val prefixMultiplier = prefix.getPrefixMultiplier()
+                val unit = toUnit.unit
+                if (pow > 0) {
+                    numerator = numerator.multiply(unit.ratio.multiply(prefixMultiplier).pow(pow), MathContext.DECIMAL128)
                 } else {
-                    denominator = denominator.multiply(toUnit.key.ratio.pow(toUnit.value), MathContext.DECIMAL128)
+                    denominator = denominator.multiply(unit.ratio.multiply(prefixMultiplier).pow(pow.absoluteValue), MathContext.DECIMAL128)
                 }
             }
             val rate = denominator.divide(numerator, MathContext.DECIMAL128)
@@ -120,11 +128,11 @@ open class Dimension private constructor() {
             val fromUnit = fromIterator.next()
             val toUnit = toIterator.next()
 
-            if (fromUnit.value != toUnit.value) return false
+            if (fromUnit.pow != toUnit.pow) return false
 
             //Kotlin hack
-            val fromType = (fromUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
-            val toType = (toUnit.key.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+            val fromType = (fromUnit.unit.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+            val toType = (toUnit.unit.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
 
             if (fromType != toType) return false
         }

@@ -1,11 +1,15 @@
 import dimension.Dimension
-import measurand.km
-import measurand.meter
+import measurand.*
+import unit.Prefix.*
+import unit.length.Meter
 import unit.length.Mile
+import unit.mass.Gram
+import unit.time.Hour
+import unit.time.Minute
+import unit.time.Second
+
 
 fun main() {
-
-    val l = 5.km()
-    val z = 1609.344.meter() * 1609.344.meter()
-    println(z.toString(Dimension(Mile.pow(2))))
+    val v = 1.msec()
+    println(v.toString(Area.sqkm()))
 }

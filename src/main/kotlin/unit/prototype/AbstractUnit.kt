@@ -10,6 +10,10 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     constructor(number: Number) : this(BigDecimal(number.toString()))
 
+    open operator fun times(other: AbstractUnit<*>) = toUnitHolder() * other.toUnitHolder()
+
+    open operator fun div(other: AbstractUnit<*>) = toUnitHolder() / other.toUnitHolder()
+
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
     open fun singularForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
@@ -34,7 +38,9 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     override fun toString() = symbol()
 
-    fun pow(pow: Int) = UnitHolder(this, pow)
+    fun pow(pow: Int = 1) = UnitHolder(this, pow)
+
+    fun toUnitHolder() = UnitHolder(this)
 
     fun toDimensionUnit(): DimensionUnit<Q> {
         if (this is DimensionUnit) return this

@@ -3,6 +3,7 @@ package measurand
 import dimension.Dimension
 import quantity.AbstractQuantity
 import quantity.DimensionQuantity
+import unit.Prefix
 import unit.length.Meter
 import unit.time.Hour
 import unit.velocity.Speed
@@ -13,6 +14,10 @@ class Velocity(number: Number) : DimensionQuantity<Velocity>(number) {
 
     override fun copyWith(value: BigDecimal): AbstractQuantity<Velocity> {
         return Velocity(value)
+    }
+
+    companion object {
+        fun kmh() = Dimension(Meter.pow(1, Prefix.KILO), Hour.pow(-1))
     }
 }
 

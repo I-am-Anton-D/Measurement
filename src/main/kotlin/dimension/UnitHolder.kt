@@ -1,17 +1,32 @@
 package dimension
 
+import unit.Prefix
 import unit.prototype.AbstractUnit
+import unit.prototype.MetricUnit
 
-class UnitHolder(val unit: AbstractUnit<*>, var pow: Int) : Comparable<UnitHolder> {
+class UnitHolder(val unit: AbstractUnit<*>, var pow: Int = 1) {
+    var prefix: Prefix = Prefix.NOMINAL
+        private set
 
-    override fun compareTo(other: UnitHolder): Int {
-        val compare = this.pow.compareTo(other.pow)
-        return if (compare == 0) {
-            this.unit::class.simpleName!!.compareTo(other.unit::class.simpleName!!)
+    constructor(unit: MetricUnit<*>, pow:Int, prefix: Prefix) : this(unit, pow) {
+        this.prefix = prefix
+    }
+
+    fun inverse() : UnitHolder  {
+        return if (this.unit is MetricUnit) {
+            UnitHolder(unit, -pow, prefix)
         } else {
-            compare
+            UnitHolder(unit, -pow)
         }
     }
+
+    operator fun times(other: AbstractUnit<*>) = Dimension(this, UnitHolder(other))
+
+    operator fun times(other: UnitHolder) = Dimension(this, other)
+
+    operator fun div(other: AbstractUnit<*>) = Dimension(this, UnitHolder(other, -1))
+
+    operator fun div(other: UnitHolder) = Dimension(this, other.inverse())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -19,6 +34,8 @@ class UnitHolder(val unit: AbstractUnit<*>, var pow: Int) : Comparable<UnitHolde
 
         other as UnitHolder
 
+        if (pow != other.pow) return false
+        if (prefix != other.prefix) return false
         if (unit != other.unit) return false
 
         return true
