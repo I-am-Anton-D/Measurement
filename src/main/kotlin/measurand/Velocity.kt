@@ -17,7 +17,7 @@ class Velocity(number: Number) : DimensionQuantity<Velocity>(number) {
     }
 
     companion object {
-        fun kmh() = Dimension(Meter.pow(1, Prefix.KILO), Hour.pow(-1))
+        fun kmh() = Dimension<Velocity>(Meter.pow(1, Prefix.KILO), Hour.pow(-1))
     }
 }
 
@@ -26,6 +26,6 @@ fun Number.msec() : Velocity {
 }
 
 fun Number.kmh() : Velocity {
-    val value = Speed.convertValueToDimension(Dimension(Meter.pow(1), Hour.pow(-1)), this)
+    val value = Speed.convertValueToDimension(Dimension<Velocity>(Meter.pow(1), Hour.pow(-1)), this)
     return Velocity(value)
 }

@@ -8,11 +8,11 @@ import java.util.*
 abstract class DimensionQuantity<Q>(number: Number) : AbstractQuantity<Q>(number) {
     abstract override val baseUnit: DimensionUnit<Q>
 
-    open fun valueIn(dimension: Dimension) =
+    open fun valueIn(dimension: Dimension<Q>) =
         baseUnit.convertValueToDimension(dimension, value)
 
     open fun toString(
-        dimension: Dimension? = null,
+        dimension: Dimension<Q>? = null,
         df: DecimalFormat? = null,
         locale: Locale = Locale.getDefault()
     ): String {

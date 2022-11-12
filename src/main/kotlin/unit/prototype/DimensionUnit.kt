@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.util.*
 
 abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
-    abstract val dimension: Dimension
+    abstract val dimension: Dimension<Q>
 
     override fun toString() =  toString(Locale.getDefault())
 
@@ -24,7 +24,7 @@ abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
         return dimension.hashCode()
     }
 
-    fun convertValueToDimension(target: Dimension, value: Number): BigDecimal {
+    fun convertValueToDimension(target: Dimension<Q>, value: Number): BigDecimal {
         return dimension.convertValue(target, value)
     }
 }

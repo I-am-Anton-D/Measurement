@@ -10,6 +10,7 @@ import unit.time.Second
 
 
 fun main() {
-    val v = 1.msec()
-    println(v.toString(Area.sqkm()))
+    val v = 10000.km() * 1.km()
+    val dim = Dimension<Area>(Meter, Meter)
+    println(v.toString(Velocity.kmh()));
 }

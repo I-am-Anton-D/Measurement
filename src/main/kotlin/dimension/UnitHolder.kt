@@ -1,5 +1,6 @@
 package dimension
 
+import quantity.Quantity
 import unit.Prefix
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
@@ -20,13 +21,13 @@ class UnitHolder(val unit: AbstractUnit<*>, var pow: Int = 1) {
         }
     }
 
-    operator fun times(other: AbstractUnit<*>) = Dimension(this, UnitHolder(other))
+    operator fun times(other: AbstractUnit<*>) = Dimension<Quantity>(this, UnitHolder(other))
 
-    operator fun times(other: UnitHolder) = Dimension(this, other)
+    operator fun times(other: UnitHolder) = Dimension<Quantity>(this, other)
 
-    operator fun div(other: AbstractUnit<*>) = Dimension(this, UnitHolder(other, -1))
+    operator fun div(other: AbstractUnit<*>) = Dimension<Quantity>(this, UnitHolder(other, -1))
 
-    operator fun div(other: UnitHolder) = Dimension(this, other.inverse())
+    operator fun div(other: UnitHolder) = Dimension<Quantity>(this, other.inverse())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

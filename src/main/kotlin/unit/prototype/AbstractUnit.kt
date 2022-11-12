@@ -3,6 +3,7 @@ package unit.prototype
 import dimension.Dimension
 import dimension.UnitHolder
 import exception.NoBundleForAnonymousClass
+import quantity.Quantity
 import java.math.BigDecimal
 import java.util.*
 
@@ -45,7 +46,7 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
     fun toDimensionUnit(): DimensionUnit<Q> {
         if (this is DimensionUnit) return this
         return object : DimensionUnit<Q>() {
-            override val dimension = Dimension(this@AbstractUnit)
+            override val dimension: Dimension<Q> = Dimension<Q>(this@AbstractUnit)
         }
     }
 }

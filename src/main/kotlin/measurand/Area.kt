@@ -21,11 +21,10 @@ class Area(number: Number) : DimensionQuantity<Area>(number) {
     operator fun times(other: Length) = Volume(value * other.value)
 
     companion object {
-        fun sqkm() =  Meter.prefix(Prefix.KILO) * Meter.prefix(Prefix.KILO)
+        fun sqkm() =  Dimension<Area>(Meter.pow(1, prefix = Prefix.KILO), Meter.pow(1, prefix = Prefix.KILO))
     }
 }
 
 fun Number.sqmeter(): Area {
     return Area(this)
 }
-

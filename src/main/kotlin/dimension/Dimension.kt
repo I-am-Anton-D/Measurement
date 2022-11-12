@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
-open class Dimension private constructor() {
+open class Dimension<Q> private constructor() {
     private val unitsSet: ArrayList<UnitHolder> = ArrayList()
 
     constructor(vararg holders: UnitHolder) : this() {
@@ -87,14 +87,14 @@ open class Dimension private constructor() {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Dimension
+        other as Dimension<*>
 
         return unitsSet == other.unitsSet
     }
 
     override fun hashCode() = unitsSet.hashCode()
 
-    fun convertValue(target: Dimension, value: Number): BigDecimal {
+    fun convertValue(target: Dimension<Q>, value: Number): BigDecimal {
         if (canConvert(target)) {
             val toIterator = target.unitsSet.iterator()
             var numerator = BigDecimal.ONE
@@ -118,7 +118,7 @@ open class Dimension private constructor() {
         }
     }
 
-    private fun canConvert(target: Dimension): Boolean {
+    private fun canConvert(target: Dimension<Q>): Boolean {
         if (unitsSet.size != target.unitsSet.size) return false
 
         val fromIterator = unitsSet.iterator()
