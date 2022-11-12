@@ -57,7 +57,7 @@ open class Dimension private constructor() {
                 (if (denominator.isNotEmpty()) "·" else "") + unit.symbol(locale) + convertPowToSuperscript(pow)
         }
 
-        if (numerator.isEmpty()) numerator = "1"
+        if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
         if (denominator.isNotEmpty()) denominator = "/$denominator"
 
         return "$numerator$denominator"
@@ -98,9 +98,9 @@ open class Dimension private constructor() {
             while (toIterator.hasNext()) {
                 val toUnit = toIterator.next()
                 if (toUnit.value > 0) {
-                    numerator = numerator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                    numerator = numerator.multiply(toUnit.key.ratio.pow(toUnit.value), MathContext.DECIMAL128)
                 } else {
-                    denominator = denominator.multiply(toUnit.key.ratio, MathContext.DECIMAL128)
+                    denominator = denominator.multiply(toUnit.key.ratio.pow(toUnit.value), MathContext.DECIMAL128)
                 }
             }
             val rate = denominator.divide(numerator, MathContext.DECIMAL128)

@@ -12,9 +12,9 @@ abstract class DimensionQuantity<Q>(number: Number) : AbstractQuantity<Q>(number
         baseUnit.convertValueToDimension(dimension, value)
 
     open fun toString(
-        locale: Locale = Locale.getDefault(),
+        dimension: Dimension? = null,
         df: DecimalFormat? = null,
-        dimension: Dimension? = null
+        locale: Locale = Locale.getDefault()
     ): String {
         val valueIn = if (dimension == null) value else valueIn(dimension)
         val valueString = df?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()

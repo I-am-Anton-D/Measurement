@@ -24,7 +24,7 @@ abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
         return dimension.hashCode()
     }
 
-    fun convertValueToDimension(dimension: Dimension, value: Number): BigDecimal {
-        return dimension.convertValue(dimension, value)
+    fun convertValueToDimension(target: Dimension, value: Number): BigDecimal {
+        return dimension.convertValue(target, value)
     }
 }
