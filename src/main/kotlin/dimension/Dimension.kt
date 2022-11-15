@@ -27,6 +27,11 @@ open class Dimension<Q> private constructor() {
         this.addSetOfUnits(second.dimension.unitsSet, divide)
     }
 
+    constructor(one: Dimension<*>, two:Dimension<*>, divide: Boolean) :this() {
+        this.addSetOfUnits(one.unitsSet)
+        this.addSetOfUnits(two.unitsSet, divide)
+    }
+
     private fun addSetOfUnits(unitSet: List<UnitHolder>, inverse: Boolean = false) {
         unitSet.forEach { uh -> addUnit(uh, inverse) }
     }

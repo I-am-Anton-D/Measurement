@@ -1,11 +1,12 @@
 package quantity
 
+import dimension.Dimension
 import unit.prototype.DimensionUnit
 import java.math.BigDecimal
 
-class Quantity(number: Number, override val baseUnit: DimensionUnit<Quantity>) : DimensionQuantity<Quantity>(number) {
+class Quantity(number: Number, dimension: Dimension<Quantity>) : AbstractQuantity<Quantity>(number, dimension) {
 
     override fun copyWith(value: BigDecimal): AbstractQuantity<Quantity> {
-        return Quantity(value, baseUnit)
+        return Quantity(value, this.dimension)
     }
 }

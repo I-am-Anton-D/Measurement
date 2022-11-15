@@ -1,13 +1,14 @@
 package measurand
 
+import dimension.Dimension
 import quantity.AbstractQuantity
-import quantity.DimensionQuantity
+
+import unit.length.Meter
 import unit.volume.VolumeUnit
 import java.math.BigDecimal
 import java.math.MathContext
 
-class Volume(number: Number) : DimensionQuantity<Volume>(number) {
-    override val baseUnit = VolumeUnit
+class Volume(number: Number) : AbstractQuantity<Volume>(number, Dimension(Meter, Meter, Meter)) {
 
     operator fun div(other: Length) = Area(value.divide(other.value, MathContext.DECIMAL128))
     operator fun div(other: Area) = Length(value.divide(other.value, MathContext.DECIMAL128))

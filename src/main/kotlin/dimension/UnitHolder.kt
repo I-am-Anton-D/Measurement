@@ -27,7 +27,7 @@ class UnitHolder(val unit: AbstractUnit<*>, var pow: Int = 1) {
 
     operator fun div(other: AbstractUnit<*>) = Dimension<Quantity>(this, UnitHolder(other, -1))
 
-    operator fun div(other: UnitHolder) = Dimension<Quantity>(this, other.inverse())
+    operator fun div(other: UnitHolder): Dimension<Quantity> = Dimension(this, other.inverse())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

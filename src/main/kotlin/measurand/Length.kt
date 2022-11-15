@@ -1,7 +1,8 @@
 package measurand
 
+
+import quantity.AbstractQuantity
 import unit.Prefix
-import quantity.BaseQuantity
 import quantity.ToStringParameters
 import unit.length.Foot
 import unit.length.Inch
@@ -12,17 +13,16 @@ import unit.prototype.MetricUnit
 import java.math.BigDecimal
 import java.math.MathContext
 
-class Length(number: Number) : BaseQuantity<Length>(number) {
-    override val baseUnit = Meter
+class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
 
     constructor(number: Number, toStringParameters: ToStringParameters<Length>) : this(number) {
-        this.defaultToStringParameters = toStringParameters
+        //this.defaultToStringParameters = toStringParameters
     }
 
     operator fun times(other: Length) = Area(value * other.value)
     operator fun div(other: Time) = Velocity(value.divide(other.value, MathContext.DECIMAL128))
 
-    override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)
+    override fun copyWith(value: BigDecimal) = Length(value)
 }
 
 fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {

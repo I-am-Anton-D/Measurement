@@ -1,17 +1,13 @@
 package measurand
 
 import dimension.Dimension
-import dimension.UnitHolder
 import quantity.AbstractQuantity
-import quantity.DimensionQuantity
 import unit.Prefix
-import unit.area.AreaUnit
 import unit.length.Meter
 import java.math.BigDecimal
 import java.math.MathContext
 
-class Area(number: Number) : DimensionQuantity<Area>(number) {
-    override val baseUnit = AreaUnit
+class Area(number: Number) : AbstractQuantity<Area>(number, Dimension(Meter, Meter)) {
 
     override fun copyWith(value: BigDecimal): AbstractQuantity<Area> {
         return Area(value)
