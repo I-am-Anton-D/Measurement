@@ -20,27 +20,21 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     @Suppress("UNCHECKED_CAST")
     open operator fun plus(other: AbstractQuantity<Q>): Q {
-        if (this.dimension != other.dimension) throw Exception()
+        if (dimension != other.dimension) throw Exception()
         return copyWith(value + other.value) as Q
     }
 
     @Suppress("UNCHECKED_CAST")
     open operator fun minus(other: AbstractQuantity<Q>): Q {
-        if (this.dimension != other.dimension) throw Exception()
+        if (dimension != other.dimension) throw Exception()
         return copyWith(value - other.value) as Q
     }
 
-    open operator fun times(other: AbstractQuantity<*>): Quantity {
-        val dimension = Dimension<Quantity>(dimension, other.dimension, false)
-        val result = this.value * other.value
-        return Quantity(result, dimension)
-    }
+    open operator fun times(other: AbstractQuantity<*>) =
+        Quantity(value * other.value, dimension * other.dimension)
 
-    open operator fun div(other: AbstractQuantity<*>): Quantity {
-        val dimension = Dimension<Quantity>(dimension, other.dimension, true)
-        val result = value.divide(other.value, MathContext.DECIMAL128)
-        return Quantity(result, dimension)
-    }
+    open operator fun div(other: AbstractQuantity<*>) =
+        Quantity(value.divide(other.value, MathContext.DECIMAL128), dimension / other.dimension)
 
     open fun valueIn(unit: AbstractUnit<Q>): BigDecimal =
         valueIn(unit.toDimension())
