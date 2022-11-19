@@ -11,13 +11,13 @@ import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
 open class Dimension<Q> private constructor() {
-    private val unitsSet: ArrayList<UnitHolder> = ArrayList()
+    private val units: ArrayList<UnitHolder> = ArrayList()
 
     constructor(vararg holders: UnitHolder) : this() {
         holders.forEach { holder -> addUnitHolder(holder) }
     }
 
-    constructor(vararg dimensions: Dimension<*>) : this(*dimensions.flatMap { d -> d.unitsSet }.toTypedArray())
+    constructor(vararg dimensions: Dimension<*>) : this(*dimensions.flatMap { d -> d.units }.toTypedArray())
 
     constructor(vararg units: AbstractUnit<*>) : this(*units.map { unit -> UnitHolder(unit) }.toTypedArray())
 
@@ -25,13 +25,13 @@ open class Dimension<Q> private constructor() {
 
     constructor(unit: MetricUnit<Q>, pow: Int = 1, prefix: Prefix) : this(UnitHolder(unit, pow, prefix))
 
-    operator fun times(other: Dimension<*>): Dimension<Quantity> = Dimension(*(unitsSet + other.unitsSet).toTypedArray())
+    operator fun times(other: Dimension<*>): Dimension<Quantity> = Dimension(*(units + other.units).toTypedArray())
 
     operator fun times(other: AbstractUnit<*>): Dimension<Quantity> = this * other.toDimension()
 
     operator fun div(other: Dimension<*>): Dimension<Quantity> {
-        val otherInverse = other.unitsSet.map { uh -> uh.inverse() }
-        return Dimension(*(unitsSet + otherInverse).toTypedArray())
+        val otherInverse = other.units.map { uh -> uh.inverse() }
+        return Dimension(*(units + otherInverse).toTypedArray())
     }
 
     operator fun div(other: AbstractUnit<*>): Dimension<Quantity> = this / other.toDimension()
@@ -40,29 +40,29 @@ open class Dimension<Q> private constructor() {
         val indexOf = indexOfByUnitQuantity(unit)
 
         if (indexOf < 0) {
-            unitsSet.add(unit)
+            units.add(unit)
         } else {
-            val rPow = unitsSet[indexOf].pow + unit.pow
+            val rPow = units[indexOf].pow + unit.pow
             if (rPow == 0) {
-                unitsSet.removeAt(indexOf)
+                units.removeAt(indexOf)
             } else {
-                unitsSet[indexOf] = unitsSet[indexOf].copyWith(rPow)
+                units[indexOf] = units[indexOf].copyWith(rPow)
             }
         }
     }
 
     private fun indexOfByUnitQuantity(unit: UnitHolder): Int {
-        unitsSet.forEachIndexed { index, element ->
+        units.forEachIndexed { index, element ->
             if (element.unitQuantity == unit.unitQuantity) return index
         }
         return -1
     }
 
     fun convertValue(target: Dimension<Q>, value: Number): BigDecimal {
-        if (unitsSet.size != target.unitsSet.size) throw Exception()
+        if (units.size != target.units.size) throw Exception()
 
-        val sortedFrom = unitsSet.sortedBy { uh -> uh.unitQuantity.toString() }
-        val sortedTo = target.unitsSet.sortedBy { uh -> uh.unitQuantity.toString() }
+        val sortedFrom = units.sortedBy { uh -> uh.unitQuantity.toString() }
+        val sortedTo = target.units.sortedBy { uh -> uh.unitQuantity.toString() }
 
         var numerator = BigDecimal.ONE
         var denominator = BigDecimal.ONE
@@ -78,7 +78,6 @@ open class Dimension<Q> private constructor() {
         }
 
         val rate = denominator.divide(numerator, MathContext.DECIMAL128)
-
         return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
     }
 
@@ -91,7 +90,7 @@ open class Dimension<Q> private constructor() {
 
     open fun toAnsiFormatString(locale: Locale = Locale("en", "GB")): String {
         var ansiString = ""
-        unitsSet.forEach { uh ->
+        units.forEach { uh ->
             val prefix = uh.prefix.prefixSymbol(locale)
             val symbol = uh.unit.symbol(locale)
             val powString = if (uh.pow == 1) "" else "^${uh.pow}"
@@ -106,7 +105,7 @@ open class Dimension<Q> private constructor() {
         var numerator = ""
         var denominator = ""
 
-        unitsSet.forEach { uh ->
+        units.forEach { uh ->
             val prefix = uh.prefix.prefixSymbol(locale)
             val symbol = uh.unit.symbol(locale)
             val powSuperscript = powInSuperScript[uh.pow.absoluteValue]
@@ -115,7 +114,6 @@ open class Dimension<Q> private constructor() {
 
             if (uh.pow > 0) numerator += multiplySign + prefix + symbol + powSuperscript
             if (uh.pow < 0) denominator += multiplySign + prefix + symbol + powSuperscript
-
         }
 
         if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
@@ -131,10 +129,10 @@ open class Dimension<Q> private constructor() {
         if (javaClass != other?.javaClass) return false
         other as Dimension<*>
 
-        return unitsSet == other.unitsSet
+        return units == other.units
     }
 
-    override fun hashCode() = unitsSet.hashCode()
+    override fun hashCode() = units.hashCode()
 
     companion object {
         val powInSuperScript =

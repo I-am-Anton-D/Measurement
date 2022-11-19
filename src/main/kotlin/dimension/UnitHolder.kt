@@ -17,12 +17,12 @@ class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
     }
 
     fun copyWith(pow: Int): UnitHolder = if (this.unit is MetricUnit) {
-        UnitHolder(this.unit, pow, this.prefix)
+        UnitHolder(unit, pow, prefix)
     } else {
-        UnitHolder(this.unit, pow)
+        UnitHolder(unit, pow)
     }
 
-    fun inverse() = copyWith(-this.pow)
+    fun inverse() = copyWith(-pow)
 
     fun canConvert(toUnit: UnitHolder) =
         pow == toUnit.pow && unitQuantity == toUnit.unitQuantity
