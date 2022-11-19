@@ -1,6 +1,7 @@
 package quantity
 
 import dimension.Dimension
+import dimension.DimensionFormat
 import dimension.UnitHolder
 import unit.Prefix
 import unit.prototype.*
@@ -48,20 +49,27 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     open fun toString(
         unit: AbstractUnit<Q>,
-        df: DecimalFormat? = null,
+        valueFormat: DecimalFormat? = null,
+        dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
         locale: Locale = Locale.getDefault()
-    ): String {
-        return toString(unit.toDimension(), df, locale)
-    }
+    ) = toString(unit.toDimension(), valueFormat, dimensionFormat, locale)
+
+    open fun toAnsiString(
+        dimension: Dimension<Q>? = null,
+        valueFormat: DecimalFormat? = null,
+        locale: Locale = Locale("en", "GB")
+    ) = toString(dimension, valueFormat, DimensionFormat.ANSI, locale)
+
 
     open fun toString(
         dimension: Dimension<Q>? = null,
-        df: DecimalFormat? = null,
+        valueFormat: DecimalFormat? = null,
+        dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
         locale: Locale = Locale.getDefault()
     ): String {
         val valueIn = if (dimension == null) value else valueIn(dimension)
-        val valueString = df?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
-        val unitString = dimension?.toString(locale) ?: this.dimension.toString(locale)
+        val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
+        val unitString = dimension?.toString(dimensionFormat, locale) ?: this.dimension.toString(dimensionFormat, locale)
         return "$valueString $unitString"
     }
 

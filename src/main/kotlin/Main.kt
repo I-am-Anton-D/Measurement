@@ -1,4 +1,5 @@
 import dimension.Dimension
+import dimension.DimensionFormat
 import measurand.*
 import quantity.Quantity
 import unit.Prefix.*
@@ -13,8 +14,7 @@ import java.util.*
 
 
 fun main() {
-    val v = 1.meter() * 1.gram()
-    val dim = Dimension<Quantity>(Gram.pow(1, prefix = KILO), Hour.pow(-1))
+    val v = Meter / Second
 
-    println(v.toString(dim))
+    println(v)
 }

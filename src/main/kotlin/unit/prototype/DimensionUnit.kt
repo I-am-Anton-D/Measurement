@@ -7,9 +7,9 @@ import java.util.*
 abstract class DimensionUnit<Q> : AbstractUnit<Q>() {
     abstract val dimension: Dimension<Q>
 
-    override fun toString() =  toString(Locale.getDefault())
+  //  override fun toString() =  toString(Locale.getDefault())
 
-    open fun toString(locale: Locale) = dimension.toString(locale)
+   // open fun toString(locale: Locale) = dimension.toString(locale)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

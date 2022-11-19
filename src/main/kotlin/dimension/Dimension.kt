@@ -27,92 +27,91 @@ open class Dimension<Q> private constructor() {
     }
 
     private fun addUnit(unit: UnitHolder) {
-        val exist = unitsSet.find { it.unit == unit.unit }
+        val indexOf = indexOfByUnitQuantity(unit)
 
-        if (exist == null) {
+        if (indexOf < 0) {
             unitsSet.add(unit)
         } else {
-            exist.pow += unit.pow
-            if (exist.pow == 0) {
-                unitsSet.remove(exist)
+            val rPow = unitsSet[indexOf].pow + unit.pow
+            if (rPow == 0) {
+                unitsSet.removeAt(indexOf)
+            } else {
+                unitsSet[indexOf] = unitsSet[indexOf].copyWith(rPow)
             }
         }
+    }
+
+    private fun indexOfByUnitQuantity(unit: UnitHolder) : Int {
+        unitsSet.forEachIndexed{ index, element ->
+            if (element.unitQuantity == unit.unitQuantity) return index
+        }
+        return -1
     }
 
     fun convertValue(target: Dimension<Q>, value: Number): BigDecimal {
-        if (!canConvert(target)) throw Exception()
-
-        val toIterator = target.unitsSet.iterator()
-        var numerator = BigDecimal.ONE
-        var denominator = BigDecimal.ONE
-        while (toIterator.hasNext()) {
-            val toUnit = toIterator.next()
-            val pow = toUnit.pow
-            val prefix = toUnit.prefix
-            val prefixMultiplier = prefix.getPrefixMultiplier()
-            val unit = toUnit.unit
-            if (pow > 0) {
-                numerator =
-                    numerator.multiply(unit.ratio.multiply(prefixMultiplier).pow(pow), MathContext.DECIMAL128)
-            } else {
-                denominator = denominator.multiply(
-                    unit.ratio.multiply(prefixMultiplier).pow(pow.absoluteValue),
-                    MathContext.DECIMAL128
-                )
-            }
-        }
-        val rate = denominator.divide(numerator, MathContext.DECIMAL128)
-        return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
-    }
-
-    private fun canConvert(target: Dimension<Q>): Boolean {
-        if (unitsSet.size != target.unitsSet.size) return false
+        if (unitsSet.size != target.unitsSet.size) throw Exception()
 
         val sortedFrom = unitsSet.sortedBy { uh -> uh.unitQuantity.toString() }
         val sortedTo = target.unitsSet.sortedBy { uh -> uh.unitQuantity.toString() }
 
-        sortedFrom.forEachIndexed { index, from ->
-            if (!from.canConvert(sortedTo[index])) return false
+        var numerator = BigDecimal.ONE
+        var denominator = BigDecimal.ONE
+
+        sortedTo.forEachIndexed { index, toUnit ->
+            if (!toUnit.canConvert(sortedFrom[index])) throw Exception()
+
+            val prefixMultiplier = toUnit.prefix.getPrefixMultiplier()
+            val unitRatio = toUnit.unit.ratio.multiply(prefixMultiplier).pow(toUnit.pow.absoluteValue)
+
+            if (toUnit.pow > 0) numerator = numerator.multiply(unitRatio, MathContext.DECIMAL128)
+            if (toUnit.pow < 0) denominator = denominator.multiply(unitRatio, MathContext.DECIMAL128)
         }
 
-        return true
+        val rate = denominator.divide(numerator, MathContext.DECIMAL128)
+
+        return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
     }
 
-    open fun toString(locale: Locale): String {
-        var numerator = ""
-        var denominator = ""
+    open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale): String {
+        when (dimensionFormat) {
+            DimensionFormat.NORMAL -> {
+                var numerator = ""
+                var denominator = ""
 
-        unitsSet.forEach { uh ->
-            val prefix = uh.prefix.prefixSymbol(locale)
-            val symbol = uh.unit.symbol(locale)
+                unitsSet.forEach { uh ->
+                    val prefix = uh.prefix.prefixSymbol(locale)
+                    val symbol = uh.unit.symbol(locale)
+                    val powSuperscript = powInSuperScript[uh.pow.absoluteValue]
+                    val multiplySign =
+                        if ((numerator.isNotEmpty() && uh.pow > 0) || (denominator.isNotEmpty() && uh.pow < 0)) "·" else ""
 
-            if (uh.pow > 0) numerator +=
-                (if (numerator.isNotEmpty()) "·" else "") + prefix + symbol + convertPowToSuperscript(uh.pow)
-            if (uh.pow < 0) denominator +=
-                (if (denominator.isNotEmpty()) "·" else "") + prefix + symbol + convertPowToSuperscript(uh.pow)
+                    if (uh.pow > 0) numerator += multiplySign + prefix + symbol + powSuperscript
+                    if (uh.pow < 0) denominator += multiplySign + prefix + symbol + powSuperscript
+
+                }
+
+                if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
+                if (denominator.isNotEmpty()) denominator = "/$denominator"
+
+                return "$numerator$denominator"
+            }
+
+            DimensionFormat.ANSI -> {
+                var ansiString = ""
+                unitsSet.forEach { uh ->
+                    val prefix = uh.prefix.prefixSymbol(locale)
+                    val symbol = uh.unit.symbol(locale)
+                    val powString = if (uh.pow == 1) "" else "^$uh.pow"
+                    val space = (if (ansiString.isNotEmpty()) " " else "")
+                    ansiString += space + prefix + symbol + powString
+                }
+
+                return ansiString
+            }
         }
-
-        if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
-        if (denominator.isNotEmpty()) denominator = "/$denominator"
-
-        return "$numerator$denominator"
     }
 
-    override fun toString() = toString(Locale.getDefault())
-
-    private fun convertPowToSuperscript(pow: Int): String {
-        return when (pow.absoluteValue) {
-            2 -> "\u00B2"
-            3 -> "\u00B3"
-            4 -> "\u2074"
-            5 -> "\u2075"
-            6 -> "\u2076"
-            7 -> "\u2077"
-            8 -> "\u2078"
-            9 -> "\u2079"
-            else -> ""
-        }
-    }
+    override fun toString() = toString(DimensionFormat.NORMAL, Locale.getDefault())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -124,4 +123,8 @@ open class Dimension<Q> private constructor() {
 
     override fun hashCode() = unitsSet.hashCode()
 
+    companion object {
+        val powInSuperScript =
+            listOf("", "", "\u00B2", "\u00B3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079")
+    }
 }

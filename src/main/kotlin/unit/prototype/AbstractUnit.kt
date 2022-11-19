@@ -11,9 +11,9 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     constructor(number: Number) : this(BigDecimal(number.toString()))
 
-    open operator fun times(other: AbstractUnit<*>) = pow(1) * other.pow(1)
+    open operator fun times(other: AbstractUnit<*>) = toDimension() * other.toDimension()
 
-    open operator fun div(other: AbstractUnit<*>) = pow(1) / other.pow(1)
+    open operator fun div(other: AbstractUnit<*>) = toDimension() / other.toDimension()
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
