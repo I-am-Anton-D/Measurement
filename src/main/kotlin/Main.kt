@@ -14,7 +14,9 @@ import java.util.*
 
 
 fun main() {
-    val v = Meter / Second
+    val v = 10.msec()
 
-    println(v)
+    val dim = Velocity.dimension(Mile, Minute)
+
+    println(v.toString(dim))
 }

@@ -1,15 +1,14 @@
 package measurand
 
 import dimension.Dimension
-import dimension.UnitHolder
 import quantity.AbstractQuantity
 import unit.Prefix
 import unit.length.Meter
 import unit.prototype.AbstractUnit
 import unit.time.Hour
 import unit.time.Second
-import unit.velocity.Speed
 import java.math.BigDecimal
+
 
 class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
 
@@ -18,11 +17,10 @@ class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
     }
 
     companion object {
-        fun dimension(length: AbstractUnit<Length>, time: AbstractUnit<Time>) =
-            Dimension<Velocity>(UnitHolder(length), UnitHolder(time, -1))
+        fun dimension(length: AbstractUnit<Length>, time: AbstractUnit<Time>) = (length / time) as Dimension<Velocity>
 
-        fun kmh() = Dimension<Velocity>(Meter.pow(1, Prefix.KILO), Hour.pow(-1))
-        fun msec() = Dimension<Velocity>(Meter.pow(1), Second.pow(-1))
+        fun kmh() = (Meter.prefix(Prefix.KILO) / Hour) as Dimension<Velocity>
+        fun msec() = (Meter / Second) as Dimension<Velocity>
     }
 }
 
@@ -31,6 +29,7 @@ fun Number.msec(): Velocity {
 }
 
 fun Number.kmh(): Velocity {
+    //FIX IT
     val value = Velocity.msec().convertValue(Velocity.kmh(), this)
     return Velocity(value)
 }

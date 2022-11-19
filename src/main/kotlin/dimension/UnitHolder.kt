@@ -1,6 +1,5 @@
 package dimension
 
-import quantity.Quantity
 import unit.Prefix
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
@@ -11,7 +10,6 @@ class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
     var prefix: Prefix = Prefix.NOMINAL
         private set
 
-    //Kotlin hack
     val unitQuantity: Type = (unit.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
 
     constructor(unit: MetricUnit<*>, pow: Int, prefix: Prefix) : this(unit, pow) {
@@ -25,14 +23,6 @@ class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
     }
 
     fun inverse() = copyWith(-this.pow)
-
-    operator fun times(other: AbstractUnit<*>) = Dimension<Quantity>(this, UnitHolder(other))
-
-    operator fun times(other: UnitHolder) = Dimension<Quantity>(this, other)
-
-    operator fun div(other: AbstractUnit<*>) = Dimension<Quantity>(this, UnitHolder(other, -1))
-
-    operator fun div(other: UnitHolder): Dimension<Quantity> = Dimension(this, other.inverse())
 
     fun canConvert(toUnit: UnitHolder) =
         pow == toUnit.pow && unitQuantity == toUnit.unitQuantity

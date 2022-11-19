@@ -1,7 +1,9 @@
 package dimension
 
 import quantity.Quantity
+import unit.Prefix
 import unit.prototype.AbstractUnit
+import unit.prototype.MetricUnit
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
@@ -12,21 +14,29 @@ open class Dimension<Q> private constructor() {
     private val unitsSet: ArrayList<UnitHolder> = ArrayList()
 
     constructor(vararg holders: UnitHolder) : this() {
-        holders.forEach { holder -> addUnit(holder) }
+        holders.forEach { holder -> addUnitHolder(holder) }
     }
 
-    constructor(vararg units: AbstractUnit<*>) :
-            this(*units.map { unit -> UnitHolder(unit) }.toTypedArray())
+    constructor(vararg dimensions: Dimension<*>) : this(*dimensions.flatMap { d -> d.unitsSet }.toTypedArray())
 
-    operator fun times(other: Dimension<*>): Dimension<Quantity> =
-        Dimension(*(unitsSet + other.unitsSet).toTypedArray())
+    constructor(vararg units: AbstractUnit<*>) : this(*units.map { unit -> UnitHolder(unit) }.toTypedArray())
+
+    constructor(unit: AbstractUnit<Q>, pow: Int = 1) : this(UnitHolder(unit, pow))
+
+    constructor(unit: MetricUnit<Q>, pow: Int = 1, prefix: Prefix) : this(UnitHolder(unit, pow, prefix))
+
+    operator fun times(other: Dimension<*>): Dimension<Quantity> = Dimension(*(unitsSet + other.unitsSet).toTypedArray())
+
+    operator fun times(other: AbstractUnit<*>): Dimension<Quantity> = this * other.toDimension()
 
     operator fun div(other: Dimension<*>): Dimension<Quantity> {
         val otherInverse = other.unitsSet.map { uh -> uh.inverse() }
         return Dimension(*(unitsSet + otherInverse).toTypedArray())
     }
 
-    private fun addUnit(unit: UnitHolder) {
+    operator fun div(other: AbstractUnit<*>): Dimension<Quantity> = this / other.toDimension()
+
+    private fun addUnitHolder(unit: UnitHolder) {
         val indexOf = indexOfByUnitQuantity(unit)
 
         if (indexOf < 0) {
@@ -41,8 +51,8 @@ open class Dimension<Q> private constructor() {
         }
     }
 
-    private fun indexOfByUnitQuantity(unit: UnitHolder) : Int {
-        unitsSet.forEachIndexed{ index, element ->
+    private fun indexOfByUnitQuantity(unit: UnitHolder): Int {
+        unitsSet.forEachIndexed { index, element ->
             if (element.unitQuantity == unit.unitQuantity) return index
         }
         return -1
@@ -72,43 +82,46 @@ open class Dimension<Q> private constructor() {
         return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
     }
 
-    open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale): String {
+    open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale) =
         when (dimensionFormat) {
-            DimensionFormat.NORMAL -> {
-                var numerator = ""
-                var denominator = ""
-
-                unitsSet.forEach { uh ->
-                    val prefix = uh.prefix.prefixSymbol(locale)
-                    val symbol = uh.unit.symbol(locale)
-                    val powSuperscript = powInSuperScript[uh.pow.absoluteValue]
-                    val multiplySign =
-                        if ((numerator.isNotEmpty() && uh.pow > 0) || (denominator.isNotEmpty() && uh.pow < 0)) "·" else ""
-
-                    if (uh.pow > 0) numerator += multiplySign + prefix + symbol + powSuperscript
-                    if (uh.pow < 0) denominator += multiplySign + prefix + symbol + powSuperscript
-
-                }
-
-                if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
-                if (denominator.isNotEmpty()) denominator = "/$denominator"
-
-                return "$numerator$denominator"
-            }
-
-            DimensionFormat.ANSI -> {
-                var ansiString = ""
-                unitsSet.forEach { uh ->
-                    val prefix = uh.prefix.prefixSymbol(locale)
-                    val symbol = uh.unit.symbol(locale)
-                    val powString = if (uh.pow == 1) "" else "^$uh.pow"
-                    val space = (if (ansiString.isNotEmpty()) " " else "")
-                    ansiString += space + prefix + symbol + powString
-                }
-
-                return ansiString
-            }
+            DimensionFormat.NORMAL -> toNormalFormatString(locale)
+            DimensionFormat.ANSI -> toAnsiFormatString(locale)
         }
+
+
+    open fun toAnsiFormatString(locale: Locale = Locale("en", "GB")): String {
+        var ansiString = ""
+        unitsSet.forEach { uh ->
+            val prefix = uh.prefix.prefixSymbol(locale)
+            val symbol = uh.unit.symbol(locale)
+            val powString = if (uh.pow == 1) "" else "^${uh.pow}"
+            val space = (if (ansiString.isNotEmpty()) " " else "")
+            ansiString += space + prefix + symbol + powString
+        }
+
+        return ansiString
+    }
+
+    open fun toNormalFormatString(locale: Locale = Locale.getDefault()): String {
+        var numerator = ""
+        var denominator = ""
+
+        unitsSet.forEach { uh ->
+            val prefix = uh.prefix.prefixSymbol(locale)
+            val symbol = uh.unit.symbol(locale)
+            val powSuperscript = powInSuperScript[uh.pow.absoluteValue]
+            val multiplySign =
+                if ((numerator.isNotEmpty() && uh.pow > 0) || (denominator.isNotEmpty() && uh.pow < 0)) "·" else ""
+
+            if (uh.pow > 0) numerator += multiplySign + prefix + symbol + powSuperscript
+            if (uh.pow < 0) denominator += multiplySign + prefix + symbol + powSuperscript
+
+        }
+
+        if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
+        if (denominator.isNotEmpty()) denominator = "/$denominator"
+
+        return "$numerator$denominator"
     }
 
     override fun toString() = toString(DimensionFormat.NORMAL, Locale.getDefault())

@@ -2,7 +2,6 @@ package quantity
 
 import dimension.Dimension
 import dimension.DimensionFormat
-import dimension.UnitHolder
 import unit.Prefix
 import unit.prototype.*
 import java.math.BigDecimal
@@ -10,8 +9,7 @@ import java.math.MathContext
 import java.text.DecimalFormat
 import java.util.*
 
-abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimension<Q>) :
-    Comparable<AbstractQuantity<Q>> {
+abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimension<Q>) : Comparable<AbstractQuantity<Q>> {
 
     constructor(number: Number, unit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), unit.toDimension())
 
@@ -37,15 +35,11 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
     open operator fun div(other: AbstractQuantity<*>) =
         Quantity(value.divide(other.value, MathContext.DECIMAL128), dimension / other.dimension)
 
-    open fun valueIn(unit: AbstractUnit<Q>): BigDecimal =
-        valueIn(unit.toDimension())
+    open fun valueIn(unit: AbstractUnit<Q>) = valueIn(unit.toDimension())
 
-    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>): BigDecimal {
-        return valueIn(Dimension(UnitHolder(unit, pow = 1, prefix)))
-    }
+    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>) = valueIn(Dimension(unit, 1, prefix))
 
-    open fun valueIn(dimension: Dimension<Q>) =
-        this.dimension.convertValue(dimension, value)
+    open fun valueIn(dimension: Dimension<Q>) = dimension.convertValue(dimension, value)
 
     open fun toString(
         unit: AbstractUnit<Q>,
@@ -69,7 +63,8 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
     ): String {
         val valueIn = if (dimension == null) value else valueIn(dimension)
         val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
-        val unitString = dimension?.toString(dimensionFormat, locale) ?: this.dimension.toString(dimensionFormat, locale)
+        val unitString =
+            dimension?.toString(dimensionFormat, locale) ?: this.dimension.toString(dimensionFormat, locale)
         return "$valueString $unitString"
     }
 
