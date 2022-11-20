@@ -67,17 +67,18 @@ open class Dimension<Q> private constructor() {
         var numerator = BigDecimal.ONE
         var denominator = BigDecimal.ONE
 
-        sortedTo.forEachIndexed { index, toUnit ->
-            if (!toUnit.canConvert(sortedFrom[index])) throw Exception()
+        for (index in sortedTo.indices) {
+            val toUnit = sortedTo[index]
+            val fromUnit = sortedFrom[index]
 
-            val prefixMultiplier = toUnit.prefix.getPrefixMultiplier()
-            val unitRatio = toUnit.unit.ratio.multiply(prefixMultiplier).pow(toUnit.pow.absoluteValue)
+            if (!toUnit.canConvert(fromUnit)) throw Exception()
 
+            val unitRatio = fromUnit.getConvertRatio(toUnit)
             if (toUnit.pow > 0) numerator = numerator.multiply(unitRatio, MathContext.DECIMAL128)
             if (toUnit.pow < 0) denominator = denominator.multiply(unitRatio, MathContext.DECIMAL128)
         }
 
-        val rate = denominator.divide(numerator, MathContext.DECIMAL128)
+        val rate = numerator.divide(denominator, MathContext.DECIMAL128)
         return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
     }
 

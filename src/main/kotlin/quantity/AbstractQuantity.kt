@@ -10,6 +10,7 @@ import java.text.DecimalFormat
 import java.util.*
 
 abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimension<Q>) : Comparable<AbstractQuantity<Q>> {
+    var defaultToStringDimension: Dimension<Q>? = null
 
     constructor(number: Number, unit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), unit.toDimension())
 
@@ -39,7 +40,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>) = valueIn(Dimension(unit, 1, prefix))
 
-    open fun valueIn(dimension: Dimension<Q>) = dimension.convertValue(dimension, value)
+    open fun valueIn(dimension: Dimension<Q>) = this.dimension.convertValue(dimension, value)
 
     open fun toString(
         unit: AbstractUnit<Q>,
@@ -61,14 +62,21 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
         dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
         locale: Locale = Locale.getDefault()
     ): String {
-        val valueIn = if (dimension == null) value else valueIn(dimension)
+        val targetDimension = dimension ?: defaultToStringDimension
+        val valueIn = if (targetDimension == null) value else valueIn(targetDimension)
         val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
         val unitString =
-            dimension?.toString(dimensionFormat, locale) ?: this.dimension.toString(dimensionFormat, locale)
+            targetDimension?.toString(dimensionFormat, locale) ?: this.dimension.toString(dimensionFormat, locale)
         return "$valueString $unitString"
     }
 
-    override fun toString() = "${value.stripTrailingZeros().toPlainString()} $dimension"
+    override fun toString() : String {
+        return if (defaultToStringDimension == null) {
+            "${value.stripTrailingZeros().toPlainString()} $dimension"
+        } else {
+            toString(defaultToStringDimension)
+        }
+    }
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
         return if (dimension == other.dimension) {

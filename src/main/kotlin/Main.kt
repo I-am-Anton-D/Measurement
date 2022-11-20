@@ -6,6 +6,7 @@ import unit.Prefix.*
 import unit.length.Inch
 import unit.length.Meter
 import unit.length.Mile
+import unit.length.mile
 import unit.mass.Gram
 import unit.time.Hour
 import unit.time.Minute
@@ -14,9 +15,7 @@ import java.util.*
 
 
 fun main() {
-    val v = 10.msec()
+    val v = 1.kmh() + 1.msec()
 
-    val dim = Velocity.dimension(Mile, Minute)
-
-    println(v.toString(dim))
+    println(v)
 }

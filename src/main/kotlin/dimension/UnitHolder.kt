@@ -5,6 +5,9 @@ import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.math.BigDecimal
+import java.math.MathContext
+import kotlin.math.absoluteValue
 
 class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
     var prefix: Prefix = Prefix.NOMINAL
@@ -24,8 +27,13 @@ class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
 
     fun inverse() = copyWith(-pow)
 
-    fun canConvert(toUnit: UnitHolder) =
-        pow == toUnit.pow && unitQuantity == toUnit.unitQuantity
+    fun canConvert(toUnit: UnitHolder) = pow == toUnit.pow && unitQuantity == toUnit.unitQuantity
+
+    fun getConvertRatio(toUnit: UnitHolder): BigDecimal {
+        val ratio = this.unit.ratio.divide(toUnit.unit.ratio, MathContext.DECIMAL128)
+        val prefixMultiplier = this.prefix.getPrefixMultiplier().divide(toUnit.prefix.getPrefixMultiplier(), MathContext.DECIMAL128)
+        return ratio.multiply(prefixMultiplier).pow(toUnit.pow.absoluteValue)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

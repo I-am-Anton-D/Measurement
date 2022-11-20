@@ -1,9 +1,11 @@
 package measurand
 
+import dimension.Dimension
 import quantity.AbstractQuantity
 import unit.Prefix
 import quantity.ToStringParameters
 import unit.prototype.AbstractUnit
+import unit.prototype.MetricUnit
 import unit.time.Day
 import unit.time.Hour
 import unit.time.Minute
@@ -12,22 +14,19 @@ import java.math.BigDecimal
 
 class Time(number: Number) : AbstractQuantity<Time>(number, Second) {
 
-    constructor(number: Number, toStringParameters: ToStringParameters<Time>) : this(number) {
-       // this.defaultToStringParameters = toStringParameters
+    constructor(number: Number, defaultToStringDimension: Dimension<Time>?) : this(number) {
+        this.defaultToStringDimension = defaultToStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Time(value)
+    override fun copyWith(value: BigDecimal) = Time(value, defaultToStringDimension)
 }
 
-fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: AbstractUnit<Time> = Second): Time {
-    val number = prefix.inNominal(this).multiply(unit.ratio)
-    return Time(number, ToStringParameters(unit, prefix))
-}
+fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Time> = Second) =
+    Time(unit.valueToBaseUnit(this, prefix), Dimension(unit, 1, prefix))
 
-fun Number.second(unit: AbstractUnit<Time>): Time {
-    val number = BigDecimal(this.toString()).multiply(unit.ratio)
-    return Time(number, ToStringParameters(unit))
-}
+
+fun Number.second(unit: AbstractUnit<Time>) = Time(unit.valueToBaseUnit(this), Dimension(unit))
+
 
 fun Number.minute() = second(Minute)
 fun Number.hour() = second(Hour)
