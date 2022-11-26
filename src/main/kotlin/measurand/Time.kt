@@ -3,7 +3,7 @@ package measurand
 import dimension.Dimension
 import quantity.AbstractQuantity
 import unit.Prefix
-import quantity.ToStringParameters
+
 import unit.prototype.AbstractUnit
 import unit.prototype.MetricUnit
 import unit.time.Day

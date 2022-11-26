@@ -1,7 +1,6 @@
 package quantity
 
 import dimension.Dimension
-import unit.prototype.DimensionUnit
 import java.math.BigDecimal
 
 class Quantity(number: Number, dimension: Dimension<Quantity>) : AbstractQuantity<Quantity>(number, dimension) {

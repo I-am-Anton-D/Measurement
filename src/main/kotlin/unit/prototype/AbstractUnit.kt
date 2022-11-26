@@ -2,7 +2,6 @@ package unit.prototype
 
 import dimension.Dimension
 import exception.NoBundleForAnonymousClass
-import unit.Prefix
 import java.math.BigDecimal
 import java.util.*
 
@@ -12,7 +11,11 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     open operator fun times(other: AbstractUnit<*>) = toDimension() * other.toDimension()
 
+    open operator fun times(other: Dimension<*>) = toDimension() * other
+
     open operator fun div(other: AbstractUnit<*>) = toDimension() / other.toDimension()
+
+    open operator fun div(other: Dimension<*>) = toDimension() / other
 
     open fun valueToBaseUnit(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(ratio)
 

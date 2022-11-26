@@ -15,7 +15,10 @@ import java.util.*
 
 
 fun main() {
-    val v = 1.kmh() + 1.msec()
-
-    println(v)
+    val length = 10.km() + 5.meter()
+    println(length)
+    val time = 2.hour()
+    println(time)
+    val velocity = length / time
+    println(velocity)
 }

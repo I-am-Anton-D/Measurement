@@ -2,12 +2,12 @@ package measurand
 
 import dimension.Dimension
 import quantity.AbstractQuantity
-import unit.Prefix
 import unit.length.Meter
 import unit.prototype.AbstractUnit
 import unit.time.Hour
 import unit.time.Second
 import java.math.BigDecimal
+import java.math.MathContext
 
 
 class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
@@ -16,8 +16,13 @@ class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
         this.defaultToStringDimension = defaultToStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Velocity(value, defaultToStringDimension)
+    constructor(length: Length, time:Time) : this(length.value.divide(time.value, MathContext.DECIMAL128)) {
 
+    }
+
+    operator fun div(other: Time) = Acceleration(value.divide(other.value, MathContext.DECIMAL128))
+
+    override fun copyWith(value: BigDecimal) = Velocity(value, defaultToStringDimension)
 
     @Suppress("UNCHECKED_CAST")
     companion object {

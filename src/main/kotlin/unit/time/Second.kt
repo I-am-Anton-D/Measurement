@@ -1,6 +1,6 @@
 package unit.time
 
 import measurand.Time
-import unit.prototype.BaseUnit
+import unit.prototype.MetricUnit
 
-object Second : BaseUnit<Time>()
+object Second : MetricUnit<Time>()

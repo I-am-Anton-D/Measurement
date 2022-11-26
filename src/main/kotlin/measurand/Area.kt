@@ -2,12 +2,11 @@ package measurand
 
 import dimension.Dimension
 import quantity.AbstractQuantity
-import unit.Prefix
 import unit.length.Meter
 import java.math.BigDecimal
 import java.math.MathContext
 
-class Area(number: Number) : AbstractQuantity<Area>(number, Dimension(Meter, Meter)) {
+class Area(number: Number) : AbstractQuantity<Area>(number, sqm()) {
 
     override fun copyWith(value: BigDecimal): AbstractQuantity<Area> {
         return Area(value)
@@ -17,7 +16,8 @@ class Area(number: Number) : AbstractQuantity<Area>(number, Dimension(Meter, Met
     operator fun times(other: Length) = Volume(value * other.value)
 
     companion object {
-        fun sqkm() =  Dimension<Area>(Meter.pow(1, prefix = Prefix.KILO), Meter.pow(1, prefix = Prefix.KILO))
+        fun sqkm() =  (Meter.KILO * Meter.KILO) as Dimension<Area>
+        fun sqm() = (Meter * Meter) as Dimension<Area>
     }
 }
 
