@@ -1,17 +1,6 @@
-import dimension.Dimension
-import dimension.DimensionFormat
-import measurand.*
-import quantity.Quantity
-import unit.Prefix.*
-import unit.length.Inch
-import unit.length.Meter
-import unit.length.Mile
-import unit.length.mile
-import unit.mass.Gram
-import unit.time.Hour
-import unit.time.Minute
-import unit.time.Second
-import java.util.*
+import measurand.hour
+import measurand.km
+import measurand.meter
 
 
 fun main() {

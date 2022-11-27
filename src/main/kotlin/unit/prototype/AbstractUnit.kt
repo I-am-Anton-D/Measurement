@@ -1,6 +1,7 @@
 package unit.prototype
 
 import dimension.Dimension
+import dimension.ValueHolder
 import exception.NoBundleForAnonymousClass
 import java.math.BigDecimal
 import java.util.*
@@ -8,6 +9,8 @@ import java.util.*
 abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     constructor(number: Number) : this(BigDecimal(number.toString()))
+
+    operator fun invoke(number: Number) = ValueHolder(number, this.toDimension())
 
     open operator fun times(other: AbstractUnit<*>) = toDimension() * other.toDimension()
 

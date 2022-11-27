@@ -1,31 +1,28 @@
 package measurand
 
-
 import dimension.Dimension
 import quantity.AbstractQuantity
 import unit.Prefix
 import unit.length.Meter
 import unit.prototype.AbstractUnit
-import unit.prototype.MetricUnit
 import java.math.BigDecimal
-import java.math.MathContext
 
-class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
+class Length(number: Number, from: Dimension<Length> = Meter.toDimension()) : AbstractQuantity<Length>(number, from) {
 
-    constructor(number: Number, defaultToStringDimension: Dimension<Length>?) : this(number) {
-        this.defaultToStringDimension = defaultToStringDimension
-    }
+    constructor(number: Number, unit: AbstractUnit<Length>) : this(number, unit.toDimension())
 
     operator fun times(other: Length) = Area(value * other.value)
-    operator fun div(other: Time) = Velocity(value.divide(other.value, MathContext.DECIMAL128))
+    operator fun div(time: Time) = Velocity(this, time)
 
     override fun copyWith(value: BigDecimal) = Length(value, defaultToStringDimension)
+
+    companion object {
+        val dimension = Meter.toDimension()
+    }
 }
 
-fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter) =
-    Length(unit.valueToBaseUnit(this, prefix), Dimension(unit, 1, prefix))
 
-fun Number.meter(unit: AbstractUnit<Length>) = Length(unit.valueToBaseUnit(this), Dimension(unit))
+fun Number.meter(prefix: Prefix = Prefix.NOMINAL) = Length(this, Meter.prefix(prefix))
 
 fun Number.km() = meter(Prefix.KILO)
 fun Number.cm() = meter(Prefix.CENTI)
