@@ -12,13 +12,14 @@ import java.math.MathContext
 
 class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
 
-    constructor(number: Number, defaultToStringDimension: Dimension<Velocity>?) : this(number) {
+    constructor(number: Number, defaultToStringDimension: Dimension<Velocity>) : this(number) {
         this.defaultToStringDimension = defaultToStringDimension
     }
 
-    constructor(length: Length, time:Time) : this(length.value.divide(time.value, MathContext.DECIMAL128)) {
-
-    }
+    constructor(length: Length, time: Time) : this(
+        length.value.divide(time.value, MathContext.DECIMAL128),
+        Dimension<Velocity>(length.defaultToStringDimension / time.defaultToStringDimension)
+    )
 
     operator fun div(other: Time) = Acceleration(value.divide(other.value, MathContext.DECIMAL128))
 

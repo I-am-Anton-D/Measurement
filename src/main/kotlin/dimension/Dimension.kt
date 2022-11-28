@@ -7,7 +7,6 @@ import unit.prototype.MetricUnit
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
 open class Dimension<Q> private constructor() {
@@ -79,7 +78,7 @@ open class Dimension<Q> private constructor() {
         }
 
         val rate = numerator.divide(denominator, MathContext.DECIMAL128)
-        return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL128)
+        return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL64)
     }
 
     open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale) =

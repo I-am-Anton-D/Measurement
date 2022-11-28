@@ -1,24 +1,14 @@
-import dimension.Dimension
-import dimension.DimensionFormat
-import measurand.*
-import quantity.Quantity
-import unit.Prefix.*
-import unit.length.Inch
-import unit.length.Meter
-import unit.length.Mile
-import unit.length.mile
-import unit.mass.Gram
-import unit.time.Hour
-import unit.time.Minute
-import unit.time.Second
-import java.util.*
+import measurand.hour
+import measurand.km
+import measurand.msec
 
 
 fun main() {
-    val length = 10.km() + 5.meter()
+    val length = 10.km() + 5.km()
     println(length)
     val time = 2.hour()
     println(time)
     val velocity = length / time
-    println(velocity)
+    val sum = velocity + 1.msec()
+    println(sum)
 }

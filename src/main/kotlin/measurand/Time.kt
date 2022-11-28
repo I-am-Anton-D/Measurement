@@ -14,7 +14,7 @@ import java.math.BigDecimal
 
 class Time(number: Number) : AbstractQuantity<Time>(number, Second) {
 
-    constructor(number: Number, defaultToStringDimension: Dimension<Time>?) : this(number) {
+    constructor(number: Number, defaultToStringDimension: Dimension<Time>) : this(number) {
         this.defaultToStringDimension = defaultToStringDimension
     }
 
