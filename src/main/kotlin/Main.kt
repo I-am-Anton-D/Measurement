@@ -9,7 +9,7 @@ fun main() {
     val mass = 10.kg()
     println(mass)
 
-    val length = 10.km()
+    val length = 1.meter()
     println(length)
 
     val time = 1.second()

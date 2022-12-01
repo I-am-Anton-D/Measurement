@@ -3,9 +3,8 @@ package measurand
 import dimension.Dimension
 import quantity.AbstractQuantity
 import unit.Prefix
-
+import unit.Prefix.NOMINAL
 import unit.prototype.AbstractUnit
-import unit.prototype.MetricUnit
 import unit.time.Day
 import unit.time.Hour
 import unit.time.Minute
@@ -21,13 +20,10 @@ class Time(number: Number) : AbstractQuantity<Time>(number, Second) {
     override fun copyWith(value: BigDecimal) = Time(value, toStringDimension)
 }
 
-fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Time> = Second) =
-    Time(unit.valueToBaseUnit(this, prefix), Dimension(unit, 1, prefix))
+fun Number.second(prefix: Prefix = NOMINAL) = Time(prefix.inNominal(this), Second.prefix(prefix))
+fun Number.timeIn(dimension:Dimension<Time>) = Time(dimension.convertValue(Second, this), dimension)
+fun Number.timeIn(unit:AbstractUnit<Time>) = timeIn(unit.toDimension())
 
-
-fun Number.second(unit: AbstractUnit<Time>) = Time(unit.valueToBaseUnit(this), Dimension(unit))
-
-
-fun Number.minute() = second(Minute)
-fun Number.hour() = second(Hour)
-fun Number.day() = second(Day)
+fun Number.minute() = timeIn(Minute)
+fun Number.hour() = timeIn(Hour)
+fun Number.day() = timeIn(Day)

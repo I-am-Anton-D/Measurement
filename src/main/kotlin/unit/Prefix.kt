@@ -29,12 +29,12 @@ enum class Prefix(val exponent: Int) {
 
     fun getPrefixMultiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
 
-    fun getPrefixString(expand: Boolean = false, locale: Locale = Locale.getDefault()) = if (expand) prefixName(locale) else prefixSymbol(locale)
+    fun getPrefixString(expand: Boolean = false, locale: Locale = Locale.getDefault()) = if (expand) name(locale) else symbol(locale)
 
-    fun prefixSymbol(locale: Locale = Locale.getDefault()): String =
+    fun symbol(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString() + "_SYMBOL")
 
-    fun prefixName(locale: Locale = Locale.getDefault()): String =
+    fun name(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString())
 
     fun inNominal(number: Number): BigDecimal =
