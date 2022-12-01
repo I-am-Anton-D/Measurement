@@ -1,6 +1,6 @@
 package unit.time
 
 import measurand.Time
-import unit.prototype.CompositeUnit
+import unit.abstract.CompositeUnit
 
 object Minute : CompositeUnit<Time>(Second, 60)

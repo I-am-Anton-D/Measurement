@@ -1,7 +1,6 @@
 package measurand
 
 import dimension.Dimension
-import quantity.AbstractQuantity
 import unit.length.Meter
 import java.math.BigDecimal
 import java.math.MathContext

@@ -1,9 +1,8 @@
 package measurand
 
 import dimension.Dimension
-import quantity.AbstractQuantity
-import unit.Prefix.*
-import unit.Prefix
+import dimension.Prefix.*
+import dimension.Prefix
 import unit.length.Meter
 import java.math.BigDecimal
 

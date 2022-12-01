@@ -1,8 +1,7 @@
 package measurand
 
 import dimension.Dimension
-import quantity.AbstractQuantity
-import unit.Prefix
+import dimension.Prefix
 import unit.mass.Gram
 import java.math.BigDecimal
 

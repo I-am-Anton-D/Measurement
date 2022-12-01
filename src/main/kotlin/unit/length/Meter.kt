@@ -1,8 +1,8 @@
 package unit.length
 
 import measurand.Length
-import unit.Prefix
-import unit.prototype.MetricUnit
+import dimension.Prefix
+import unit.abstract.MetricUnit
 
 object Meter : MetricUnit<Length>() {
 

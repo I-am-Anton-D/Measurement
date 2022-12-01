@@ -4,14 +4,13 @@ import measurand.Length
 import measurand.lengthIn
 
 
-import unit.prototype.Fraction
-import unit.prototype.FractionUnit
-import unit.prototype.StreakUnit
+import unit.abstract.Fraction
+import unit.abstract.FractionUnit
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
 
-object Inch : FractionUnit<Length>(0.0254), StreakUnit {
+object Inch : FractionUnit<Length>(0.0254) {
 
     fun fraction(numerator: Int, denominator: Int): Length {
         val fractionValue = calculateFraction(numerator, denominator)

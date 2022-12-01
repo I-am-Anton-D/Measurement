@@ -1,4 +1,4 @@
-package unit.prototype
+package unit.abstract
 import java.math.BigDecimal
 
 abstract class CompositeUnit<Q>(val parentUnit: AbstractUnit<Q>, val parentRatio: BigDecimal) :

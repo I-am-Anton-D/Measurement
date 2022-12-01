@@ -2,9 +2,9 @@ package unit.mass
 
 import measurand.Mass
 import measurand.massFrom
-import unit.Prefix
-import unit.Prefix.*
-import unit.prototype.MetricUnit
+import dimension.Prefix
+import dimension.Prefix.*
+import unit.abstract.MetricUnit
 
 object Gram : MetricUnit<Mass>()
 

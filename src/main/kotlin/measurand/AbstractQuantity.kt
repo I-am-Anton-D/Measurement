@@ -1,9 +1,8 @@
-package quantity
+package measurand
 
-import dimension.Dimension
-import dimension.DimensionFormat
-import unit.Prefix
-import unit.prototype.*
+import dimension.*
+import unit.abstract.AbstractUnit
+import unit.abstract.MetricUnit
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat

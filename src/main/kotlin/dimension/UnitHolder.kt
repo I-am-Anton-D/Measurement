@@ -1,8 +1,7 @@
 package dimension
 
-import unit.Prefix
-import unit.prototype.AbstractUnit
-import unit.prototype.MetricUnit
+import unit.abstract.AbstractUnit
+import unit.abstract.MetricUnit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.math.BigDecimal

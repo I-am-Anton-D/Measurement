@@ -1,12 +1,13 @@
 package quantity
 
-import unit.Prefix
+import measurand.AbstractQuantity
+import dimension.Prefix
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import unit.AbstractUnit
-import unit.MetricUnit
+import unit.abstract.AbstractUnit
+import unit.abstract.MetricUnit
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
@@ -29,7 +30,7 @@ internal class AbstractQuantityTest {
 
     }
 
-    object AnotherUnit : MetricUnit<SomeQuantity>(2) {
+    object AnotherUnit : MetricUnit<SomeQuantity>() {
         override fun symbol(locale: Locale): String {
             return "another symbol"
         }
@@ -72,8 +73,8 @@ internal class AbstractQuantityTest {
         var s = SomeQuantity(BigDecimal.ONE);
 
         assertThat(s.value).isEqualTo(BigDecimal.ONE)
-        assertThat(s.unit).isEqualTo(SomeUnit)
-        assertThat(s.unit).isNotEqualTo(AnotherUnit)
+        assertThat(s.dimension).isEqualTo(SomeUnit)
+        assertThat(s.dimension).isNotEqualTo(AnotherUnit)
 
         s = SomeQuantity(1.2345)
         assertThat(s.value).isEqualTo(BigDecimal(1.2345.toString()))
@@ -179,52 +180,7 @@ internal class AbstractQuantityTest {
 
     @Test
     fun toStringWithParameter() {
-        val q1 = SomeQuantity(10);
 
-        assertThat(q1.toString(expand = false)).isEqualTo("10 " + SomeUnit.symbol())
-        assertThat(q1.toString(expand = true)).isEqualTo("10 " + SomeUnit.pluralForm())
-
-        assertThat(q1.toString(expand = true, df = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.pluralForm())
-        assertThat(q1.toString(expand = false, df = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.symbol())
-        assertThat(q1.toString(valueFormat = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.symbol())
-
-
-        assertThat(q1.toString(expand = true, df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.pluralForm())
-        assertThat(q1.toString(expand = false, df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.symbol())
-        assertThat(q1.toString(valueFormat = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.symbol())
-        assertThat(q1.toString(locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.symbol())
-        assertThat(q1.toString(expand = false, locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.symbol())
-        assertThat(q1.toString(expand = true, locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.pluralForm())
-
-        val q2 = SomeQuantity(1000)
-        assertThat(q2.toString(unit = AnotherUnit)).isEqualTo("500 " + AnotherUnit.symbol())
-        assertThat(q2.toString(unit = AnotherUnit, expand = true)).isEqualTo("500 " + AnotherUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, expand = false)).isEqualTo("500 " + AnotherUnit.symbol())
-
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"))).isEqualTo("500! " + AnotherUnit.symbol())
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("500! " + AnotherUnit.symbol())
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"), locale = Locale("ru", "RU") , expand = false)).isEqualTo("500! " + AnotherUnit.symbol())
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"), locale = Locale("ru", "RU") , expand = true)).isEqualTo("500! " + AnotherUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"), expand = true)).isEqualTo("500! " + AnotherUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, df = DecimalFormat("#!"), expand = false)).isEqualTo("500! " + AnotherUnit.symbol())
-
-
-        Locale.setDefault(Locale("en","GB"))
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.KILO)).isEqualTo("1 k" + SomeUnit.symbol())
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.MEGA)).isEqualTo("0.001 M" + SomeUnit.symbol())
-        assertThat(q2.toString(unit = AnotherUnit, prefix = Prefix.KILO)).isEqualTo("0.5 k" + AnotherUnit.symbol())
-
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.KILO, expand = true)).isEqualTo("1 kilo" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.MEGA, expand = true)).isEqualTo("0.001 mega" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, prefix = Prefix.KILO, expand = true)).isEqualTo("0.5 kilo" + AnotherUnit.pluralForm())
-
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.KILO, expand = true, locale = Locale("ru", "RU"))).isEqualTo("1 кило" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.MEGA, expand = true, locale = Locale("ru", "RU"))).isEqualTo("0.001 мега" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, prefix = Prefix.KILO, expand = true, locale = Locale("ru", "RU"))).isEqualTo("0.5 кило" + AnotherUnit.pluralForm())
-
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.KILO, expand = true, locale = Locale("ru", "RU"), df = DecimalFormat("#!"))).isEqualTo("1! кило" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = SomeUnit, prefix = Prefix.MEGA, expand = true, locale = Locale("ru", "RU"), df = DecimalFormat("#.###!"))).isEqualTo("0.001! мега" + SomeUnit.pluralForm())
-        assertThat(q2.toString(unit = AnotherUnit, prefix = Prefix.KILO, expand = true, locale = Locale("ru", "RU"), df = DecimalFormat("#.#!"))).isEqualTo("0.5! кило" + AnotherUnit.pluralForm())
     }
 
     object NotMetricUnit : AbstractUnit<SomeQuantity>() {
@@ -236,7 +192,7 @@ internal class AbstractQuantityTest {
     @Test
     fun toStringWithQParamsAndNullUnits() {
         val q1 = 10.some()
-        assertThat(q1.toString(ToStringParameters(expand = false))).isEqualTo("10 "+ SomeUnit.symbol())
+
 
         assertThat(q1.toString(unit = NotMetricUnit)).isEqualTo("10 " + NotMetricUnit.symbol())
     }

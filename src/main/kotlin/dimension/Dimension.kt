@@ -1,7 +1,7 @@
 package dimension
 
-import quantity.Quantity
-import unit.prototype.AbstractUnit
+import measurand.Quantity
+import unit.abstract.AbstractUnit
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*

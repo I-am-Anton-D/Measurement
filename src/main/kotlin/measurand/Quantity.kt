@@ -1,4 +1,4 @@
-package quantity
+package measurand
 
 import dimension.Dimension
 import java.math.BigDecimal

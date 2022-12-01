@@ -1,4 +1,4 @@
-package unit
+package dimension
 
 import java.math.BigDecimal
 import java.math.MathContext

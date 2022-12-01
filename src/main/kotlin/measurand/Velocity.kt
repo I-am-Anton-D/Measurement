@@ -1,10 +1,8 @@
 package measurand
 
 import dimension.Dimension
-import quantity.AbstractQuantity
 import unit.length.Meter
 import unit.length.Mile
-import unit.prototype.AbstractUnit
 import unit.time.Hour
 import unit.time.Second
 import java.math.BigDecimal

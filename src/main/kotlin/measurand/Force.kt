@@ -1,7 +1,6 @@
 package measurand
 
 import dimension.Dimension
-import quantity.AbstractQuantity
 import unit.force.Newton
 import java.math.BigDecimal
 

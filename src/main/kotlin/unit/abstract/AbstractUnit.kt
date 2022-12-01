@@ -1,4 +1,4 @@
-package unit.prototype
+package unit.abstract
 
 import dimension.Dimension
 import dimension.UnitHolder

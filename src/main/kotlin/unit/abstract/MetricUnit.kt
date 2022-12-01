@@ -1,8 +1,8 @@
-package unit.prototype
+package unit.abstract
 
 import dimension.Dimension
+import dimension.Prefix
 import dimension.UnitHolder
-import unit.Prefix
 import java.math.BigDecimal
 
 abstract class MetricUnit<Q> : AbstractUnit<Q>() {
@@ -11,5 +11,5 @@ abstract class MetricUnit<Q> : AbstractUnit<Q>() {
 
     open fun prefix(prefix: Prefix) =  Dimension<Q>(UnitHolder(this, 1, prefix))
 
-    open fun valueToBaseUnit(number: Number, prefix: Prefix): BigDecimal = prefix.inNominal(number).multiply(ratio)
+    open fun valueToBaseUnit(number: Number, prefix: Prefix = Prefix.NOMINAL): BigDecimal = prefix.inNominal(number).multiply(ratio)
  }

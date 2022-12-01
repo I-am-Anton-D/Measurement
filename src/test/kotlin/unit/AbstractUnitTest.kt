@@ -6,6 +6,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import unit.abstract.AbstractUnit
+import unit.length.Meter
+import unit.length.Mile
 import unit.mass.Gram
 import java.math.BigDecimal
 import java.util.*
@@ -143,28 +146,28 @@ internal class AbstractUnitTest {
 
     @Test
     fun checkValueInBaseUnit() {
-        assertThat(Meter.valueInBaseUnit(1)).isEqualTo(BigDecimal.ONE)
-        assertThat(Mile.valueInBaseUnit(1)).isEqualTo(Mile.ratio)
-        assertThat(Mile.valueInBaseUnit(10)).isEqualTo(Mile.ratio.multiply(BigDecimal.TEN))
-        assertThat(Mile.valueInBaseUnit(1)).isEqualTo(BigDecimal(1609.344.toString()))
+        assertThat(Meter.valueToBaseUnit(1)).isEqualTo(BigDecimal.ONE)
+        assertThat(Mile.valueToBaseUnit(1)).isEqualTo(Mile.ratio)
+        assertThat(Mile.valueToBaseUnit(10)).isEqualTo(Mile.ratio.multiply(BigDecimal.TEN))
+        assertThat(Mile.valueToBaseUnit(1)).isEqualTo(BigDecimal(1609.344.toString()))
     }
 
     @Test
     fun overrideValueInBaseUnit() {
         val descendant = object : AbstractUnit<Length>() {
-            override fun valueInBaseUnit(number: Number): BigDecimal {
+            override fun valueToBaseUnit(number: Number): BigDecimal {
                 return BigDecimal.ZERO
             }
         }
-        assertThat(descendant.valueInBaseUnit(10)).isEqualTo(BigDecimal.ZERO)
+        assertThat(descendant.valueToBaseUnit(10)).isEqualTo(BigDecimal.ZERO)
     }
 
     @Test
     fun valueOfDescendant() {
         val descendant = object : AbstractUnit<Length>() {}
 
-        assertThat(descendant.valueInBaseUnit(1)).isEqualTo(BigDecimal.ONE)
-        assertThat(descendant.valueInBaseUnit(10)).isEqualTo(BigDecimal.TEN)
+        assertThat(descendant.valueToBaseUnit(1)).isEqualTo(BigDecimal.ONE)
+        assertThat(descendant.valueToBaseUnit(10)).isEqualTo(BigDecimal.TEN)
     }
 
     @Test

@@ -3,10 +3,9 @@ package unit.length
 import measurand.Length
 import measurand.lengthIn
 
-import unit.prototype.CompositeUnit
-import unit.prototype.StreakUnit
+import unit.abstract.CompositeUnit
 
-object Foot : CompositeUnit<Length>(Inch, 12), StreakUnit
+object Foot : CompositeUnit<Length>(Inch, 12)
 
 fun Number.foot() = lengthIn(Foot.toDimension())
 fun Length.toFoot() = valueIn(Foot)
