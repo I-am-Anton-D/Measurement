@@ -19,19 +19,15 @@ class UnitHolder(val unit: AbstractUnit<*>, val pow: Int = 1) {
         this.prefix = prefix
     }
 
-    fun copyWith(pow: Int): UnitHolder = if (this.unit is MetricUnit) {
-        UnitHolder(unit, pow, prefix)
-    } else {
-        UnitHolder(unit, pow)
-    }
+    fun copyWith(pow: Int): UnitHolder = if (unit is MetricUnit) UnitHolder(unit, pow, prefix) else UnitHolder(unit, pow)
 
     fun inverse() = copyWith(-pow)
 
     fun canConvert(toUnit: UnitHolder) = pow == toUnit.pow && unitQuantity == toUnit.unitQuantity
 
     fun getConvertRatio(toUnit: UnitHolder): BigDecimal {
-        val ratio = this.unit.ratio.divide(toUnit.unit.ratio, MathContext.DECIMAL128)
-        val prefixMultiplier = this.prefix.getPrefixMultiplier().divide(toUnit.prefix.getPrefixMultiplier(), MathContext.DECIMAL128)
+        val ratio = unit.ratio.divide(toUnit.unit.ratio, MathContext.DECIMAL128)
+        val prefixMultiplier = prefix.getPrefixMultiplier().divide(toUnit.prefix.getPrefixMultiplier(), MathContext.DECIMAL128)
         return ratio.multiply(prefixMultiplier).pow(toUnit.pow.absoluteValue)
     }
 

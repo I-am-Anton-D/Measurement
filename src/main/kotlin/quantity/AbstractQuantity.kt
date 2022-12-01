@@ -38,7 +38,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     open fun valueIn(unit: AbstractUnit<Q>) = valueIn(unit.toDimension())
 
-    open fun valueIn(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Q>) = valueIn(unit.prefix(prefix))
+    open fun valueIn(unit: MetricUnit<Q>, prefix: Prefix = Prefix.NOMINAL,) = valueIn(unit.prefix(prefix))
 
     open fun valueIn(dimension: Dimension<Q>) = this.dimension.convertValue(dimension, value)
 
@@ -55,7 +55,6 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
         locale: Locale = Locale("en", "GB")
     ) = toString(dimension, valueFormat, DimensionFormat.ANSI, locale)
 
-
     open fun toString(
         dimension: Dimension<Q>? = null,
         valueFormat: DecimalFormat? = null,
@@ -65,14 +64,11 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
         val targetDimension = dimension ?: toStringDimension
         val valueIn = valueIn(targetDimension)
         val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
-        val unitString =
-            targetDimension.toString(dimensionFormat, locale)
+        val unitString = targetDimension.toString(dimensionFormat, locale)
         return "$valueString $unitString"
     }
 
-    override fun toString() : String {
-        return toString(toStringDimension)
-    }
+    override fun toString() = toString(toStringDimension)
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {
         return if (dimension == other.dimension) {
@@ -86,11 +82,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
         if (this === other) return true
         if (other !is AbstractQuantity<*>) return false
 
-        return if (dimension == other.dimension) {
-            this.value == other.value
-        } else {
-            false
-        }
+        return dimension == other.dimension && this.value == other.value
     }
 
     override fun hashCode(): Int {
