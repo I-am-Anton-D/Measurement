@@ -1,5 +1,7 @@
 package unit.prototype
 
+import dimension.Dimension
+import dimension.UnitHolder
 import exception.NoBundleForAnonymousClass
 import java.math.BigDecimal
 import java.util.*
@@ -7,6 +9,16 @@ import java.util.*
 abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     constructor(number: Number) : this(BigDecimal(number.toString()))
+
+    open operator fun times(other: AbstractUnit<*>) = toDimension() * other.toDimension()
+
+    open operator fun times(other: Dimension<*>) = toDimension() * other
+
+    open operator fun div(other: AbstractUnit<*>) = toDimension() / other.toDimension()
+
+    open operator fun div(other: Dimension<*>) = toDimension() / other
+
+    open fun valueToBaseUnit(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(ratio)
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
@@ -21,10 +33,6 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
             pluralForm(locale)
         }
 
-    open fun valueInBaseUnit(number: Number): BigDecimal =
-        if (ratio == BigDecimal.ONE) BigDecimal(number.toString())
-        else BigDecimal(number.toString()).multiply(ratio)
-
     open fun getBundle(locale: Locale): ResourceBundle {
         val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClass()
         return ResourceBundle.getBundle(unitSimpleClassName, locale)
@@ -35,4 +43,9 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
         else symbol(locale)
 
     override fun toString() = symbol()
+
+    fun pow(pow: Int = 1) = Dimension<Q>(UnitHolder(this, pow))
+
+    fun toDimension() = Dimension<Q>(this)
+
 }

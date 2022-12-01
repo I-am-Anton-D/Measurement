@@ -1,12 +1,12 @@
 package quantity
 
+import unit.Prefix
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import unit.AbstractUnit
 import unit.MetricUnit
-import unit.prototype.Prefix
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
@@ -186,12 +186,12 @@ internal class AbstractQuantityTest {
 
         assertThat(q1.toString(expand = true, df = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.pluralForm())
         assertThat(q1.toString(expand = false, df = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.symbol())
-        assertThat(q1.toString(df = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.symbol())
+        assertThat(q1.toString(valueFormat = DecimalFormat("#!"))).isEqualTo("10! " + SomeUnit.symbol())
 
 
         assertThat(q1.toString(expand = true, df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.pluralForm())
         assertThat(q1.toString(expand = false, df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.symbol())
-        assertThat(q1.toString(df = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.symbol())
+        assertThat(q1.toString(valueFormat = DecimalFormat("#!"), locale = Locale("ru", "RU"))).isEqualTo("10! " + SomeUnit.symbol())
         assertThat(q1.toString(locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.symbol())
         assertThat(q1.toString(expand = false, locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.symbol())
         assertThat(q1.toString(expand = true, locale = Locale("ru", "RU"))).isEqualTo("10 " + SomeUnit.pluralForm())

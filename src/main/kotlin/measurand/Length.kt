@@ -1,44 +1,27 @@
 package measurand
 
+import dimension.Dimension
 import quantity.AbstractQuantity
-import quantity.ToStringParameters
-import unit.length.Foot
-import unit.length.Inch
+import unit.Prefix.*
+import unit.Prefix
 import unit.length.Meter
-import unit.length.Mile
-import unit.prototype.AbstractUnit
-import unit.prototype.MetricUnit
-import unit.prototype.Prefix
 import java.math.BigDecimal
 
-class Length(number: Number) : AbstractQuantity<Length>(number) {
-    override val baseUnit = Meter
+class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
 
-    constructor(number: Number, toStringParameters: ToStringParameters<Length>) : this(number) {
-        this.defaultToStringParameters = toStringParameters
+    constructor(number: Number, toStringDimension: Dimension<Length>) : this(number) {
+        this.toStringDimension = toStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Length(value, defaultToStringParameters)
+    operator fun times(other: Length) = Area(value * other.value)
+    operator fun div(time: Time) = Velocity(this, time)
+
+    override fun copyWith(value: BigDecimal) = Length(value, toStringDimension)
 }
 
-fun Length.toMile() = valueIn(Mile)
-fun Length.toInch() = valueIn(Inch)
-fun Length.toFoot() = valueIn(Foot)
+fun Number.meter(prefix: Prefix = NOMINAL) = Length(prefix.inNominal(this), Meter.prefix(prefix))
+fun Number.lengthIn(dimension:Dimension<Length>) = Length(dimension.convertValue(Meter, this), dimension)
 
-fun Number.meter(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Length> = Meter): Length {
-    val number = unit.valueInBaseUnit(prefix.getNominalValue(this))
-    return Length(number, ToStringParameters(unit, prefix))
-}
-
-fun Number.meter(unit: AbstractUnit<Length>): Length {
-    val number = unit.valueInBaseUnit(this)
-    return Length(number, ToStringParameters(unit))
-}
-
-fun Number.km() = meter(Prefix.KILO)
-fun Number.cm() = meter(Prefix.CENTI)
-fun Number.mm() = meter(Prefix.MILLI)
-
-fun Number.inch() = meter(Inch)
-fun Number.foot() = meter(Foot)
-fun Number.mile() = meter(Mile)
+fun Number.km() = meter(KILO)
+fun Number.cm() = meter(CENTI)
+fun Number.mm() = meter(MILLI)

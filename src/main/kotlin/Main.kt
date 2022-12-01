@@ -1,8 +1,26 @@
-import measurand.hour
-import measurand.minute
+import measurand.*
+import unit.length.inch
+import unit.length.mile
+import unit.mass.gram
+import unit.mass.ng
+
 
 fun main() {
+    val mass = 10.kg()
+    println(mass)
 
-    val l = 12.hour() + 33.5.minute()
-    println()
+    val length = 1.meter()
+    println(length)
+
+    val time = 1.second()
+    println(time)
+
+    val velocity = length / time
+    println(velocity)
+
+    val acceleration = velocity / 1.second()
+    println(acceleration)
+
+    val force = mass * acceleration
+    println(force)
 }
