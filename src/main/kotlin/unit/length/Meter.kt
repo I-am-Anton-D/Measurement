@@ -1,6 +1,6 @@
 package unit.length
 
-import measurand.Length
+import quantity.Length
 import dimension.Prefix
 import unit.abstract.MetricUnit
 

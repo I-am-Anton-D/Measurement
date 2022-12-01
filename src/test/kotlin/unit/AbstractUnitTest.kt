@@ -1,7 +1,7 @@
 package unit
 
 import exception.NoBundleForAnonymousClass
-import measurand.Length
+import quantity.Length
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow

@@ -1,8 +1,4 @@
-import measurand.*
-import unit.length.inch
-import unit.length.mile
-import unit.mass.gram
-import unit.mass.ng
+import quantity.*
 
 
 fun main() {

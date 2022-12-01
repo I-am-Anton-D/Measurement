@@ -1,6 +1,5 @@
 package quantity
 
-import measurand.AbstractQuantity
 import dimension.Prefix
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.assertThrows
 import unit.abstract.AbstractUnit
 import unit.abstract.MetricUnit
 import java.math.BigDecimal
-import java.text.DecimalFormat
 import java.util.*
 
 @Suppress("KotlinConstantConditions")

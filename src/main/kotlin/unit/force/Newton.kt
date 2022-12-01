@@ -2,9 +2,9 @@ package unit.force
 
 import dimension.Dimension
 import dimension.DimensionFormat
-import measurand.Acceleration
-import measurand.Force
-import measurand.Mass
+import quantity.Acceleration
+import quantity.Force
+import quantity.Mass
 import java.util.*
 
 object Newton : Dimension<Force>(Mass.kg(), Acceleration.baseDimension()) {

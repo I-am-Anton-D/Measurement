@@ -1,7 +1,7 @@
 package unit.length
 
-import measurand.Length
-import measurand.lengthIn
+import quantity.Length
+import quantity.lengthIn
 
 
 import unit.abstract.Fraction

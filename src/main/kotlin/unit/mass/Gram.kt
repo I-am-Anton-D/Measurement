@@ -1,7 +1,7 @@
 package unit.mass
 
-import measurand.Mass
-import measurand.massFrom
+import quantity.Mass
+import quantity.massFrom
 import dimension.Prefix
 import dimension.Prefix.*
 import unit.abstract.MetricUnit

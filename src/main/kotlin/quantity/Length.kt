@@ -1,4 +1,4 @@
-package measurand
+package quantity
 
 import dimension.Dimension
 import dimension.Prefix.*
