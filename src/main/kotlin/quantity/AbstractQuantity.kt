@@ -10,7 +10,7 @@ import java.text.DecimalFormat
 import java.util.*
 
 abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimension<Q>) : Comparable<AbstractQuantity<Q>> {
-    var defaultToStringDimension: Dimension<Q> = dimension
+    var toStringDimension: Dimension<Q> = dimension
 
     constructor(number: Number, unit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), unit.toDimension())
 
@@ -62,7 +62,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
         dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
         locale: Locale = Locale.getDefault()
     ): String {
-        val targetDimension = dimension ?: defaultToStringDimension
+        val targetDimension = dimension ?: toStringDimension
         val valueIn = valueIn(targetDimension)
         val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
         val unitString =
@@ -71,7 +71,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
     }
 
     override fun toString() : String {
-        return toString(defaultToStringDimension)
+        return toString(toStringDimension)
     }
 
     override operator fun compareTo(other: AbstractQuantity<Q>): Int {

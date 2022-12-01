@@ -81,6 +81,8 @@ open class Dimension<Q> private constructor() {
         return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL64)
     }
 
+    fun convertValue(unit: AbstractUnit<Q>, value: Number) = convertValue(unit.toDimension(), value)
+
     open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale) =
         when (dimensionFormat) {
             DimensionFormat.NORMAL -> toNormalFormatString(locale)

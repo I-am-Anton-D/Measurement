@@ -3,6 +3,7 @@ package measurand
 import dimension.Dimension
 import quantity.AbstractQuantity
 import unit.length.Meter
+import unit.length.Mile
 import unit.prototype.AbstractUnit
 import unit.time.Hour
 import unit.time.Second
@@ -13,33 +14,28 @@ import java.math.MathContext
 class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
 
     constructor(number: Number, defaultToStringDimension: Dimension<Velocity>) : this(number) {
-        this.defaultToStringDimension = defaultToStringDimension
+        this.toStringDimension = defaultToStringDimension
     }
 
     constructor(length: Length, time: Time) : this(
         length.value.divide(time.value, MathContext.DECIMAL128),
-        Dimension<Velocity>(length.defaultToStringDimension / time.defaultToStringDimension)
+        Dimension<Velocity>(length.toStringDimension / time.toStringDimension)
     )
 
     operator fun div(other: Time) = Acceleration(value.divide(other.value, MathContext.DECIMAL128))
 
-    override fun copyWith(value: BigDecimal) = Velocity(value, defaultToStringDimension)
+    override fun copyWith(value: BigDecimal) = Velocity(value, toStringDimension)
 
     @Suppress("UNCHECKED_CAST")
     companion object {
-        fun dimension(length: AbstractUnit<Length>, time: AbstractUnit<Time>) = (length / time) as Dimension<Velocity>
-
         fun kmh() = (Meter.KILO / Hour) as Dimension<Velocity>
         fun msec() = (Meter / Second) as Dimension<Velocity>
+        fun mph() = (Mile / Hour) as Dimension<Velocity>
     }
 }
 
-fun Number.msec(): Velocity {
-    return Velocity(this)
-}
+fun Number.velocityFrom(dimension: Dimension<Velocity>) = Velocity(dimension.convertValue(Velocity.msec(), this))
 
-fun Number.kmh(): Velocity {
-    //FIX IT
-    val value = Velocity.kmh().convertValue(Velocity.msec(), this)
-    return Velocity(value, Velocity.kmh())
-}
+fun Number.msec() = Velocity(this)
+fun Number.kmh() = velocityFrom(Velocity.kmh())
+fun Number.mph() = velocityFrom(Velocity.mph())

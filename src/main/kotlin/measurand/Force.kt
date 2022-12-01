@@ -8,9 +8,9 @@ import java.math.BigDecimal
 class Force(number: Number) : AbstractQuantity<Force>(number, Newton) {
 
     constructor(number: Number, defaultToStringDimension: Dimension<Force>) : this(number) {
-        this.defaultToStringDimension = defaultToStringDimension
+        this.toStringDimension = defaultToStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Force(value, defaultToStringDimension)
+    override fun copyWith(value: BigDecimal) = Force(value, toStringDimension)
 }
 

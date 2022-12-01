@@ -1,7 +1,8 @@
 package unit.length
 
 import measurand.Length
-import measurand.meter
+import measurand.lengthFrom
+
 
 import unit.prototype.Fraction
 import unit.prototype.FractionUnit
@@ -113,5 +114,5 @@ object Inch : FractionUnit<Length>(0.0254), StreakUnit {
     }
 }
 
-fun Number.inch() = meter(Inch)
+fun Number.inch() = lengthFrom(Inch.toDimension())
 fun Length.toInch() = valueIn(Inch)

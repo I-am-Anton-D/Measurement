@@ -8,10 +8,10 @@ import java.math.BigDecimal
 class Acceleration(number: Number) : AbstractQuantity<Acceleration>(number, baseDimension()) {
 
     constructor(number: Number, defaultToStringDimension: Dimension<Acceleration>) : this(number) {
-        this.defaultToStringDimension = defaultToStringDimension
+        this.toStringDimension = defaultToStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Acceleration(value, defaultToStringDimension)
+    override fun copyWith(value: BigDecimal) = Acceleration(value, toStringDimension)
 
     @Suppress("UNCHECKED_CAST")
     companion object {

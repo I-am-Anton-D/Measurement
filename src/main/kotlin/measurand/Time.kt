@@ -15,10 +15,10 @@ import java.math.BigDecimal
 class Time(number: Number) : AbstractQuantity<Time>(number, Second) {
 
     constructor(number: Number, defaultToStringDimension: Dimension<Time>) : this(number) {
-        this.defaultToStringDimension = defaultToStringDimension
+        this.toStringDimension = defaultToStringDimension
     }
 
-    override fun copyWith(value: BigDecimal) = Time(value, defaultToStringDimension)
+    override fun copyWith(value: BigDecimal) = Time(value, toStringDimension)
 }
 
 fun Number.second(prefix: Prefix = Prefix.NOMINAL, unit: MetricUnit<Time> = Second) =
