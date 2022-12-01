@@ -4,13 +4,10 @@ import dimension.Dimension
 import dimension.DimensionFormat
 import measurand.Acceleration
 import measurand.Force
-import unit.Prefix
-import unit.length.Meter
-import unit.mass.Gram
-import unit.mass.Kg
+import measurand.Mass
 import java.util.*
 
-object Newton : Dimension<Force>(Kg.toDimension(), Acceleration.baseDimension()) {
+object Newton : Dimension<Force>(Mass.kg(), Acceleration.baseDimension()) {
 
     override fun toString(dimensionFormat: DimensionFormat, locale: Locale) =
         when (dimensionFormat) {

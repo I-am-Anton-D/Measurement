@@ -22,7 +22,7 @@ class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
         Dimension<Velocity>(length.toStringDimension / time.toStringDimension)
     )
 
-    operator fun div(other: Time) = Acceleration(value.divide(other.value, MathContext.DECIMAL128))
+    operator fun div(time: Time) = Acceleration(this, time)
 
     override fun copyWith(value: BigDecimal) = Velocity(value, toStringDimension)
 

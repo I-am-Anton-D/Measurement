@@ -19,6 +19,7 @@ class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
     override fun copyWith(value: BigDecimal) = Length(value, toStringDimension)
 }
 
+fun Number.meter() = Length(this)
 fun Number.meter(prefix: Prefix) = Length(prefix.inNominal(this), Meter.prefix(prefix))
 fun Number.lengthFrom(dimension:Dimension<Length>) = Length(dimension.convertValue(Meter, this), dimension)
 
