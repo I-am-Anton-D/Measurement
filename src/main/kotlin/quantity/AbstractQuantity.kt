@@ -39,7 +39,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     open fun valueIn(unit: MetricUnit<Q>, prefix: Prefix = Prefix.NOMINAL,) = valueIn(unit.prefix(prefix))
 
-    open fun valueIn(dimension: Dimension<Q>) = this.dimension.convertValue(dimension, value)
+    open fun valueIn(toDimension: Dimension<Q>) = this.dimension.convertValue(toDimension, value)
 
     open fun toString(
         unit: AbstractUnit<Q>,

@@ -6,7 +6,7 @@ import exception.NoBundleForAnonymousClass
 import java.math.BigDecimal
 import java.util.*
 
-abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
+abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE, val zeroOffset: BigDecimal= BigDecimal.ZERO) {
 
     constructor(number: Number) : this(BigDecimal(number.toString()))
 
@@ -18,7 +18,7 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE) {
 
     open operator fun div(other: Dimension<*>) = toDimension() / other
 
-    open fun valueToBaseUnit(number: Number): BigDecimal = BigDecimal(number.toString()).multiply(ratio)
+    open fun resolveZeroOffset(fromUnit:AbstractUnit<*>, toUnit: AbstractUnit<*>) = fromUnit.zeroOffset - toUnit.zeroOffset
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 

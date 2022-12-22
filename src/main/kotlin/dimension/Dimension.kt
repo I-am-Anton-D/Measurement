@@ -21,7 +21,7 @@ open class Dimension<Q> private constructor() {
     operator fun times(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units).toTypedArray())
     operator fun times(other: AbstractUnit<*>) = this * other.toDimension()
 
-    operator fun div(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units.map { uh -> uh.inverse()}).toTypedArray())
+    operator fun div(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units.map { uh -> uh.inverse() }).toTypedArray())
     operator fun div(other: AbstractUnit<*>) = this / other.toDimension()
 
     private fun addUnitHolder(unit: UnitHolder) {
@@ -59,8 +59,30 @@ open class Dimension<Q> private constructor() {
             if (toUnit.pow < 0) denominator = denominator.multiply(unitRatio, MathContext.DECIMAL128)
         }
 
+        val offsetedValue = moveZero(value, sortedFrom, sortedTo)
         val rate = numerator.divide(denominator, MathContext.DECIMAL128)
-        return BigDecimal(value.toString()).multiply(rate).round(MathContext.DECIMAL64)
+        return offsetedValue.multiply(rate).round(MathContext.DECIMAL64)
+
+    }
+
+    private fun moveZero(value: Number, from: List<UnitHolder>, to: List<UnitHolder>): BigDecimal {
+        var offsetValue = BigDecimal(value.toString())
+
+        if (from.size == 1) {
+            val fromUnit = from[0].unit
+            val toUnit = to[0].unit
+
+            //Fahrenheit hack, try to simplify (for usual units newValue = fromUnit.zeroOffset - toUnit.zeroOffset)
+            if (toUnit.zeroOffset != BigDecimal.ZERO && fromUnit.zeroOffset != BigDecimal.ZERO) {
+                offsetValue += toUnit.zeroOffset + fromUnit.zeroOffset // or maybe throw Exception
+            } else if (toUnit.zeroOffset != BigDecimal.ZERO) {
+                offsetValue += toUnit.resolveZeroOffset(fromUnit, toUnit)
+            } else if (fromUnit.zeroOffset != BigDecimal.ZERO) {
+                offsetValue += fromUnit.resolveZeroOffset(fromUnit, toUnit)
+            }
+
+        }
+        return offsetValue
     }
 
     fun convertValue(unit: AbstractUnit<Q>, value: Number) = convertValue(unit.toDimension(), value)
