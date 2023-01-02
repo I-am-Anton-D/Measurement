@@ -1,5 +1,6 @@
 package dimension
 
+import exception.ConvertDimensionException
 import quantity.Quantity
 import unit.abstract.AbstractUnit
 import java.math.BigDecimal
@@ -7,10 +8,10 @@ import java.math.MathContext
 import java.util.*
 import kotlin.math.absoluteValue
 
-open class Dimension<Q> private constructor() {
+open class Dimension<Q> {
     private val units: ArrayList<UnitHolder> = ArrayList()
 
-    constructor(vararg holders: UnitHolder) : this() {
+    constructor(vararg holders: UnitHolder) {
         holders.forEach { holder -> addUnitHolder(holder) }
     }
 
@@ -43,7 +44,8 @@ open class Dimension<Q> private constructor() {
     fun convertValue(value: Number, unit: AbstractUnit<Q>) = convertValue(value, unit.toDimension())
 
     open fun convertValue(value: Number, target: Dimension<Q>): BigDecimal {
-        if (units.size != target.units.size) throw Exception()
+        if (units.size != target.units.size)
+            throw ConvertDimensionException("$this and $target have different count of units")
 
         val sortedFrom = units.sortedBy { uh -> uh.unitQuantity.toString() }
         val sortedTo = target.units.sortedBy { uh -> uh.unitQuantity.toString() }
@@ -55,7 +57,8 @@ open class Dimension<Q> private constructor() {
             val toUnit = sortedTo[index]
             val fromUnit = sortedFrom[index]
 
-            if (!toUnit.canConvert(fromUnit)) throw Exception()
+            if (!toUnit.canConvert(fromUnit))
+                throw ConvertDimensionException("Can not convert $fromUnit to $toUnit")
 
             val unitRatio = fromUnit.calculateConvertRatio(toUnit)
             if (toUnit.pow > 0) numerator = numerator.multiply(unitRatio, MathContext.DECIMAL128)
@@ -65,7 +68,6 @@ open class Dimension<Q> private constructor() {
         val offsetValue = moveZero(value, sortedFrom, sortedTo)
         val rate = numerator.divide(denominator, MathContext.DECIMAL128)
         return offsetValue.multiply(rate).round(MathContext.DECIMAL64)
-
     }
 
     open fun moveZero(value: Number, from: List<UnitHolder>, to: List<UnitHolder>): BigDecimal {

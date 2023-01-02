@@ -2,7 +2,7 @@ package unit.abstract
 
 import dimension.Dimension
 import dimension.UnitHolder
-import exception.NoBundleForAnonymousClass
+import exception.NoBundleForAnonymousClassException
 import java.math.BigDecimal
 import java.util.*
 
@@ -34,7 +34,7 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE, val zeroO
         }
 
     open fun getBundle(locale: Locale): ResourceBundle {
-        val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClass()
+        val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClassException()
         return ResourceBundle.getBundle(unitSimpleClassName, locale)
     }
 

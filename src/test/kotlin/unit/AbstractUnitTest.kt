@@ -1,6 +1,6 @@
 package unit
 
-import exception.NoBundleForAnonymousClass
+import exception.NoBundleForAnonymousClassException
 import quantity.Length
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -45,21 +45,21 @@ internal class AbstractUnitTest {
     fun getLocalizedStringForAnonymousClass() {
         val descendant = object : AbstractUnit<Length>() {}
 
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
            descendant.symbol()
         }
 
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
             descendant.symbol(Locale("en","GB"))
         }
 
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
             descendant.singularForm()
         }
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
             descendant.pluralForm()
         }
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
             descendant.expandedForm(value = BigDecimal.ONE)
         }
     }
@@ -211,7 +211,7 @@ internal class AbstractUnitTest {
     @Test
     fun noBundleForAnonymousClass() {
         val descendant = object : AbstractUnit<Length>() {}
-        assertThrows<NoBundleForAnonymousClass> {
+        assertThrows<NoBundleForAnonymousClassException> {
             descendant.getBundle(locale = Locale.getDefault())
         }
     }
