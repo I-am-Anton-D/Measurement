@@ -27,19 +27,17 @@ enum class Prefix(val exponent: Int) {
     ZEPTO(-21),
     YOCTO(-24);
 
-    fun getPrefixMultiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
-
-    fun getPrefixString(expand: Boolean = false, locale: Locale = Locale.getDefault()) = if (expand) name(locale) else symbol(locale)
-
     fun symbol(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString() + "_SYMBOL")
 
     fun name(locale: Locale = Locale.getDefault()): String =
         getBundle(locale).getString(this.toString())
 
+    fun multiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
+
     fun inNominal(number: Number): BigDecimal =
         if (this == NOMINAL) BigDecimal(number.toString())
-        else BigDecimal(number.toString()).multiply(getPrefixMultiplier())
+        else BigDecimal(number.toString()).multiply(multiplier())
 
     private fun getBundle(locale: Locale) = ResourceBundle.getBundle(this::class.simpleName!!, locale)
 }

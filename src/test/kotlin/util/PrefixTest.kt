@@ -88,9 +88,9 @@ internal class PrefixTest {
 
     @Test
     fun getPrefixMultiplierTest() {
-        assertThat(KILO.getPrefixMultiplier() ).isEqualTo(BigDecimal(1000))
-        assertThat(MEGA.getPrefixMultiplier() ).isEqualTo(BigDecimal(1000000))
-        assertThat(MILLI.getPrefixMultiplier() ).isEqualTo(BigDecimal("0.001"))
+        assertThat(KILO.multiplier() ).isEqualTo(BigDecimal(1000))
+        assertThat(MEGA.multiplier() ).isEqualTo(BigDecimal(1000000))
+        assertThat(MILLI.multiplier() ).isEqualTo(BigDecimal("0.001"))
     }
 
     @Test

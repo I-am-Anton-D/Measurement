@@ -20,7 +20,7 @@ open class Dimension<Q> private constructor() {
     operator fun times(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units).toTypedArray())
     operator fun times(other: AbstractUnit<*>) = this * other.toDimension()
 
-    operator fun div(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units.map { uh -> uh.inverse() }).toTypedArray())
+    operator fun div(other: Dimension<*>) = Dimension<Quantity>(*(units + other.units.map { uh -> uh.invert() }).toTypedArray())
     operator fun div(other: AbstractUnit<*>) = this / other.toDimension()
 
     private fun addUnitHolder(unit: UnitHolder) {
@@ -57,7 +57,7 @@ open class Dimension<Q> private constructor() {
 
             if (!toUnit.canConvert(fromUnit)) throw Exception()
 
-            val unitRatio = fromUnit.getConvertRatio(toUnit)
+            val unitRatio = fromUnit.calculateConvertRatio(toUnit)
             if (toUnit.pow > 0) numerator = numerator.multiply(unitRatio, MathContext.DECIMAL128)
             if (toUnit.pow < 0) denominator = denominator.multiply(unitRatio, MathContext.DECIMAL128)
         }
@@ -83,8 +83,8 @@ open class Dimension<Q> private constructor() {
             } else if (fromUnit.zeroOffset != BigDecimal.ZERO) {
                 offsetValue += fromUnit.resolveZeroOffset(fromUnit, toUnit)
             }
-
         }
+
         return offsetValue
     }
 
@@ -110,12 +110,7 @@ open class Dimension<Q> private constructor() {
 
     override fun toString() = toString(Locale.getDefault())
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Dimension<*>) return false
-
-        return units == other.units
-    }
+    override fun equals(other: Any?) = this === other || (other is Dimension<*> && units == other.units)
 
     override fun hashCode() = units.hashCode()
 
