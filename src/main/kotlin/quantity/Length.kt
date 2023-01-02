@@ -19,7 +19,7 @@ class Length(number: Number) : AbstractQuantity<Length>(number, Meter) {
 }
 
 fun Number.meter(prefix: Prefix = NOMINAL) = Length(prefix.inNominal(this), Meter.prefix(prefix))
-fun Number.lengthIn(dimension:Dimension<Length>) = Length(dimension.convertValue(Meter, this), dimension)
+fun Number.lengthIn(dimension:Dimension<Length>) = Length(dimension.convertValue(this, Meter), dimension)
 
 fun Number.km() = meter(KILO)
 fun Number.cm() = meter(CENTI)

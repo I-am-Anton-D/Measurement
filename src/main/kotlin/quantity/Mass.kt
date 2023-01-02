@@ -20,6 +20,6 @@ class Mass(number: Number) : AbstractQuantity<Mass>(number, kg()) {
     }
 }
 
-fun Number.massFrom(dimension: Dimension<Mass>) = Mass(dimension.convertValue(Mass.kg(),this), dimension)
+fun Number.massFrom(dimension: Dimension<Mass>) = Mass(dimension.convertValue(this, Mass.kg()), dimension)
 
 fun Number.kg() = Mass(this)

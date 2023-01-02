@@ -16,4 +16,4 @@ class Temperature(number: Number) : AbstractQuantity<Temperature>(number, Kelvin
 
 fun Number.kelvin(prefix: Prefix = Prefix.NOMINAL) = Temperature(prefix.inNominal(this), Kelvin.prefix(prefix))
 //or AbstractUnit<Temperature>
-fun Number.tempIn(dimension:Dimension<Temperature>) = Temperature(dimension.convertValue(Kelvin, this), dimension)
+fun Number.tempIn(dimension:Dimension<Temperature>) = Temperature(dimension.convertValue( this, Kelvin), dimension)

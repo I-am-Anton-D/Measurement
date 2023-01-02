@@ -20,7 +20,7 @@ class Time(number: Number) : AbstractQuantity<Time>(number, Second) {
 }
 
 fun Number.second(prefix: Prefix = NOMINAL) = Time(prefix.inNominal(this), Second.prefix(prefix))
-fun Number.timeIn(dimension:Dimension<Time>) = Time(dimension.convertValue(Second, this), dimension)
+fun Number.timeIn(dimension:Dimension<Time>) = Time(dimension.convertValue( this, Second), dimension)
 fun Number.timeIn(unit: AbstractUnit<Time>) = timeIn(unit.toDimension())
 
 fun Number.minute() = timeIn(Minute)

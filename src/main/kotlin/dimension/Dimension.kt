@@ -40,7 +40,9 @@ open class Dimension<Q> private constructor() {
 
     fun getUnitList() : ArrayList<UnitHolder> = ArrayList(units)
 
-    fun convertValue(target: Dimension<Q>, value: Number): BigDecimal {
+    fun convertValue(value: Number, unit: AbstractUnit<Q>) = convertValue(value, unit.toDimension())
+
+    open fun convertValue(value: Number, target: Dimension<Q>): BigDecimal {
         if (units.size != target.units.size) throw Exception()
 
         val sortedFrom = units.sortedBy { uh -> uh.unitQuantity.toString() }
@@ -66,7 +68,7 @@ open class Dimension<Q> private constructor() {
 
     }
 
-    private fun moveZero(value: Number, from: List<UnitHolder>, to: List<UnitHolder>): BigDecimal {
+    open fun moveZero(value: Number, from: List<UnitHolder>, to: List<UnitHolder>): BigDecimal {
         var offsetValue = BigDecimal(value.toString())
 
         if (from.size == 1) {
@@ -85,8 +87,6 @@ open class Dimension<Q> private constructor() {
         }
         return offsetValue
     }
-
-    fun convertValue(unit: AbstractUnit<Q>, value: Number) = convertValue(unit.toDimension(), value)
 
     open fun toString(locale: Locale = Locale.getDefault()): String {
         var numerator = ""
@@ -120,7 +120,6 @@ open class Dimension<Q> private constructor() {
     override fun hashCode() = units.hashCode()
 
     companion object {
-        val powInSuperScript =
-            listOf("", "", "\u00B2", "\u00B3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079")
+        val powInSuperScript = listOf("", "", "\u00B2", "\u00B3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", "\u2079")
     }
 }
