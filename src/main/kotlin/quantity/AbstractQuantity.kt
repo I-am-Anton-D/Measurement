@@ -37,33 +37,22 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
 
     open fun valueIn(unit: AbstractUnit<Q>) = valueIn(unit.toDimension())
 
-    open fun valueIn(unit: MetricUnit<Q>, prefix: Prefix = Prefix.NOMINAL,) = valueIn(unit.prefix(prefix))
+    open fun valueIn(unit: MetricUnit<Q>, prefix: Prefix = Prefix.NOMINAL) = valueIn(unit.prefix(prefix))
 
     open fun valueIn(toDimension: Dimension<Q>) = this.dimension.convertValue(toDimension, value)
 
-    open fun toString(
-        unit: AbstractUnit<Q>,
-        valueFormat: DecimalFormat? = null,
-        dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
-        locale: Locale = Locale.getDefault()
-    ) = toString(unit.toDimension(), valueFormat, dimensionFormat, locale)
-
-    open fun toAnsiString(
-        dimension: Dimension<Q>? = null,
-        valueFormat: DecimalFormat? = null,
-        locale: Locale = Locale("en", "GB")
-    ) = toString(dimension, valueFormat, DimensionFormat.ANSI, locale)
+    open fun toString(unit: AbstractUnit<Q>, valueFormat: DecimalFormat? = null, locale: Locale = Locale.getDefault()) =
+        toString(unit.toDimension(), valueFormat, locale)
 
     open fun toString(
         dimension: Dimension<Q>? = null,
         valueFormat: DecimalFormat? = null,
-        dimensionFormat: DimensionFormat = DimensionFormat.NORMAL,
         locale: Locale = Locale.getDefault()
     ): String {
         val targetDimension = dimension ?: toStringDimension
         val valueIn = valueIn(targetDimension)
         val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
-        val unitString = targetDimension.toString(dimensionFormat, locale)
+        val unitString = targetDimension.toString(locale)
         return "$valueString $unitString"
     }
 

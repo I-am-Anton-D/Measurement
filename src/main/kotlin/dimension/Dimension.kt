@@ -5,7 +5,6 @@ import unit.abstract.AbstractUnit
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.absoluteValue
 
 open class Dimension<Q> private constructor() {
@@ -39,6 +38,8 @@ open class Dimension<Q> private constructor() {
         }
     }
 
+    fun getUnitList() : ArrayList<UnitHolder> = ArrayList(units)
+
     fun convertValue(target: Dimension<Q>, value: Number): BigDecimal {
         if (units.size != target.units.size) throw Exception()
 
@@ -59,9 +60,9 @@ open class Dimension<Q> private constructor() {
             if (toUnit.pow < 0) denominator = denominator.multiply(unitRatio, MathContext.DECIMAL128)
         }
 
-        val offsetedValue = moveZero(value, sortedFrom, sortedTo)
+        val offsetValue = moveZero(value, sortedFrom, sortedTo)
         val rate = numerator.divide(denominator, MathContext.DECIMAL128)
-        return offsetedValue.multiply(rate).round(MathContext.DECIMAL64)
+        return offsetValue.multiply(rate).round(MathContext.DECIMAL64)
 
     }
 
@@ -72,7 +73,7 @@ open class Dimension<Q> private constructor() {
             val fromUnit = from[0].unit
             val toUnit = to[0].unit
 
-            //Fahrenheit hack, try to simplify (for usual units newValue = fromUnit.zeroOffset - toUnit.zeroOffset)
+            //Fahrenheit hack, try to simplify (for usual units offsetValue = fromUnit.zeroOffset - toUnit.zeroOffset)
             if (toUnit.zeroOffset != BigDecimal.ZERO && fromUnit.zeroOffset != BigDecimal.ZERO) {
                 offsetValue += toUnit.zeroOffset + fromUnit.zeroOffset // or maybe throw Exception
             } else if (toUnit.zeroOffset != BigDecimal.ZERO) {
@@ -87,26 +88,7 @@ open class Dimension<Q> private constructor() {
 
     fun convertValue(unit: AbstractUnit<Q>, value: Number) = convertValue(unit.toDimension(), value)
 
-    open fun toString(dimensionFormat: DimensionFormat = DimensionFormat.NORMAL, locale: Locale) =
-        when (dimensionFormat) {
-            DimensionFormat.NORMAL -> toNormalFormatString(locale)
-            DimensionFormat.ANSI -> toAnsiFormatString(locale)
-        }
-
-    open fun toAnsiFormatString(locale: Locale = Locale("en", "GB")): String {
-        var ansiString = ""
-        units.forEach { uh ->
-            val prefix = uh.prefix.symbol(locale)
-            val symbol = uh.unit.symbol(locale)
-            val powString = if (uh.pow == 1) "" else "^${uh.pow}"
-            val space = (if (ansiString.isNotEmpty()) " " else "")
-            ansiString += space + prefix + symbol + powString
-        }
-
-        return ansiString
-    }
-
-    open fun toNormalFormatString(locale: Locale = Locale.getDefault()): String {
+    open fun toString(locale: Locale = Locale.getDefault()): String {
         var numerator = ""
         var denominator = ""
 
@@ -126,12 +108,11 @@ open class Dimension<Q> private constructor() {
         return "$numerator$denominator"
     }
 
-    override fun toString() = toString(DimensionFormat.NORMAL, Locale.getDefault())
+    override fun toString() = toString(Locale.getDefault())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as Dimension<*>
+        if (other !is Dimension<*>) return false
 
         return units == other.units
     }
