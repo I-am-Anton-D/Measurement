@@ -18,34 +18,22 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE, val zeroO
 
     open operator fun div(other: Dimension<*>) = toDimension() / other
 
+    fun toDimension() = Dimension<Q>(this)
+
+    fun pow(pow: Int = 1) = Dimension<Q>(UnitHolder(this, pow))
+
     open fun resolveZeroOffset(fromUnit:AbstractUnit<*>, toUnit: AbstractUnit<*>) = fromUnit.zeroOffset - toUnit.zeroOffset
 
     open fun symbol(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("symbol")
 
-    open fun singularForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
+    open fun name(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
 
-    open fun pluralForm(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("pluralForm")
-
-    open fun expandedForm(locale: Locale = Locale.getDefault(), value: BigDecimal): String =
-        try {
-            getBundle(locale).getString(value.toString())
-        } catch (ex: MissingResourceException) {
-            pluralForm(locale)
-        }
-
-    open fun getBundle(locale: Locale): ResourceBundle {
-        val unitSimpleClassName = this::class.simpleName ?: throw NoBundleForAnonymousClassException()
-        return ResourceBundle.getBundle(unitSimpleClassName, locale)
-    }
-
-    open fun toString(expand: Boolean = false, locale: Locale = Locale.getDefault(), value: BigDecimal) =
-        if (expand) expandedForm(locale, value)
-        else symbol(locale)
+    open fun toString(locale: Locale = Locale.getDefault()) = symbol(locale)
 
     override fun toString() = symbol()
 
-    fun pow(pow: Int = 1) = Dimension<Q>(UnitHolder(this, pow))
-
-    fun toDimension() = Dimension<Q>(this)
-
+    open fun getBundle(locale: Locale): ResourceBundle {
+        val className = this::class.simpleName ?: throw NoBundleForAnonymousClassException()
+        return ResourceBundle.getBundle(className, locale)
+    }
 }

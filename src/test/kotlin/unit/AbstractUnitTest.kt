@@ -54,7 +54,7 @@ internal class AbstractUnitTest {
         }
 
         assertThrows<NoBundleForAnonymousClassException> {
-            descendant.singularForm()
+            descendant.name()
         }
         assertThrows<NoBundleForAnonymousClassException> {
             descendant.pluralForm()
@@ -89,20 +89,20 @@ internal class AbstractUnitTest {
 
     @Test
     fun getSingularForm() {
-        assertThat(Meter.singularForm(locale = Locale("en","GB"))).isEqualTo("meter")
+        assertThat(Meter.name(locale = Locale("en","GB"))).isEqualTo("meter")
         Locale.setDefault(Locale("en", "GB"))
-        assertThat(Meter.singularForm()).isEqualTo("meter")
+        assertThat(Meter.name()).isEqualTo("meter")
     }
 
     @Test
     fun overrideSingularForm() {
         val singularForm = "SINGLE"
         val descendant = object : AbstractUnit<Length>() {
-            override fun singularForm(locale: Locale): String {
+            override fun name(locale: Locale): String {
                 return singularForm
             }
         }
-        assertThat(descendant.singularForm()).isEqualTo(singularForm)
+        assertThat(descendant.name()).isEqualTo(singularForm)
     }
 
     @Test
@@ -116,11 +116,11 @@ internal class AbstractUnitTest {
     fun overridePluralForm() {
         val pluralForm = "PLURAL"
         val descendant = object : AbstractUnit<Length>() {
-            override fun singularForm(locale: Locale): String {
+            override fun name(locale: Locale): String {
                 return pluralForm
             }
         }
-        assertThat(descendant.singularForm()).isEqualTo(pluralForm)
+        assertThat(descendant.name()).isEqualTo(pluralForm)
     }
 
     @Test

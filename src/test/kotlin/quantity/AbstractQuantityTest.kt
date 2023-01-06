@@ -18,7 +18,7 @@ internal class AbstractQuantityTest {
             return "some symbol"
         }
 
-        override fun singularForm(locale: Locale): String {
+        override fun name(locale: Locale): String {
             return "some singular"
         }
 
@@ -33,7 +33,7 @@ internal class AbstractQuantityTest {
             return "another symbol"
         }
 
-        override fun singularForm(locale: Locale): String {
+        override fun name(locale: Locale): String {
             return "another singular"
         }
 
