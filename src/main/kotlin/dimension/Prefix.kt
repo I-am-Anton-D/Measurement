@@ -1,5 +1,6 @@
 package dimension
 
+import extension.toBigDecimal
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.*
@@ -36,8 +37,8 @@ enum class Prefix(val exponent: Int) {
     fun multiplier(): BigDecimal = BigDecimal.TEN.pow(exponent, MathContext.DECIMAL128)
 
     fun inNominal(number: Number): BigDecimal =
-        if (this == NOMINAL) BigDecimal(number.toString())
-        else BigDecimal(number.toString()).multiply(multiplier())
+        if (this == NOMINAL) number.toBigDecimal()
+        else  number.toBigDecimal().multiply(multiplier())
 
     private fun getBundle(locale: Locale) = ResourceBundle.getBundle(this::class.simpleName!!, locale)
 }

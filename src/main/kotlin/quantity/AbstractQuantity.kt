@@ -1,6 +1,8 @@
 package quantity
 
 import dimension.*
+import extension.out
+import extension.toBigDecimal
 import unit.abstract.AbstractUnit
 import unit.abstract.MetricUnit
 import java.math.BigDecimal
@@ -11,9 +13,9 @@ import java.util.*
 abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimension<Q>) : Comparable<AbstractQuantity<Q>> {
     var toStringDimension: Dimension<Q> = dimension
 
-    constructor(number: Number, unit: AbstractUnit<Q>) : this(BigDecimal(number.toString()), unit.toDimension())
+    constructor(number: Number, unit: AbstractUnit<Q>) : this(number.toBigDecimal(), unit.toDimension())
 
-    constructor(number: Number, dimension: Dimension<Q>) : this(BigDecimal(number.toString()), dimension)
+    constructor(number: Number, dimension: Dimension<Q>) : this(number.toBigDecimal(), dimension)
 
     abstract fun copyWith(value: BigDecimal): AbstractQuantity<Q>
 
@@ -51,7 +53,7 @@ abstract class AbstractQuantity<Q>(val value: BigDecimal, val dimension: Dimensi
     ): String {
         val targetDimension = dimension ?: toStringDimension
         val valueIn = valueIn(targetDimension)
-        val valueString = valueFormat?.format(valueIn) ?: valueIn.stripTrailingZeros().toPlainString()
+        val valueString = valueFormat?.format(valueIn) ?: valueIn.out()
         val unitString = targetDimension.toString(locale)
         return "$valueString $unitString"
     }

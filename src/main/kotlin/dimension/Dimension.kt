@@ -1,6 +1,8 @@
 package dimension
 
 import exception.ConvertDimensionException
+import exception.NotSingleUnitDimensionException
+import extension.toBigDecimal
 import quantity.Quantity
 import unit.abstract.AbstractUnit
 import java.math.BigDecimal
@@ -41,6 +43,10 @@ open class Dimension<Q> {
 
     fun getUnitList() : ArrayList<UnitHolder> = ArrayList(units)
 
+    fun isSingleUnit() = units.size == 1
+
+    fun getSingleUnit() = if (!isSingleUnit()) throw NotSingleUnitDimensionException() else units[0].unit
+
     fun convertValue(value: Number, unit: AbstractUnit<Q>) = convertValue(value, unit.toDimension())
 
     open fun convertValue(value: Number, target: Dimension<Q>): BigDecimal {
@@ -71,7 +77,7 @@ open class Dimension<Q> {
     }
 
     open fun moveZero(value: Number, from: List<UnitHolder>, to: List<UnitHolder>): BigDecimal {
-        var offsetValue = BigDecimal(value.toString())
+        var offsetValue = value.toBigDecimal()
 
         if (from.size == 1) {
             val fromUnit = from[0].unit

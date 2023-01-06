@@ -1,9 +1,13 @@
 import dimension.Prefix
 import extension.toAnsiString
+import extension.toDecomposedString
 import quantity.*
 import unit.length.Meter
 import unit.length.mile
 import unit.temperature.*
+import unit.time.Day
+import unit.time.Hour
+import unit.time.Minute
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -44,5 +48,10 @@ fun main() {
     val celsius = 0.celsius()
     println(celsius)
     println(celsius.toString(Kelvin))
+
+    val time2 = 30.5.day() + 30.minute() + 20.second()
+    println(time2)
+    println(time2.toDecomposedString(Hour))
+
 
 }
