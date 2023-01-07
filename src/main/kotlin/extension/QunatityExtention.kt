@@ -5,6 +5,7 @@ import exception.DecompositionException
 import quantity.AbstractQuantity
 import unit.abstract.CompositeUnit
 import java.math.BigDecimal
+import java.math.MathContext
 import java.text.DecimalFormat
 import java.util.*
 
@@ -42,7 +43,7 @@ fun decomposeUnit(value:BigDecimal, unit:CompositeUnit<*>, locale: Locale = Loca
         if (unit.parentUnit is CompositeUnit) {
             "${divider.out()} $symbol ${decomposeUnit(remainder, unit.parentUnit, locale)}"
         } else {
-            "${divider.out()} $symbol ${remainder.out()} ${unit.parentUnit.symbol(locale)}"
+            "${divider.out()} $symbol ${remainder.divide(unit.parentUnit.ratio, MathContext.DECIMAL64).out()} ${unit.parentUnit.symbol(locale)}"
         }
     }
 }

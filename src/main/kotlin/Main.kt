@@ -2,8 +2,7 @@ import dimension.Prefix
 import extension.toAnsiString
 import extension.toDecomposedString
 import quantity.*
-import unit.length.Meter
-import unit.length.mile
+import unit.length.*
 import unit.temperature.*
 import unit.time.Day
 import unit.time.Hour
@@ -53,5 +52,7 @@ fun main() {
     println(time2)
     println(time2.toDecomposedString(Hour))
 
-
+    val foot = 1.5.foot()
+    println(foot.toString(Inch))
+    println(foot.toDecomposedString())
 }
