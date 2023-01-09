@@ -1,6 +1,7 @@
 import dimension.Prefix
 import extension.toAnsiString
 import extension.toDecomposedString
+import extension.toFractionalString
 import quantity.*
 import unit.length.*
 import unit.temperature.*
@@ -52,7 +53,11 @@ fun main() {
     println(time2)
     println(time2.toDecomposedString(Hour))
 
-    val foot = 1.5.foot()
+    val foot = 1.5.foot() + 0.5.inch()
     println(foot.toString(Inch))
-    println(foot.toDecomposedString())
+    println(foot.toDecomposedString(withFraction = true))
+
+    val inch = 5.inch() + Inch.ThreeEighth
+    println(inch)
+    println(inch.toFractionalString())
 }
