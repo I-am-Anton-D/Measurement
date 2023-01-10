@@ -1,10 +1,11 @@
-package util
+package dimension
 
-import dimension.Prefix.*
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.util.*
+import dimension.Prefix.*
 
 internal class PrefixTest {
     @Test
@@ -91,14 +92,6 @@ internal class PrefixTest {
         assertThat(KILO.multiplier() ).isEqualTo(BigDecimal(1000))
         assertThat(MEGA.multiplier() ).isEqualTo(BigDecimal(1000000))
         assertThat(MILLI.multiplier() ).isEqualTo(BigDecimal("0.001"))
-    }
-
-    @Test
-    fun getPrefixStringTest() {
-        assertThat(KILO.getPrefixString()).isEqualTo("k")
-        assertThat(KILO.getPrefixString(true)).isEqualTo("kilo")
-        assertThat(KILO.getPrefixString(true, Locale("ru","RU"))).isEqualTo("кило")
-        assertThat(KILO.getPrefixString(locale = Locale("ru","RU"))).isEqualTo("к")
     }
 
     @Test

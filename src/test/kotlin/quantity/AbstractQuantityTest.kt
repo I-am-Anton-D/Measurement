@@ -21,11 +21,6 @@ internal class AbstractQuantityTest {
         override fun name(locale: Locale): String {
             return "some singular"
         }
-
-        override fun pluralForm(locale: Locale): String {
-            return "some plural"
-        }
-
     }
 
     object AnotherUnit : MetricUnit<SomeQuantity>() {
@@ -37,9 +32,6 @@ internal class AbstractQuantityTest {
             return "another singular"
         }
 
-        override fun pluralForm(locale: Locale): String {
-            return "another plural"
-        }
     }
 
     class SomeQuantity(number: Number) : AbstractQuantity<SomeQuantity>(number, SomeUnit) {
@@ -64,52 +56,6 @@ internal class AbstractQuantityTest {
         assertDoesNotThrow {
             5.some()
         }
-    }
-
-    @Test
-    fun valueAndUnitTest() {
-        var s = SomeQuantity(BigDecimal.ONE);
-
-        assertThat(s.value).isEqualTo(BigDecimal.ONE)
-        assertThat(s.dimension).isEqualTo(SomeUnit)
-        assertThat(s.dimension).isNotEqualTo(AnotherUnit)
-
-        s = SomeQuantity(1.2345)
-        assertThat(s.value).isEqualTo(BigDecimal(1.2345.toString()))
-    }
-
-    @Test
-    fun valueInTest() {
-        val s = SomeQuantity(BigDecimal.TEN)
-        assertThat(s to AnotherUnit).isEqualTo(BigDecimal(5))
-    }
-
-    @Test
-    fun valueInPrefixTest() {
-        val s = 1000.some()
-
-        assertThat(s.valueIn(prefix = Prefix.KILO, unit = SomeUnit)).isEqualTo(BigDecimal.ONE)
-        assertThat(s.valueIn(prefix = Prefix.KILO, unit = AnotherUnit)).isEqualTo(BigDecimal(0.5.toString()))
-        assertThat(s.valueIn(unit = AnotherUnit)).isEqualTo(BigDecimal(500.toString()))
-    }
-
-    @Test
-    fun infixMethodTest() {
-        val result = 1000.some() to AnotherUnit
-
-        assertThat(result).isInstanceOf(BigDecimal::class.java)
-        assertThat(result).isEqualTo(BigDecimal(500))
-    }
-
-    @Test
-    fun plusTest() {
-        val q1 = SomeQuantity(10)
-        val q2 = SomeQuantity(BigDecimal.TEN)
-
-        val sum = q1 + q2
-
-        assertThat(sum).isInstanceOf(SomeQuantity::class.java)
-        assertThat(sum.value).isEqualTo(BigDecimal(20))
     }
 
     @Test

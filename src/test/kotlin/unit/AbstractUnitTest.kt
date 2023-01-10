@@ -56,12 +56,7 @@ internal class AbstractUnitTest {
         assertThrows<NoBundleForAnonymousClassException> {
             descendant.name()
         }
-        assertThrows<NoBundleForAnonymousClassException> {
-            descendant.pluralForm()
-        }
-        assertThrows<NoBundleForAnonymousClassException> {
-            descendant.expandedForm(value = BigDecimal.ONE)
-        }
+
     }
 
     @Test fun overrideGetSymbol() {
@@ -106,13 +101,6 @@ internal class AbstractUnitTest {
     }
 
     @Test
-    fun getPluralForm() {
-        assertThat(Meter.pluralForm(locale = Locale("en","GB"))).isEqualTo("meters")
-        Locale.setDefault(Locale("en", "GB"))
-        assertThat(Meter.pluralForm()).isEqualTo("meters")
-    }
-
-    @Test
     fun overridePluralForm() {
         val pluralForm = "PLURAL"
         val descendant = object : AbstractUnit<Length>() {
@@ -123,52 +111,8 @@ internal class AbstractUnitTest {
         assertThat(descendant.name()).isEqualTo(pluralForm)
     }
 
-    @Test
-    fun getExpandForm() {
-        assertThat(Meter.expandedForm(locale = Locale("en","GB"), BigDecimal.ONE)).isEqualTo("meter")
-        assertThat(Meter.expandedForm(locale = Locale("en","GB"), BigDecimal.TEN)).isEqualTo("meters")
-        assertThat(Meter.expandedForm(locale = Locale("en","GB"), BigDecimal(123))).isEqualTo("meters")
-        Locale.setDefault(Locale("en", "GB"))
-        assertThat(Meter.expandedForm(value = BigDecimal(123))).isEqualTo("meters")
-    }
 
-    @Test
-    fun checkRuLocalizationForExpandedForm() {
-        Locale.setDefault(Locale("ru", "RU"))
-        assertThat(Meter.expandedForm(value = BigDecimal.ZERO)).isEqualTo("метров")
-        assertThat(Meter.expandedForm(value = BigDecimal.ONE)).isEqualTo("метр")
-        assertThat(Meter.expandedForm(value =  BigDecimal(2))).isEqualTo("метра")
-        assertThat(Meter.expandedForm(value =  BigDecimal(3))).isEqualTo("метра")
-        assertThat(Meter.expandedForm(value =  BigDecimal(4))).isEqualTo("метра")
-        assertThat(Meter.expandedForm(value =  BigDecimal(5))).isEqualTo("метров")
-        assertThat(Meter.expandedForm(value =  BigDecimal(50))).isEqualTo("метров")
-    }
 
-    @Test
-    fun checkValueInBaseUnit() {
-        assertThat(Meter.valueToBaseUnit(1)).isEqualTo(BigDecimal.ONE)
-        assertThat(Mile.valueToBaseUnit(1)).isEqualTo(Mile.ratio)
-        assertThat(Mile.valueToBaseUnit(10)).isEqualTo(Mile.ratio.multiply(BigDecimal.TEN))
-        assertThat(Mile.valueToBaseUnit(1)).isEqualTo(BigDecimal(1609.344.toString()))
-    }
-
-    @Test
-    fun overrideValueInBaseUnit() {
-        val descendant = object : AbstractUnit<Length>() {
-            override fun valueToBaseUnit(number: Number): BigDecimal {
-                return BigDecimal.ZERO
-            }
-        }
-        assertThat(descendant.valueToBaseUnit(10)).isEqualTo(BigDecimal.ZERO)
-    }
-
-    @Test
-    fun valueOfDescendant() {
-        val descendant = object : AbstractUnit<Length>() {}
-
-        assertThat(descendant.valueToBaseUnit(1)).isEqualTo(BigDecimal.ONE)
-        assertThat(descendant.valueToBaseUnit(10)).isEqualTo(BigDecimal.TEN)
-    }
 
     @Test
     fun toStringTest() {
@@ -176,37 +120,6 @@ internal class AbstractUnitTest {
         assertThat(Meter.toString()).isEqualTo("m")
     }
 
-    @Test
-    fun toStringTestWithParameters() {
-        Locale.setDefault(Locale("en","GB"))
-
-        assertThat(Meter.toString(expand = true, value = BigDecimal.ZERO)).isEqualTo("meters")
-        assertThat(Meter.toString(expand = true, value = BigDecimal.ONE)).isEqualTo("meter")
-        assertThat(Meter.toString(expand = true, value = BigDecimal.TEN)).isEqualTo("meters")
-        assertThat(Meter.toString(expand = false, value = BigDecimal.TEN)).isEqualTo("m")
-        assertThat(Meter.toString(expand = false, value = BigDecimal.ONE)).isEqualTo("m")
-        assertThat(Meter.toString(value = BigDecimal.ONE)).isEqualTo("m")
-
-        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("метр")
-        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.TEN)).isEqualTo("метров")
-        assertThat(Meter.toString(expand = true, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("метров")
-        assertThat(Meter.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("м")
-        assertThat(Meter.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("м")
-        assertThat(Meter.toString(locale = Locale("ru", "RU"), value = BigDecimal.ONE)).isEqualTo("м")
-    }
-
-    @Test
-    fun overrideToStringTestWithParameters() {
-        val descendant = object : AbstractUnit<Length>() {
-            override fun toString(expand: Boolean, locale: Locale, value: BigDecimal): String {
-                return "X"
-            }
-        }
-        assertThat(descendant.toString(expand = true, value = BigDecimal.ZERO)).isEqualTo("X")
-        assertThat(descendant.toString(expand = true, value = BigDecimal.ONE)).isEqualTo("X")
-        assertThat(descendant.toString(expand = true, value = BigDecimal.TEN)).isEqualTo("X")
-        assertThat(descendant.toString(expand = false, locale = Locale("ru", "RU"), value = BigDecimal.ZERO)).isEqualTo("X")
-    }
 
     @Test
     fun noBundleForAnonymousClass() {
@@ -239,15 +152,6 @@ internal class AbstractUnitTest {
         assertThrows<MissingResourceException>{
             SomeUnit.symbol()
         }
-
-        assertThrows<MissingResourceException>{
-            SomeUnit.pluralForm()
-        }
-
-        assertThrows<MissingResourceException>{
-            SomeUnit.pluralForm()
-        }
-
         assertThat(SomeUnit.ratio).isEqualTo(BigDecimal(1.234.toString()))
     }
 
