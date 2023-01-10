@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>measurement</artifactId>
-    <groupId>it.dmitrochenko</groupId>
+    <groupId>info.dmitrochenko</groupId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
@@ -51,7 +51,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>1.7.20</version>
+                <version>1.7.22</version>
                 <executions>
                     <execution>
                         <id>compile</id>

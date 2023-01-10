@@ -1,12 +1,12 @@
 package quantity
 
-import dimension.Prefix
+import info.dmitrochenko.measurment.abstracts.AbstractQuantity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import unit.abstract.AbstractUnit
-import unit.abstract.MetricUnit
+import info.dmitrochenko.measurment.abstracts.AbstractUnit
+import info.dmitrochenko.measurment.abstracts.MetricUnit
 import java.math.BigDecimal
 import java.util.*
 

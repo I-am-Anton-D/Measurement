@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.util.*
-import dimension.Prefix.*
+import info.dmitrochenko.measurment.dimension.Prefix.*
 
 internal class PrefixTest {
     @Test

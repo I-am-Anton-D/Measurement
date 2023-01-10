@@ -1,13 +1,14 @@
-import dimension.Prefix
-import extension.toAnsiString
-import extension.toDecomposedString
-import extension.toFractionalString
-import quantity.*
-import unit.length.*
-import unit.temperature.*
-import unit.time.Day
-import unit.time.Hour
-import unit.time.Minute
+import info.dmitrochenko.measurment.dimension.Prefix
+import info.dmitrochenko.measurment.extension.toAnsiString
+import info.dmitrochenko.measurment.extension.toDecomposedString
+import info.dmitrochenko.measurment.extension.toFractionalString
+import info.dmitrochenko.measurment.quantity.*
+import info.dmitrochenko.measurment.unit.length.*
+import info.dmitrochenko.measurment.unit.temperature.Celsius
+import info.dmitrochenko.measurment.unit.temperature.Kelvin
+import info.dmitrochenko.measurment.unit.temperature.celsius
+import info.dmitrochenko.measurment.unit.temperature.fahrenheit
+import info.dmitrochenko.measurment.unit.time.Hour
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
