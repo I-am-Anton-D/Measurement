@@ -1,4 +1,4 @@
-package dimension
+package info.dmitrochenko.measurment.dimension
 
 
 import org.assertj.core.api.Assertions.assertThat

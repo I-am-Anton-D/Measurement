@@ -1,15 +1,16 @@
-package unit
+package info.dmitrochenko.measurment.abstracts
 
 import info.dmitrochenko.measurment.exception.NoBundleForAnonymousClassException
-import quantity.Length
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import info.dmitrochenko.measurment.abstracts.AbstractUnit
-import unit.length.Meter
-import unit.length.Mile
-import unit.mass.Gram
+import info.dmitrochenko.measurment.quantity.Length
+import info.dmitrochenko.measurment.unit.length.Meter
+import info.dmitrochenko.measurment.unit.length.Mile
+import info.dmitrochenko.measurment.unit.mass.Gram
+
 import java.math.BigDecimal
 import java.util.*
 

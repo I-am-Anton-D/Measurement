@@ -1,4 +1,4 @@
-package quantity
+package info.dmitrochenko.measurment.qunatity
 
 import info.dmitrochenko.measurment.abstracts.AbstractQuantity
 import org.assertj.core.api.Assertions.assertThat
