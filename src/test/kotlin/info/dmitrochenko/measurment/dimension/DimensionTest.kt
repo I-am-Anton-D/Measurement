@@ -2,8 +2,6 @@ package info.dmitrochenko.measurment.dimension
 
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
 internal class DimensionTest {
 
     @Test

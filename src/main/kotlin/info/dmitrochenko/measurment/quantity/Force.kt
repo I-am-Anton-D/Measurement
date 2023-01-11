@@ -11,7 +11,7 @@ class Force(number: Number) : AbstractQuantity<Force>(number, Newton) {
         this.toStringDimension = defaultToStringDimension
     }
 
-    constructor(mass:Mass, acceleration: info.dmitrochenko.measurment.quantity.Acceleration) : this(mass.value * acceleration.value)
+    constructor(mass:Mass, acceleration: Acceleration) : this(mass.value * acceleration.value)
 
     override fun copyWith(value: BigDecimal) = Force(value, toStringDimension)
 }

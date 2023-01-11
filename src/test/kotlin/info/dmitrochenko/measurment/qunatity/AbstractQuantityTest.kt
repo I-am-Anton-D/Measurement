@@ -129,7 +129,7 @@ internal class AbstractQuantityTest {
 
     object NotMetricUnit : AbstractUnit<SomeQuantity>() {
         override fun symbol(locale: Locale): String {
-            return "notmetric"
+            return "not metric"
         }
     }
 

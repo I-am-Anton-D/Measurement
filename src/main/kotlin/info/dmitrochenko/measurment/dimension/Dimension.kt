@@ -46,7 +46,9 @@ open class Dimension<Q> {
 
     fun isSingleUnit() = units.size == 1
 
-    fun getSingleUnit() = if (!isSingleUnit()) throw NotSingleUnitDimensionException() else units[0].unit
+    fun isMultiUnit() = units.size > 1
+
+    fun getSingleUnit() = if (isMultiUnit()) throw NotSingleUnitDimensionException() else units[0].unit
 
     fun convertValue(value: Number, unit: AbstractUnit<Q>) = convertValue(value, unit.toDimension())
 

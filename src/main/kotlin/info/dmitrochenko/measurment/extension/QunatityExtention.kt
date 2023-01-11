@@ -26,7 +26,7 @@ fun <Q> AbstractQuantity<Q>.toAnsiString(
 
 fun <Q> AbstractQuantity<Q>.toDecomposedString(decomposeFrom: CompositeUnit<Q>? = null, withFraction: Boolean = false, locale: Locale = Locale.getDefault()) : String {
     val targetDimension = decomposeFrom?.toDimension() ?: toStringDimension
-    if (!targetDimension.isSingleUnit()) throw DecompositionException("Size of dimension of quantity not equal 1")
+    if (targetDimension.isMultiUnit()) throw DecompositionException("Size of dimension of quantity not equal 1")
 
     val unit = targetDimension.getSingleUnit()
     if (unit !is CompositeUnit<*>) throw DecompositionException("Target unit is not composite")
@@ -60,7 +60,7 @@ private fun <Q> decomposeUnit(value:BigDecimal, unit: CompositeUnit<Q>, withFrac
 @Suppress("UNCHECKED_CAST")
 fun <Q> AbstractQuantity<Q>.toFractionalString(fractionalFrom: FractionUnit<Q>? = null, locale: Locale = Locale.getDefault()) : String {
     val targetDimension = fractionalFrom?.toDimension() ?: toStringDimension
-    if (!targetDimension.isSingleUnit()) throw FractionalTransformException("Size of dimension quantity not equal 1")
+    if (targetDimension.isMultiUnit()) throw FractionalTransformException("Size of dimension quantity not equal 1")
 
     val unit = targetDimension.getSingleUnit()
     if (unit !is FractionUnit<*>) throw FractionalTransformException("Target unit is not fractional")
