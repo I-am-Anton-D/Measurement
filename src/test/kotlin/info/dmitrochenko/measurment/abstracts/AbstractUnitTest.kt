@@ -138,8 +138,8 @@ internal class AbstractUnitTest {
 
     @Test
     fun foundedBundle() {
-        val bundle = Mile.getBundle(Locale("en","GB"))
-        assertThat(bundle.locale).isEqualTo(Locale("en","GB"))
+        val bundle = Mile.getBundle(Locale("ru","RU"))
+        assertThat(bundle.locale).isEqualTo(Locale("ru","RU"))
     }
 
     object SomeUnit: AbstractUnit<Length>(1.234)
