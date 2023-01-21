@@ -42,7 +42,7 @@ open class Dimension<Q> {
         }
     }
 
-    fun getUnitList() : ArrayList<UnitHolder> = ArrayList(units)
+    fun getHoldersList() : ArrayList<UnitHolder> = ArrayList(units)
 
     fun isSingleUnit() = units.size == 1
 

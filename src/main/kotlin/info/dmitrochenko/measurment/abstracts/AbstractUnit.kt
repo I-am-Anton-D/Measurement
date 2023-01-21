@@ -28,7 +28,7 @@ abstract class AbstractUnit<Q>(val ratio: BigDecimal = BigDecimal.ONE, val zeroO
 
     open fun name(locale: Locale = Locale.getDefault()): String = getBundle(locale).getString("singularForm")
 
-    open fun toString(locale: Locale = Locale.getDefault()) = symbol(locale)
+    open fun toString(locale:Locale) = symbol(locale)
 
     override fun toString() = symbol()
 
