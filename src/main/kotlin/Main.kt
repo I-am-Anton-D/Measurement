@@ -1,4 +1,3 @@
-import info.dmitrochenko.measurment.dimension.Prefix
 import info.dmitrochenko.measurment.extension.toAnsiString
 import info.dmitrochenko.measurment.extension.toDecomposedString
 import info.dmitrochenko.measurment.extension.toFractionalString
@@ -9,8 +8,7 @@ import info.dmitrochenko.measurment.unit.temperature.Kelvin
 import info.dmitrochenko.measurment.unit.temperature.celsius
 import info.dmitrochenko.measurment.unit.temperature.fahrenheit
 import info.dmitrochenko.measurment.unit.time.Hour
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import java.util.*
 
 
 fun main() {
@@ -37,14 +35,9 @@ fun main() {
     println(temp.toString(Celsius))
     println(temp.toString(Kelvin))
 
-
-    val length2 = 10.mile()
-    println(length2)
-    println(length2.toString(Meter))
-
-    val kevlin = 1000.kelvin()
-    println(kevlin)
-    println(kevlin.toString(Celsius))
+    val kelvin = 1000.kelvin()
+    println(kelvin)
+    println(kelvin.toString(Celsius))
 
     val celsius = 0.celsius()
     println(celsius)
@@ -54,6 +47,10 @@ fun main() {
     println(time2)
     println(time2.toDecomposedString(Hour))
 
+    val length2 = 10.mile()
+    println(length2)
+    println(length2.toString(Meter))
+
     val foot = 1.5.foot() + 0.5.inch()
     println(foot.toString(Inch))
     println(foot.toDecomposedString(withFraction = true))
@@ -61,4 +58,7 @@ fun main() {
     val inch = 5.inch() + Inch.ThreeEighth
     println(inch)
     println(inch.toFractionalString())
+
+    val t = 100.celsius()
+    println(t.toString(locale = Locale("ru", "RU")))
 }

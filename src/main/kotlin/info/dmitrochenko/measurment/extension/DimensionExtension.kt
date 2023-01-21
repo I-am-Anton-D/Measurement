@@ -5,7 +5,7 @@ import java.util.*
 
 fun <Q> Dimension<Q>.toAnsiString(locale: Locale)  : String {
         var ansiString = ""
-        this.getUnitList().forEach { uh ->
+        this.getHoldersList().forEach { uh ->
             val prefix = uh.prefix.symbol(locale)
             val symbol = uh.unit.symbol(locale)
             val powString = if (uh.pow == 1) "" else "^${uh.pow}"

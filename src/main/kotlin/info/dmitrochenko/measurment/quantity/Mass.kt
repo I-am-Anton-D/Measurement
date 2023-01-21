@@ -12,7 +12,7 @@ class Mass(number: Number) : AbstractQuantity<Mass>(number, kg()) {
         this.toStringDimension = toStringDimension
     }
 
-    operator fun times(acceleration: info.dmitrochenko.measurment.quantity.Acceleration) = Force(this, acceleration)
+    operator fun times(acceleration: Acceleration) = Force(this, acceleration)
 
     override fun copyWith(value: BigDecimal) = Mass(value, this.toStringDimension)
 

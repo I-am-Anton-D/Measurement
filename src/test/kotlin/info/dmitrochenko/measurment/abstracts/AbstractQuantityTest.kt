@@ -1,13 +1,18 @@
-package info.dmitrochenko.measurment.qunatity
+package info.dmitrochenko.measurment.abstracts
 
-import info.dmitrochenko.measurment.abstracts.AbstractQuantity
+import info.dmitrochenko.measurment.dimension.Dimension
+import info.dmitrochenko.measurment.dimension.Prefix
+import info.dmitrochenko.measurment.quantity.*
+import info.dmitrochenko.measurment.unit.length.Meter
+import info.dmitrochenko.measurment.unit.length.Mile
+import info.dmitrochenko.measurment.unit.length.mile
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import info.dmitrochenko.measurment.abstracts.AbstractUnit
-import info.dmitrochenko.measurment.abstracts.MetricUnit
 import java.math.BigDecimal
+import java.text.DecimalFormat
 import java.util.*
 
 @Suppress("KotlinConstantConditions")
@@ -129,7 +134,7 @@ internal class AbstractQuantityTest {
 
     object NotMetricUnit : AbstractUnit<SomeQuantity>() {
         override fun symbol(locale: Locale): String {
-            return "notmetric"
+            return "not metric"
         }
     }
 
@@ -194,5 +199,76 @@ internal class AbstractQuantityTest {
 
         assertThat(q1.hashCode()).isEqualTo(q2.hashCode())
         assertThat(q1.hashCode()).isNotEqualTo(q3.hashCode())
+    }
+
+    @Test
+    fun divideTest() {
+        val length = 10.meter()
+        val time = 10.second()
+
+        val velocity = length / time
+
+        assertThat(velocity.value).isEqualTo(BigDecimal("1"))
+        assertThat(velocity).isInstanceOf(Velocity::class.java)
+    }
+
+    @Test
+    fun timesTest() {
+        val length = 10.meter()
+        val area = length * length
+
+        assertThat(area.value).isEqualTo(BigDecimal("100"))
+        assertThat(area).isInstanceOf(Area::class.java)
+    }
+
+    @Test
+    fun plusTest() {
+        val length = 10.meter()
+        val miles = 10.mile()
+        val km = 10.km()
+        val sum = km + miles + length
+        assertThat(sum.value).isEqualTo(BigDecimal("26103.440"))
+    }
+
+    @Test
+    fun quantityTimesTest() {
+        val q1 = SomeQuantity(10)
+        val q2 = AnotherQuantity(20)
+        val times = q1 * q2
+        assertThat(times.value).isEqualTo(BigDecimal("200"))
+
+        val divide = q2 / q1
+        assertThat(divide.value).isEqualTo(BigDecimal("2"))
+    }
+
+    @Test
+    fun valueInTest() {
+        val meters = 1609.344.meter()
+        val mile = meters.valueIn(Mile)
+        assertThat(mile).isEqualTo(BigDecimal("1.000000000000000"))
+
+        val miles = 1.mile()
+        val inMeters = miles.valueIn(Meter, prefix = Prefix.KILO )
+        assertThat(inMeters).isEqualTo(BigDecimal("1.609344"))
+
+        val inMetersDef = miles.valueIn(Meter)
+        assertThat(inMetersDef).isEqualTo(BigDecimal("1609.344"))
+
+        val fromDimension = miles.valueIn(Meter.toDimension())
+        assertThat(fromDimension).isEqualTo(BigDecimal("1609.344"))
+
+        assertThat(meters.dimension).isEqualTo(Dimension<Length>(Meter))
+
+    }
+
+    @Test
+    fun toStringTest() {
+        val length = 1609.344.meter()
+        Locale.setDefault(Locale("ru", "RU"))
+        assertThat(length.toString()).isEqualTo("1609.344 м")
+        assertThat(length.toString(Mile)).isEqualTo("1 миль")
+        assertThat(length.toString(Mile.toDimension())).isEqualTo("1 миль")
+        assertThat(length.toString(dimension = null, valueFormat = null, locale = Locale.getDefault())).isEqualTo("1609.344 м")
+        assertThat(length.toString(Mile, valueFormat = DecimalFormat("##.#"))).isEqualTo("1 миль")
     }
 }

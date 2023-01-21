@@ -4,7 +4,6 @@ import info.dmitrochenko.measurment.abstracts.AbstractQuantity
 import info.dmitrochenko.measurment.dimension.Dimension
 import info.dmitrochenko.measurment.dimension.Prefix
 import info.dmitrochenko.measurment.unit.temperature.Kelvin
-
 import java.math.BigDecimal
 
 class Temperature(number: Number) : AbstractQuantity<Temperature>(number, Kelvin) {
