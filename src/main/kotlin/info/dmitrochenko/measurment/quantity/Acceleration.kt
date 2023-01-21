@@ -6,9 +6,7 @@ import info.dmitrochenko.measurment.unit.time.Second
 import java.math.BigDecimal
 import java.math.MathContext
 
-class Acceleration(number: Number) : AbstractQuantity<Acceleration>(number,
-    baseDimension()
-) {
+class Acceleration(number: Number) : AbstractQuantity<Acceleration>(number, baseDimension()) {
 
     constructor(number: Number, toStringDimension: Dimension<Acceleration>) : this(number) {
         this.toStringDimension = toStringDimension

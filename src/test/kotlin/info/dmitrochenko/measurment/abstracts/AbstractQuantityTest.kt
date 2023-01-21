@@ -1,18 +1,16 @@
-package info.dmitrochenko.measurment.qunatity
+package info.dmitrochenko.measurment.abstracts
 
-import info.dmitrochenko.measurment.abstracts.AbstractQuantity
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import info.dmitrochenko.measurment.abstracts.AbstractUnit
-import info.dmitrochenko.measurment.abstracts.MetricUnit
 import info.dmitrochenko.measurment.dimension.Dimension
 import info.dmitrochenko.measurment.dimension.Prefix
 import info.dmitrochenko.measurment.quantity.*
 import info.dmitrochenko.measurment.unit.length.Meter
 import info.dmitrochenko.measurment.unit.length.Mile
 import info.dmitrochenko.measurment.unit.length.mile
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.*
