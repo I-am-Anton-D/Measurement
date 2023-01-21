@@ -35,11 +35,6 @@ fun main() {
     println(temp.toString(Celsius))
     println(temp.toString(Kelvin))
 
-
-    val length2 = 10.mile()
-    println(length2)
-    println(length2.toString(Meter))
-
     val kelvin = 1000.kelvin()
     println(kelvin)
     println(kelvin.toString(Celsius))
@@ -51,6 +46,10 @@ fun main() {
     val time2 = 30.5.day() + 30.minute() + 20.second()
     println(time2)
     println(time2.toDecomposedString(Hour))
+
+    val length2 = 10.mile()
+    println(length2)
+    println(length2.toString(Meter))
 
     val foot = 1.5.foot() + 0.5.inch()
     println(foot.toString(Inch))

@@ -42,7 +42,7 @@ open class Dimension<Q> {
         }
     }
 
-    fun getHoldersList() : ArrayList<UnitHolder> = ArrayList(units)
+    fun getHoldersList(): ArrayList<UnitHolder> = ArrayList(units)
 
     fun isSingleUnit() = units.size == 1
 
@@ -99,7 +99,7 @@ open class Dimension<Q> {
         return offsetValue
     }
 
-    open fun toString(locale: Locale = Locale.getDefault()): String {
+    open fun toString(locale: Locale): String {
         var numerator = ""
         var denominator = ""
 
@@ -107,10 +107,17 @@ open class Dimension<Q> {
             val prefix = uh.prefix.symbol(locale)
             val symbol = uh.unit.symbol(locale)
             val powSuperscript = powInSuperScript[uh.pow.absoluteValue]
-            val multiplySign = if ((numerator.isNotEmpty() && uh.pow > 0) || (denominator.isNotEmpty() && uh.pow < 0)) "·" else ""
+            var multiplySign = ""
 
-            if (uh.pow > 0) numerator += multiplySign + prefix + symbol + powSuperscript
-            if (uh.pow < 0) denominator += multiplySign + prefix + symbol + powSuperscript
+            if (uh.pow > 0) {
+                if (numerator.isNotEmpty()) multiplySign = "·"
+                numerator += multiplySign + prefix + symbol + powSuperscript
+            }
+
+            if (uh.pow < 0) {
+                if (denominator.isNotEmpty()) multiplySign = "·"
+                denominator += multiplySign + prefix + symbol + powSuperscript
+            }
         }
 
         if (numerator.isEmpty() && denominator.isNotEmpty()) numerator = "1"
