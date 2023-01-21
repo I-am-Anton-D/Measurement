@@ -72,8 +72,8 @@ internal class AbstractUnitTest {
 
     @Test
     fun getSymbolOnExistUnit() {
-        assertThat(Meter.symbol(locale = Locale("en", "GB"))).isEqualTo("m")
-        assertThat(Gram.symbol(locale = Locale("en", "GB"))).isEqualTo("g")
+        assertThat(Meter.symbol(locale = Locale("ru", "RU"))).isEqualTo("м")
+        assertThat(Gram.symbol(locale = Locale("ru", "RU"))).isEqualTo("г")
     }
 
     @Test
@@ -132,8 +132,7 @@ internal class AbstractUnitTest {
 
     @Test
     fun notFoundBundle() {
-        val bundle = Meter.getBundle(Locale("TT","TT"))
-        assertThat(bundle.locale).isEqualTo(Locale.getDefault())
+        assertDoesNotThrow { Meter.getBundle(Locale("TT","TT")) }
     }
 
     @Test

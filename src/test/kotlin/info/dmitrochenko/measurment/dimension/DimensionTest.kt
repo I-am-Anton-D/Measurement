@@ -1,62 +1,10 @@
 package info.dmitrochenko.measurment.dimension
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 internal class DimensionTest {
 
-    @Test
-    fun times() {
-    }
 
-    @Test
-    fun testTimes() {
-    }
-
-    @Test
-    fun div() {
-    }
-
-    @Test
-    fun testDiv() {
-    }
-
-    @Test
-    fun getUnitList() {
-    }
-
-    @Test
-    fun isSingleUnit() {
-    }
-
-    @Test
-    fun getSingleUnit() {
-    }
-
-    @Test
-    fun convertValue() {
-    }
-
-    @Test
-    fun testConvertValue() {
-    }
-
-    @Test
-    fun moveZero() {
-    }
-
-    @Test
-    fun testToString() {
-    }
-
-    @Test
-    fun testToString1() {
-    }
-
-    @Test
-    fun testEquals() {
-    }
-
-    @Test
-    fun testHashCode() {
-    }
 }
