@@ -33,7 +33,7 @@ class Velocity(number: Number) : AbstractQuantity<Velocity>(number, msec()) {
     }
 }
 
-fun Number.velocityFrom(dimension: Dimension<Velocity>) = Velocity(dimension.convertValue( this, Velocity.msec()))
+fun Number.velocityFrom(dimension: Dimension<Velocity>) = Velocity(dimension.convertValue(this, Velocity.msec()), dimension)
 
 fun Number.msec() = Velocity(this)
 fun Number.kmh() = velocityFrom(Velocity.kmh())
