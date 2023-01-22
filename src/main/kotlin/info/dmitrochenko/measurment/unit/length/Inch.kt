@@ -10,7 +10,7 @@ import java.math.MathContext
 
 object Inch : FractionUnit<Length>(0.0254) {
 
-    fun fraction(numerator: Int, denominator: Int): Length {
+    private fun fraction(numerator: Int, denominator: Int): Length {
         val fractionValue = calculateFraction(numerator, denominator)
         return fractionValue.inch()
     }

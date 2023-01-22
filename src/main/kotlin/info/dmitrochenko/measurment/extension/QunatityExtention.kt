@@ -1,11 +1,11 @@
 package info.dmitrochenko.measurment.extension
 
-import info.dmitrochenko.measurment.dimension.Dimension
-import info.dmitrochenko.measurment.exception.DecompositionException
-import info.dmitrochenko.measurment.exception.FractionalTransformException
 import info.dmitrochenko.measurment.abstracts.AbstractQuantity
 import info.dmitrochenko.measurment.abstracts.CompositeUnit
 import info.dmitrochenko.measurment.abstracts.FractionUnit
+import info.dmitrochenko.measurment.dimension.Dimension
+import info.dmitrochenko.measurment.exception.DecompositionException
+import info.dmitrochenko.measurment.exception.FractionalTransformException
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
@@ -58,11 +58,10 @@ private fun <Q> decomposeUnit(value:BigDecimal, unit: CompositeUnit<Q>, withFrac
 
 //TODO NEED HARD TESTING
 @Suppress("UNCHECKED_CAST")
-fun <Q> AbstractQuantity<Q>.toFractionalString(fractionalFrom: FractionUnit<Q>? = null, locale: Locale = Locale.getDefault()) : String {
-    val targetDimension = fractionalFrom?.toDimension() ?: toStringDimension
-    if (targetDimension.isMultiUnit()) throw FractionalTransformException("Size of dimension quantity not equal 1")
+fun <Q> AbstractQuantity<Q>.toFractionalString(locale: Locale = Locale.getDefault()): String {
+    if (toStringDimension.isMultiUnit()) throw FractionalTransformException("Size of dimension quantity not equal 1")
 
-    val unit = targetDimension.getSingleUnit()
+    val unit = toStringDimension.getSingleUnit()
     if (unit !is FractionUnit<*>) throw FractionalTransformException("Target unit is not fractional")
 
     val valueIn = valueIn(unit as FractionUnit<Q>)
