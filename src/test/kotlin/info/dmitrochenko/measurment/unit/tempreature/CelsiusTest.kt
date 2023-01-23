@@ -18,5 +18,4 @@ internal class CelsiusTest {
         val t1 = Temperature(0)
         assertThat(t1.toCelsius()).isEqualTo(BigDecimal("-273.15"))
     }
-
 }

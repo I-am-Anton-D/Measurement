@@ -1,11 +1,11 @@
 package info.dmitrochenko.measurment.dimension
 
 
+import info.dmitrochenko.measurment.dimension.Prefix.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.util.*
-import info.dmitrochenko.measurment.dimension.Prefix.*
 
 internal class PrefixTest {
     @Test
@@ -33,7 +33,6 @@ internal class PrefixTest {
         assertThat(YOCTO.exponent).isEqualTo(-24)
         
     }
-
 
     @Test
     fun prefixSymbolText() {

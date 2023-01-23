@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-
 //0.3048
 internal class FootTest {
 
@@ -17,5 +16,4 @@ internal class FootTest {
         val l = 0.3048.meter()
         assertThat(l.toFoot()).isEqualTo("1.000000000000000")
     }
-
 }

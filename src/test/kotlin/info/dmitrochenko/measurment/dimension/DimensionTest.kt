@@ -2,11 +2,16 @@ package info.dmitrochenko.measurment.dimension
 
 import info.dmitrochenko.measurment.exception.ConvertDimensionException
 import info.dmitrochenko.measurment.exception.NotSingleUnitDimensionException
-import info.dmitrochenko.measurment.quantity.*
+import info.dmitrochenko.measurment.quantity.Length
+import info.dmitrochenko.measurment.quantity.Quantity
+import info.dmitrochenko.measurment.quantity.Temperature
+import info.dmitrochenko.measurment.quantity.Velocity
 import info.dmitrochenko.measurment.unit.length.Meter
 import info.dmitrochenko.measurment.unit.length.Mile
 import info.dmitrochenko.measurment.unit.mass.Gram
-import info.dmitrochenko.measurment.unit.temperature.*
+import info.dmitrochenko.measurment.unit.temperature.Celsius
+import info.dmitrochenko.measurment.unit.temperature.Fahrenheit
+import info.dmitrochenko.measurment.unit.temperature.Kelvin
 import info.dmitrochenko.measurment.unit.time.Hour
 import info.dmitrochenko.measurment.unit.time.Second
 import org.assertj.core.api.Assertions.assertThat
@@ -33,7 +38,6 @@ internal class DimensionTest {
 
         assertThat(newDim.getSingleUnit()).isEqualTo(Meter)
     }
-
 
     @Test
     fun convertValueTest() {

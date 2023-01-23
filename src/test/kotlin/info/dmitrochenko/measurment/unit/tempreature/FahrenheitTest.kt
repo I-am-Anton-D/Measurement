@@ -9,6 +9,7 @@ import java.math.BigDecimal
 
 
 internal class FahrenheitTest {
+
     @Test
     fun fahrenheitTest() {
         val t = 0.fahrenheit()

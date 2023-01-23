@@ -7,6 +7,7 @@ import java.math.BigDecimal
 
 // 0.0254
 internal class InchTest {
+
     @Test
     fun inchTest() {
         val inch = 1.inch()
@@ -16,7 +17,6 @@ internal class InchTest {
         assertThat(l.toInch()).isEqualTo("1.000000000000000")
 
     }
-
 
     //Just for coverage
     @Test

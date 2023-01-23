@@ -4,7 +4,6 @@ import info.dmitrochenko.measurment.dimension.Prefix
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-
 internal class MeterTest {
 
     @Test
@@ -17,7 +16,5 @@ internal class MeterTest {
 
         assertThat(nm.getSingleUnit()).isEqualTo(Meter)
         assertThat(nm.getHoldersList()[0].prefix).isEqualTo(Prefix.NANO)
-
-
     }
 }
